@@ -3,7 +3,8 @@
 #include <Windows.h>
 #include <iostream>
 #include <map>
-#include "IRequestHandler.h"
+#include <thread>
+#include "LoginRequestHandler.h"
 
 class Communicator
 {
@@ -11,7 +12,7 @@ public:
 	void startHandleRequests();
 
 private:
-	void bindAndListen();
+	SOCKET bindAndListen();
 	void handleNewClient();
 
 	std::map<SOCKET, IRequestHandler*> m_clients;
