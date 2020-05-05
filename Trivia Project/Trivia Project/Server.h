@@ -7,6 +7,7 @@
 #include <string>
 #include "Communicator.h"
 
+
 class Server
 {
 private:

@@ -1,5 +1,7 @@
 #include "Communicator.h"
 
+std::mutex isEnded;
+
 SOCKET Communicator::bindAndListen()
 {
 	// Creating the listening socket of the server.
@@ -32,9 +34,34 @@ SOCKET Communicator::bindAndListen()
 	return listeningSocket;
 }
 
-void Communicator::handleNewClient()
+void Communicator::handleNewClient(SOCKET s)
 {
+	//Should short it, there is no need in 2 variables.
+	std::string message("Hello");
+	const char* data = message.c_str();
+	//Send hello message
+	if (send(this->m_clients.begin()->first, data, message.size(), 0) == INVALID_SOCKET)
+	{
+		throw std::exception("Error while sending message to client");
+	}
 
+	//Recieve hello message.
+	char* dataRecieved = new char[6];
+	int res = recv(this->m_clients.begin()->first, dataRecieved, 5, 0);
+	if (res == INVALID_SOCKET)
+	{
+		std::string s = "Error while recieving from socket: ";
+		s += std::to_string(this->m_clients.begin()->first);
+		throw std::exception(s.c_str());
+	}
+	dataRecieved[5] = 0;
+	std::cout << dataRecieved << std::endl;
+	while (!this->_isEnded)
+	{
+		std::cout << "would do something sometime" << std::endl;
+	}
+	std::cout << "ended" << std::endl;
+	closesocket(this->m_clients.begin()->first);
 }
 
 void Communicator::startHandleRequests()
@@ -42,7 +69,7 @@ void Communicator::startHandleRequests()
 	SOCKET listeningSocket = bindAndListen();
 
 	// Listening for new clients and accepting them.
-	while (true)
+	while (!this->_isEnded) 
 	{
 		// Accepting the client and creating a specific socket from the server to this client.
 		SOCKET clientSocket = ::accept(listeningSocket, NULL, NULL);
@@ -53,7 +80,7 @@ void Communicator::startHandleRequests()
 		}
 
 		// Creating a detached thread that handles the new client.
-		std::thread clientThread(&Communicator::handleNewClient, this);
+		std::thread clientThread(&Communicator::handleNewClient, this, clientSocket);
 		clientThread.detach();
 
 		// Adding the client to the clients map.
@@ -61,4 +88,11 @@ void Communicator::startHandleRequests()
 		std::pair<SOCKET, IRequestHandler*> client(clientSocket, &handler);
 		m_clients.insert(client);
 	}
+}
+
+void Communicator::setIsEnded(bool _isEnded)
+{
+	std::unique_lock <std::mutex> locker(isEnded);
+	this->_isEnded = _isEnded;
+	locker.unlock();
 }
