@@ -1,5 +1,8 @@
 #include "Communicator.h"
-
+#define HELLO_MSG "Hello"
+#define MSG_LEN 5
+#define PORT 1050
+#define _CRT_SECURE_NO_WARNINGS
 std::mutex isEnded;
 
 SOCKET Communicator::bindAndListen()
@@ -15,8 +18,10 @@ SOCKET Communicator::bindAndListen()
 
 	/* Initializing socket. */
 	struct sockaddr_in sa = { 0 };
-	std::pair<std::string, int> socketInfo;
-	sa.sin_port = htons(socketInfo.second);  // Port that server will listen to
+	//std::pair<std::string, int> socketInfo;
+	//sa.sin_port = htons(socketInfo.second);  //didn't work to me, maybe something is missing 
+
+	sa.sin_port = htons(PORT); // Port that server will listen to
 	sa.sin_family = AF_INET;
 	sa.sin_addr.s_addr = INADDR_ANY;     
 
@@ -37,31 +42,32 @@ SOCKET Communicator::bindAndListen()
 void Communicator::handleNewClient(SOCKET s)
 {
 	//Should short it, there is no need in 2 variables.
-	std::string message("Hello");
-	const char* data = message.c_str();
+	const char* data = HELLO_MSG;
+
 	//Send hello message
-	if (send(this->m_clients.begin()->first, data, message.size(), 0) == INVALID_SOCKET)
+	std::cout << strlen(data);
+	if (send(s, data, strlen(data), 0) == INVALID_SOCKET)
 	{
 		throw std::exception("Error while sending message to client");
 	}
-
+	
 	//Recieve hello message.
-	char* dataRecieved = new char[6];
-	int res = recv(this->m_clients.begin()->first, dataRecieved, 5, 0);
+	char* dataRecieved = new char[MSG_LEN+1];
+	int res = recv(s, dataRecieved, MSG_LEN, 0);
 	if (res == INVALID_SOCKET)
 	{
 		std::string s = "Error while recieving from socket: ";
 		s += std::to_string(this->m_clients.begin()->first);
 		throw std::exception(s.c_str());
 	}
-	dataRecieved[5] = 0;
+	dataRecieved[MSG_LEN] = 0;
 	std::cout << dataRecieved << std::endl;
+
 	while (!this->_isEnded)
 	{
-		std::cout << "would do something sometime" << std::endl;
+		//Do something... will be added in the next versions.
 	}
-	std::cout << "ended" << std::endl;
-	closesocket(this->m_clients.begin()->first);
+	closesocket(s);
 }
 
 void Communicator::startHandleRequests()
@@ -92,6 +98,7 @@ void Communicator::startHandleRequests()
 
 void Communicator::setIsEnded(bool _isEnded)
 {
+	//Update the variable so all the threads will know to stop.
 	std::unique_lock <std::mutex> locker(isEnded);
 	this->_isEnded = _isEnded;
 	locker.unlock();
