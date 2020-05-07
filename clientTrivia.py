@@ -7,28 +7,36 @@ HELLO_MSG = "Hello"
 
 
 def make_socket():
-    """:return: sock
-    :rtype: socket.socket"""
+    """
+    Creates a socket.
+    :return: sock
+    :rtype: socket.socket
+    """
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    server_address = (SERVER_IP, SERVER_PORT)
-    sock.connect(server_address)
+    sock.connect((SERVER_IP, SERVER_PORT))
     return sock
 
 
 def receive_information(sock):
-    """:param sock: the conversation socket
+    """
+    Receives data from the client.
+    :param sock: the conversation socket
     :type sock: socket.socket.
     :return: server_msg
-    :rtype: str"""
+    :rtype: str
+    """
     server_msg = sock.recv(MAX_LEN)
     return server_msg.decode()
 
 
 def send_information(sock, msg):
-    """:param sock: the conversation socket
+    """
+    Sends data to the client.
+    :param sock: the conversation socket
     :type sock: socket.socket.
     :param msg: the message to send
-    :type msg: str"""
+    :type msg: str
+    """
     sock.sendall(msg.encode())
 
 
@@ -37,7 +45,7 @@ def main():
     msg = receive_information(sock)
     print(msg)
     if msg == HELLO_MSG:
-        send_information(sock,HELLO_MSG)
+        send_information(sock, HELLO_MSG)
 
 
 if __name__ == "__main__":

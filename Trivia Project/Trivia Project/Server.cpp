@@ -1,8 +1,5 @@
 #include "Server.h"
-#define EXIT_REQUEST "EXIT"
-#pragma comment (lib, "ws2_32.lib")
 
-#include "WSAInitializer.h"
 void Server::run()
 {
 	this->m_communicator = Communicator();

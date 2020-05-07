@@ -1,5 +1,7 @@
 #pragma once
+#pragma comment (lib, "ws2_32.lib")
 
+#include "WSAInitializer.h"
 #include <thread>
 #include <iterator>
 #include <mutex>
@@ -7,6 +9,7 @@
 #include <string>
 #include "Communicator.h"
 
+#define EXIT_REQUEST "EXIT"
 
 class Server
 {

@@ -4,15 +4,20 @@
 #include <iostream>
 #include <map>
 #include <thread>
-#include "LoginRequestHandler.h"
 #include <string>
 #include <mutex>
+#include "LoginRequestHandler.h"
+
+#define HELLO_MSG "Hello"
+#define MSG_LEN 5
+#define PORT 1050
 
 class Communicator
 {
 public:
 	void startHandleRequests();
 	void setIsEnded(bool isEnded);
+
 private:
 	SOCKET bindAndListen();
 	void handleNewClient(SOCKET s);
