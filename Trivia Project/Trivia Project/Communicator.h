@@ -19,10 +19,11 @@ public:
 	void setIsEnded(bool isEnded);
 
 private:
-	SOCKET bindAndListen();
+	void bindAndListen();
 	void handleNewClient(SOCKET s);
 
 	std::map<SOCKET, IRequestHandler*> m_clients;
-	bool _isEnded;
+	SOCKET m_listeningSocket;
+	bool m_isEnded;
 };
 

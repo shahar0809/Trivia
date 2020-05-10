@@ -3,13 +3,13 @@
 #define _CRT_SECURE_NO_WARNINGS
 std::mutex isEnded;
 
-SOCKET Communicator::bindAndListen()
+void Communicator::bindAndListen()
 {
 	// Creating the listening socket of the server.
-	SOCKET listeningSocket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+	m_listeningSocket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
 
 	// Checking that the socket is valid.
-	if (listeningSocket == INVALID_SOCKET)
+	if (m_listeningSocket == INVALID_SOCKET)
 	{
 		throw std::exception(__FUNCTION__ " - socket");
 	}
@@ -21,17 +21,16 @@ SOCKET Communicator::bindAndListen()
 	sa.sin_addr.s_addr = INADDR_ANY;     
 
 	// Connects between the socket and the configuration (port and etc..)
-	if (bind(listeningSocket, (struct sockaddr*) & sa, sizeof(sa)) == SOCKET_ERROR)
+	if (bind(m_listeningSocket, (struct sockaddr*) & sa, sizeof(sa)) == SOCKET_ERROR)
 	{
 		throw std::exception(__FUNCTION__ " - bind");
 	}
 
 	// Start listening for incoming requests of clients
-	if (listen(listeningSocket, SOMAXCONN) == SOCKET_ERROR)
+	if (listen(m_listeningSocket, SOMAXCONN) == SOCKET_ERROR)
 	{
 		throw std::exception(__FUNCTION__ " - listen");
 	}
-	return listeningSocket;
 }
 
 void Communicator::handleNewClient(SOCKET s)
@@ -43,7 +42,7 @@ void Communicator::handleNewClient(SOCKET s)
 		throw std::exception("Error while sending message to client");
 	}
 	
-	// Recieve hello message from the client.
+	// Receive hello message from the client.
 	char* dataRecieved = new char[MSG_LEN + 1];
 	int result = recv(s, dataRecieved, MSG_LEN, 0);
 
@@ -55,8 +54,9 @@ void Communicator::handleNewClient(SOCKET s)
 	}
 	dataRecieved[MSG_LEN] = 0;
 	std::cout << dataRecieved << std::endl;
+	delete[] dataRecieved;
 
-	while (!this->_isEnded)
+	while (!this->m_isEnded)
 	{
 		// Do something... will be added in the next versions.
 	}
@@ -65,13 +65,13 @@ void Communicator::handleNewClient(SOCKET s)
 
 void Communicator::startHandleRequests()
 {
-	SOCKET listeningSocket = bindAndListen();
+	bindAndListen();
 
 	// Listening for new clients and accepting them.
-	while (!this->_isEnded) 
+	while (!this->m_isEnded) 
 	{
 		// Accepting the client and creating a specific socket from the server to this client.
-		SOCKET clientSocket = ::accept(listeningSocket, NULL, NULL);
+		SOCKET clientSocket = ::accept(m_listeningSocket, NULL, NULL);
 
 		if (clientSocket == INVALID_SOCKET)
 		{
@@ -93,6 +93,6 @@ void Communicator::setIsEnded(bool _isEnded)
 {
 	// Update the variable so all the threads will know to stop executing.
 	std::unique_lock <std::mutex> locker(isEnded);
-	this->_isEnded = _isEnded;
+	this->m_isEnded = _isEnded;
 	locker.unlock();
 }
