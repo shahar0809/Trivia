@@ -36,7 +36,6 @@ void Communicator::bindAndListen()
 void Communicator::handleNewClient(SOCKET s)
 {
 	// Send hello message to the client.
-	std::cout << strlen(HELLO_MSG);
 	if (send(s, HELLO_MSG, strlen(HELLO_MSG), 0) == INVALID_SOCKET)
 	{
 		throw std::exception("Error while sending message to client");
