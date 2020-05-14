@@ -1,6 +1,8 @@
 #pragma once
 #include <iostream>
 #include <vector>
+#include <nlohmann/json.hpp>
+using json = nlohmann::json;
 struct Buffer
 {
 	int id;
@@ -26,4 +28,6 @@ public:
 	static Buffer serializeResponse(ErrorResponse);
 	static Buffer serializeResponse(LoginResponse);
 	static Buffer serializeResponse(SignupResponse);
+private:
+	static Buffer serializeResponse(json j, int code);
 };
