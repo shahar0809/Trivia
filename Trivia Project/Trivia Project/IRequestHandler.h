@@ -4,6 +4,7 @@
 #include <cstddef>
 #include <vector>
 #include "JsonResponsePacketSerializer.h"
+
 struct RequestInfo
 {
 	std::string requestId;

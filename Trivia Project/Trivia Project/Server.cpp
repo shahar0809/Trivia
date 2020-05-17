@@ -16,6 +16,7 @@ void Server::run()
 
 void main()
 {
+
 	try
 	{
 		WSAInitializer wsaInit;
