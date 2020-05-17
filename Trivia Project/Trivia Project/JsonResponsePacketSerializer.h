@@ -6,8 +6,8 @@
 using json = nlohmann::json;
 struct Buffer
 {
-	int id;
-	int len;
+	unsigned char id;
+	unsigned char* len;
 	std::vector<uint8_t> data;
 };
 struct ErrorResponse

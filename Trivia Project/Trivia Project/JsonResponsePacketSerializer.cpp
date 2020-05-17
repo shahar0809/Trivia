@@ -1,4 +1,5 @@
-
+#define _CRT_SECURE_NO_WARNINGS
+#include <iomanip>
 #include <sstream> 
 #include "JsonResponsePacketSerializer.h"
 
@@ -38,8 +39,12 @@ Buffer JsonResponsePacketSerializer::serializeResponse(json j, int code)
 
 	//Convert the data to bin values.
 	std::vector<uint8_t> binData = json::to_cbor(j);
+	std::ostringstream os;
+	os << std::setw(4) << std::setfill('0') << binData.size();
+	unsigned char* val = new unsigned char[5];
+	strcpy((char*)val, os.str().c_str());
 
 	//Insert values to the buffer that will be sent to the client.
-	Buffer buffer{ code, binData.size(),binData};
+	Buffer buffer{ code, val,binData};
 	return buffer;
 }
