@@ -1,5 +1,6 @@
 #pragma once
 #include <iostream>
+#include "IRequestHandler.h"
 #include "include/nlohmann/json.hpp"
 using json = nlohmann::json;
 
@@ -22,7 +23,7 @@ struct SignupRequest
 class JsonRequestPacketDeserializer
 {
 public: 
-	static LoginRequest deserializeLoginRequest(std::string buffer);
-	static SignupRequest deserializeSignupRequest(std::string buffer);
+	static LoginRequest deserializeLoginRequest(std::vector<uint8_t> buffer);
+	static SignupRequest deserializeSignupRequest(std::vector<uint8_t> buffer);
 };
 

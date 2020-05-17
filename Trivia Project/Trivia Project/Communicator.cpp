@@ -41,15 +41,19 @@ void Communicator::handleNewClient(SOCKET s)
 	// Receive hello message from the client.
 	this->h.getPartFromSocket(s,MSG_LEN);
 
-	
-	SignupRequest request= JsonRequestPacketDeserializer::deserializeSignupRequest(this->h.getAllTheSocket(s));
-	SignupResponse response;
-	response.status = 1;
-	Buffer binResponse  =JsonResponsePacketSerializer::serializeResponse(response);
-	std::string headers(1,static_cast<unsigned char>(binResponse.code));
+	do
+	{
+
+	} while (true);
+	/*SignupRequest request = JsonRequestPacketDeserializer::deserializeSignupRequest(this->h.getAllTheSocket(s));
+	SignupResponse response{ 1 };
+
+	Buffer binResponse = JsonResponsePacketSerializer::serializeResponse(response);
+	std::string headers(1, static_cast<unsigned char>(binResponse.code));
 	headers += reinterpret_cast<char const*>(binResponse.dataLen);
 	std::string data (binResponse.data.begin(), binResponse.data.end());
 	this->h.sendData(s,headers+data);
+
 	while (!this->m_isEnded)
 	{
 		LoginRequest request = JsonRequestPacketDeserializer::deserializeLoginRequest(this->h.getAllTheSocket(s));
@@ -60,7 +64,9 @@ void Communicator::handleNewClient(SOCKET s)
 		headers += reinterpret_cast<char const*>(binResponse.dataLen);
 		std::string data(binResponse.data.begin(), binResponse.data.end());
 		this->h.sendData(s, headers + data);
-	}
+	}*/
+
+
 	closesocket(s);
 }
 
@@ -79,14 +85,14 @@ void Communicator::startHandleRequests()
 			throw std::exception(__FUNCTION__);
 		}
 
-		// Creating a detached thread that handles the new client.
-		std::thread clientThread(&Communicator::handleNewClient, this, clientSocket);
-		clientThread.detach();
-
 		// Adding the client to the clients map.
 		LoginRequestHandler handler = LoginRequestHandler();
 		std::pair<SOCKET, IRequestHandler*> client(clientSocket, &handler);
 		m_clients.insert(client);
+
+		// Creating a detached thread that handles the new client.
+		std::thread clientThread(&Communicator::handleNewClient, this, clientSocket);
+		clientThread.detach();
 	}
 }
 

@@ -7,18 +7,20 @@
 
 struct RequestInfo
 {
-	std::string requestId;
-	time_t time;
-	Buffer buffer;
+	int requestId;
+	time_t receivalTime;
+	std::vector<uint8_t> buffer;
 };
+
 struct RequestResult
 {
-	std::string requestBuffer;
+	Buffer requestBuffer;
 	//IRequestHandler* newHandler;
 };
+
 class IRequestHandler
 {
-	virtual bool isRequestRelevant(RequestInfo)=0;
+	virtual bool isRequestRelevant(RequestInfo) = 0;
 	virtual RequestResult handleRequest(RequestInfo) = 0;
 };
 

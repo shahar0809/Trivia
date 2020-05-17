@@ -1,11 +1,13 @@
 #include "LoginRequestHandler.h"
 
-bool LoginRequestHandler::isRequestRelevant(RequestInfo)
+bool LoginRequestHandler::isRequestRelevant(RequestInfo info)
 {
-	return true;
+	return info.requestId == LOGIN_CODE;
 }
-RequestResult LoginRequestHandler::handleRequest(RequestInfo)
+
+RequestResult LoginRequestHandler::handleRequest(RequestInfo info)
 {
-	RequestResult f;
-	return f;
+	JsonRequestPacketDeserializer::deserializeLoginRequest(info.buffer);
+	LoginResponse response = { 1 };
+	return RequestResult{ JsonResponsePacketSerializer::serializeResponse(response) };
 }
