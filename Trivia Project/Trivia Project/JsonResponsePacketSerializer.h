@@ -2,12 +2,13 @@
 #include <iostream>
 #include <vector>
 #include <nlohmann/json.hpp>
+
 using json = nlohmann::json;
 struct Buffer
 {
 	int id;
 	int len;
-	std::string data;
+	std::vector<uint8_t> data;
 };
 struct ErrorResponse
 {

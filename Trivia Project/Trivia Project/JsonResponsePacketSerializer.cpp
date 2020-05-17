@@ -1,4 +1,4 @@
-#include <iostream>
+
 #include <sstream> 
 #include "JsonResponsePacketSerializer.h"
 
@@ -36,13 +36,10 @@ Buffer JsonResponsePacketSerializer::serializeResponse(json j, int code)
 {
 	std::string str = j.dump();
 
-	//Convert the data to hex values.
-	std::stringstream s;
-	for (int i = 0; i < str.length(); ++i)
-		s << std::hex << (int)str[i];
-	std::string hexStr = s.str();
+	//Convert the data to bin values.
+	std::vector<uint8_t> binData = json::to_cbor(j);
 
 	//Insert values to the buffer that will be sent to the client.
-	Buffer buffer{ code ,hexStr.length(),hexStr};
+	Buffer buffer{ code, binData.size(),binData};
 	return buffer;
 }
