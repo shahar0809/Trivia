@@ -7,6 +7,9 @@
 #include <string>
 #include <mutex>
 #include "LoginRequestHandler.h"
+#include "Helper.h"
+#include "JsonRequestPacketDeserializer.h"
+#include "JsonResponsePacketSerializer.h"
 
 #define HELLO_MSG "Hello"
 #define MSG_LEN 5
@@ -19,6 +22,7 @@ public:
 	void setIsEnded(bool isEnded);
 
 private:
+	Helper h;
 	void bindAndListen();
 	void handleNewClient(SOCKET s);
 

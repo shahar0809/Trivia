@@ -36,28 +36,30 @@ void Communicator::bindAndListen()
 void Communicator::handleNewClient(SOCKET s)
 {
 	// Send hello message to the client.
-	if (send(s, HELLO_MSG, strlen(HELLO_MSG), 0) == INVALID_SOCKET)
-	{
-		throw std::exception("Error while sending message to client");
-	}
+	this->h.sendData(s, HELLO_MSG);
 	
 	// Receive hello message from the client.
-	char* dataRecieved = new char[MSG_LEN + 1];
-	int result = recv(s, dataRecieved, MSG_LEN, 0);
+	this->h.getPartFromSocket(s,MSG_LEN);
 
-	if (result == INVALID_SOCKET)
-	{
-		std::string s = "Error while recieving from socket: ";
-		s += std::to_string(this->m_clients.begin()->first);
-		throw std::exception(s.c_str());
-	}
-	dataRecieved[MSG_LEN] = 0;
-	std::cout << dataRecieved << std::endl;
-	delete[] dataRecieved;
-
+	
+	SignupRequest request= JsonRequestPacketDeserializer::deserializeSignupRequest(this->h.getAllTheSocket(s));
+	SignupResponse response;
+	response.status = 1;
+	Buffer binResponse  =JsonResponsePacketSerializer::serializeResponse(response);
+	std::string headers(1,static_cast<unsigned char>(binResponse.code));
+	headers += reinterpret_cast<char const*>(binResponse.dataLen);
+	std::string data (binResponse.data.begin(), binResponse.data.end());
+	this->h.sendData(s,headers+data);
 	while (!this->m_isEnded)
 	{
-		// Do something... will be added in the next versions.
+		LoginRequest request = JsonRequestPacketDeserializer::deserializeLoginRequest(this->h.getAllTheSocket(s));
+		LoginResponse response;
+		response.status = 1;
+		Buffer binResponse = JsonResponsePacketSerializer::serializeResponse(response);
+		std::string headers(1, static_cast<unsigned char>(binResponse.code));
+		headers += reinterpret_cast<char const*>(binResponse.dataLen);
+		std::string data(binResponse.data.begin(), binResponse.data.end());
+		this->h.sendData(s, headers + data);
 	}
 	closesocket(s);
 }
