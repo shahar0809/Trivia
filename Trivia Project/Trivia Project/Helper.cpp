@@ -2,7 +2,7 @@
 #define NO_FLAGS 0
 
 // recieve data from socket according byteSize
-std::string Helper::getPartFromSocket(SOCKET sc, int bytesNum)
+char* Helper::getPartFromSocket(SOCKET sc, int bytesNum)
 {
 	if (bytesNum == 0)
 	{
@@ -36,7 +36,7 @@ void Helper::sendData(SOCKET sc, std::string message)
 
 std::string Helper::getAllTheSocket(SOCKET sc)
 {
-	std::string	buffer = this->getPartFromSocket(sc, 5);
-	buffer += this->getPartFromSocket(sc, std::stoi(buffer.substr(1, 4)));
-	return buffer
+	std::string	buffer = this->getPartFromSocket(sc, DATA_LEN_IN_BYTES+ CODE_LEN_IN_BYTES);
+	buffer += this->getPartFromSocket(sc, std::stoi(buffer.substr(CODE_LEN_IN_BYTES, DATA_LEN_IN_BYTES)));
+	return buffer;
 }

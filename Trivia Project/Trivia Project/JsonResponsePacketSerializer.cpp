@@ -32,8 +32,8 @@ Buffer JsonResponsePacketSerializer::serializeResponse(json j, int code)
 	// Convert the data to binary values.
 	std::vector<uint8_t> binData = json::to_cbor(j);
 	std::ostringstream os;
-	os << std::setw(DATA_LEN_BYTES) << std::setfill('0') << binData.size();
-	unsigned char* val = new unsigned char[DATA_LEN_BYTES+1];
+	os << std::setw(DATA_LEN_IN_BYTES) << std::setfill('0') << binData.size();
+	unsigned char* val = new unsigned char[DATA_LEN_IN_BYTES +1];
 	strcpy((char*)val, os.str().c_str());
 
 	//Insert values to the buffer that will be sent to the client.
