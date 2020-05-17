@@ -2,6 +2,8 @@
 #include "Communicator.h"
 #include <WinSock2.h>
 
+#define DATA_LEN_IN_BYTES 4
+#define CODE_LEN_IN_BYTES 1
 class Helper
 {
 public:

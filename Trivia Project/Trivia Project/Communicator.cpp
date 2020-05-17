@@ -41,21 +41,31 @@ void Communicator::handleNewClient(SOCKET s)
 	// Receive hello message from the client.
 	this->h.getPartFromSocket(s,MSG_LEN);
 
-	
+	// Get the sign up request from the client.
 	SignupRequest request= JsonRequestPacketDeserializer::deserializeSignupRequest(this->h.getAllTheSocket(s));
+
+	// Create the sign up response.
 	SignupResponse response;
 	response.status = 1;
 	Buffer binResponse  =JsonResponsePacketSerializer::serializeResponse(response);
+
+	// Send the sign up response to the client.
 	std::string headers(1,static_cast<unsigned char>(binResponse.code));
 	headers += reinterpret_cast<char const*>(binResponse.dataLen);
 	std::string data (binResponse.data.begin(), binResponse.data.end());
 	this->h.sendData(s,headers+data);
+
 	while (!this->m_isEnded)
 	{
+		// Get the login request from the client.
 		LoginRequest request = JsonRequestPacketDeserializer::deserializeLoginRequest(this->h.getAllTheSocket(s));
+
+		// Create the login response.
 		LoginResponse response;
 		response.status = 1;
 		Buffer binResponse = JsonResponsePacketSerializer::serializeResponse(response);
+
+		// Send the login response to the client.
 		std::string headers(1, static_cast<unsigned char>(binResponse.code));
 		headers += reinterpret_cast<char const*>(binResponse.dataLen);
 		std::string data(binResponse.data.begin(), binResponse.data.end());

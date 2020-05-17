@@ -8,7 +8,7 @@ using json = nlohmann::json;
 
 #define ERROR_FIELD "message"
 #define ORDINARY_RESPONSE_FIELD "status"
-#define DATA_LEN_BYTES 4
+#define DATA_LEN_IN_BYTES 4
 
 enum Codes { ERROR_CODE = 0, LOGIN_CODE, SIGN_UP_CODE };
 
