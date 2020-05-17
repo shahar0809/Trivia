@@ -59,7 +59,7 @@
     <ClInclude Include="JsonResponsePacketSerializer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="single_include\nlohmann\json.hpp">
+    <ClInclude Include="include\nlohmann\json.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
