@@ -36,7 +36,7 @@ void Helper::sendData(SOCKET sc, std::string message)
 
 std::string Helper::getAllTheSocket(SOCKET sc)
 {
-	std::string	buffer = this->getPartFromSocket(sc, DATA_LEN_IN_BYTES + CODE_LEN_IN_BYTES);
-	buffer += this->getPartFromSocket(sc, std::stoi(buffer.substr(CODE_LEN_IN_BYTES, DATA_LEN_IN_BYTES)));
+	std::string	buffer = Helper::getPartFromSocket(sc, DATA_LEN_IN_BYTES + CODE_LEN_IN_BYTES);
+	buffer += Helper::getPartFromSocket(sc, std::stoi(buffer.substr(CODE_LEN_IN_BYTES, DATA_LEN_IN_BYTES)));
 	return buffer;
 }

@@ -9,6 +9,7 @@ HELLO_MSG = "Hello"
 # Codes for different types of requests
 Codes = {"LOGIN_CODE": "1", "SIGN_UP_CODE": "2"}
 
+
 def make_socket():
     """
     Creates a socket.

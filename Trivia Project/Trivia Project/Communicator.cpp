@@ -78,7 +78,7 @@ void Communicator::startHandleRequests()
 		m_clients.insert(client);
 
 		// Creating a detached thread that handles the new client.
-		std::thread clientThread(&Communicator::handleNewClient, this, clientSocket);
+		std::thread clientThread(&Communicator::handleNewClient, this, client);
 		clientThread.detach();
 	}
 }

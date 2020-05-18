@@ -8,7 +8,6 @@
 #include <condition_variable>
 #include <string>
 #include "Communicator.h"
-#include "JsonResponsePacketSerializer.h"
 
 #define EXIT_REQUEST "EXIT"
 
