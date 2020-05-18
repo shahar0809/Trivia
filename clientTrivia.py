@@ -64,9 +64,9 @@ def send_sign_up_request(sock):
                    "password": password,
                    "email": email}
 
-    sign_up_req = sign_up_req.dumps()  # Getting the json as a string
+    sign_up_req = json.dumps(sign_up_req)  # Getting the json as a string
     str_packet = Codes["SIGN_UP_CODE"] + str(len(sign_up_req)) + sign_up_req  # Building the packet according to the protocol
-    sock.sendall(bytes(str_packet, encoding="utf-8"))
+    sock.sendall(bytes(str_packet, "ascii"))
 
 
 def send_login_request(sock):
@@ -84,11 +84,11 @@ def send_login_request(sock):
 
     # Creating a json object from the information
     login_req = {"username": username,
-                 "password": password }
+                 "password": password}
 
-    login_req = login_req.dumps()  # Getting the json as a string
+    login_req = json.dumps(login_req)  # Getting the json as a string
     str_packet = Codes["LOGIN_CODE"] + str(len(login_req)) + login_req  # Building the packet according to the protocol
-    sock.sendall(bytes(str_packet, encoding="utf-8"))
+    sock.sendall(bytes(str_packet, "ascii"))
 
 
 def receive_response(sock):
@@ -98,8 +98,8 @@ def receive_response(sock):
     :return: None.
     """
     packet = sock.recv(MAX_LEN)
-    j = json.load(packet.decode('utf-8'))
-    print("Received from server: " + j.dumps)
+    j = json.load(packet.decode('ascii'))
+    print("Received from server: " + json.dumps(j))
 
 
 def main():
@@ -108,7 +108,7 @@ def main():
     print("Message from server: " + msg)
 
     if msg == HELLO_MSG:                               # Checking message's content
-        send_information(listening_socket, HELLO_MSG)  # Responding to the server
+        send_information(sock, HELLO_MSG)  # Responding to the server
 
     send_sign_up_request(sock)  # Sending a Sign up request
     receive_response(sock)      # Getting server's response
