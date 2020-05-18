@@ -65,8 +65,10 @@ def send_sign_up_request(sock):
                    "email": email}
 
     sign_up_req = json.dumps(sign_up_req)  # Getting the json as a string
-    str_packet = Codes["SIGN_UP_CODE"] + str(len(sign_up_req)) + sign_up_req  # Building the packet according to the protocol
-    sock.sendall(bytes(str_packet, "ascii"))
+    json_length = str(len(sign_up_req))
+    json_length = json_length.zfill(4 - len(json_length))
+    str_packet = Codes["SIGN_UP_CODE"] + json_length + sign_up_req  # Building the packet according to the protocol
+    send_information(sock, str_packet)
 
 
 def send_login_request(sock):
@@ -88,7 +90,7 @@ def send_login_request(sock):
 
     login_req = json.dumps(login_req)  # Getting the json as a string
     str_packet = Codes["LOGIN_CODE"] + str(len(login_req)) + login_req  # Building the packet according to the protocol
-    sock.sendall(bytes(str_packet, "ascii"))
+    send_information(sock, str_packet)
 
 
 def receive_response(sock):
