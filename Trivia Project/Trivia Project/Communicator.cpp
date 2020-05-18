@@ -51,8 +51,11 @@ void Communicator::handleNewClient(std::pair<SOCKET, IRequestHandler*> client)
 			ErrorResponse errResponse{ "Request is not relevant." };
 			Helper::sendData(client.first, JsonResponsePacketSerializer::serializeResponse(errResponse));
 		}
-		RequestResult result = client.second->handleRequest(info);
-		Helper::sendData(client.first, result.requestBuffer);
+		else
+		{
+			RequestResult result = client.second->handleRequest(info);
+			Helper::sendData(client.first, result.requestBuffer);
+		}
 	} while (!this->m_isEnded);
 	closesocket(client.first);
 }
