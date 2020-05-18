@@ -38,9 +38,9 @@ class JsonResponsePacketSerializer
 {
 public:
 	//all these functions retruns buffer
-	static Buffer serializeResponse(ErrorResponse);
-	static Buffer serializeResponse(LoginResponse);
-	static Buffer serializeResponse(SignupResponse);
+	static Buffer serializeResponse(ErrorResponse error);
+	static Buffer serializeResponse(LoginResponse login);
+	static Buffer serializeResponse(SignupResponse signUp);
 
 private:
 	static Buffer serializeResponse(json j, int code);

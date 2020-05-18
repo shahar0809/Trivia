@@ -22,9 +22,8 @@ public:
 	void setIsEnded(bool isEnded);
 
 private:
-	Helper h;
 	void bindAndListen();
-	void handleNewClient(SOCKET s);
+	void handleNewClient(std::pair<SOCKET, IRequestHandler*> client);
 
 	std::map<SOCKET, IRequestHandler*> m_clients;
 	SOCKET m_listeningSocket;

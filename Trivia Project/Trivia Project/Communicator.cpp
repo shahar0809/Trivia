@@ -33,17 +33,24 @@ void Communicator::bindAndListen()
 	}
 }
 
-void Communicator::handleNewClient(SOCKET s)
+void Communicator::handleNewClient(std::pair<SOCKET, IRequestHandler*> client)
 {
 	// Send hello message to the client.
-	this->h.sendData(s, HELLO_MSG);
+	Helper::sendData(client.first, HELLO_MSG);
 	
 	// Receive hello message from the client.
-	this->h.getPartFromSocket(s,MSG_LEN);
+	Helper::getPartFromSocket(client.first, MSG_LEN);
 
 	do
 	{
-
+		std::string packet = Helper::getAllTheSocket(client.first);
+		RequestInfo info(packet);
+		
+		if (!client.second->isRequestRelevant(info))
+		{
+			ErrorResponse errResponse{ "Request is not relevant." };
+			Helper::sendData(client.first, JsonResponsePacketSerializer::serializeResponse(errResponse));
+		}
 	} while (true);
 	/*SignupRequest request = JsonRequestPacketDeserializer::deserializeSignupRequest(this->h.getAllTheSocket(s));
 	SignupResponse response{ 1 };
