@@ -2,7 +2,7 @@
 
 bool LoginRequestHandler::isRequestRelevant(RequestInfo info)
 {
-	return info.requestId == LOGIN_CODE;
+	return info.requestId == LOGIN_CODE || info.requestId == SIGN_UP_CODE;
 }
 
 RequestResult LoginRequestHandler::handleRequest(RequestInfo info)
