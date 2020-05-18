@@ -22,7 +22,7 @@ struct RequestInfo
 
 struct RequestResult
 {
-	Buffer requestBuffer;
+	std::string requestBuffer;
 	//IRequestHandler* newHandler;
 };
 

@@ -12,7 +12,7 @@ SignupRequest JsonRequestPacketDeserializer::deserializeSignupRequest(std::vecto
 	return SignupRequest{ j[fields[USERNAME]], j[fields[PASSWORD]], j[fields[EMAIL]] };
 }
 
-json getJson(std::vector<uint8_t> packet)
+json JsonRequestPacketDeserializer::getJson(std::vector<uint8_t> packet)
 {
 	return json::from_cbor(packet);
 }

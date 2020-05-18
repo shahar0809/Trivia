@@ -12,13 +12,6 @@ using json = nlohmann::json;
 
 enum Codes { ERROR_CODE = 0, LOGIN_CODE, SIGN_UP_CODE };
 
-struct Buffer
-{
-	unsigned char code;
-	unsigned char* dataLen;
-	std::vector<uint8_t> data;
-};
-
 struct ErrorResponse
 {
 	std::string message;
@@ -38,10 +31,10 @@ class JsonResponsePacketSerializer
 {
 public:
 	//all these functions retruns buffer
-	static Buffer serializeResponse(ErrorResponse error);
-	static Buffer serializeResponse(LoginResponse login);
-	static Buffer serializeResponse(SignupResponse signUp);
+	static std::string serializeResponse(ErrorResponse error);
+	static std::string serializeResponse(LoginResponse login);
+	static std::string serializeResponse(SignupResponse signUp);
 
 private:
-	static Buffer serializeResponse(json j, int code);
+	static std::string serializeResponse(json j, int code);
 };

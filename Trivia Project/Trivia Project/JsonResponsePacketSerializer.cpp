@@ -3,7 +3,7 @@
 #include <sstream>
 #include "JsonResponsePacketSerializer.h"
 
-Buffer JsonResponsePacketSerializer::serializeResponse(ErrorResponse error)
+std::string JsonResponsePacketSerializer::serializeResponse(ErrorResponse error)
 {
 	// Create data using json
 	json j;
@@ -11,7 +11,7 @@ Buffer JsonResponsePacketSerializer::serializeResponse(ErrorResponse error)
 	return JsonResponsePacketSerializer::serializeResponse(j, ERROR_CODE);
 }
 
-Buffer JsonResponsePacketSerializer::serializeResponse(LoginResponse login)
+std::string JsonResponsePacketSerializer::serializeResponse(LoginResponse login)
 {
 	// Create data using json
 	json j;
@@ -19,7 +19,7 @@ Buffer JsonResponsePacketSerializer::serializeResponse(LoginResponse login)
 	return JsonResponsePacketSerializer::serializeResponse(j, LOGIN_CODE);
 }
 
-Buffer JsonResponsePacketSerializer::serializeResponse(SignupResponse signUp)
+std::string JsonResponsePacketSerializer::serializeResponse(SignupResponse signUp)
 {
 	// Create data using json
 	json j;
@@ -27,16 +27,17 @@ Buffer JsonResponsePacketSerializer::serializeResponse(SignupResponse signUp)
 	return JsonResponsePacketSerializer::serializeResponse(j, SIGN_UP_CODE);
 }
 
-Buffer JsonResponsePacketSerializer::serializeResponse(json j, int code)
+std::string JsonResponsePacketSerializer::serializeResponse(json j, int code)
 {
 	// Convert the data to binary values.
 	std::vector<uint8_t> binData = json::to_cbor(j);
 	std::ostringstream os;
 	os << std::setw(DATA_LEN_IN_BYTES) << std::setfill('0') << binData.size();
-	unsigned char* val = new unsigned char[DATA_LEN_IN_BYTES +1];
-	strcpy((char*)val, os.str().c_str());
+	unsigned char* dataLen = new unsigned char[DATA_LEN_IN_BYTES +1];
+	strcpy((char*)dataLen, os.str().c_str());
 
-	//Insert values to the buffer that will be sent to the client.
-	Buffer buffer{code,val,binData};
-	return buffer;
+	std::string headers(1, static_cast<unsigned char>(code));
+	headers += reinterpret_cast<char const*>(dataLen);
+	std::string data(binData.begin(), binData.end());
+	return headers+data;
 }
