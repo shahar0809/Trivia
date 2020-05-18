@@ -44,7 +44,7 @@ void Communicator::handleNewClient(std::pair<SOCKET, IRequestHandler*> client)
 	do
 	{
 		std::string packet = Helper::getAllTheSocket(client.first);
-		RequestInfo info(packet);  //
+		RequestInfo info(packet);  
 		
 		if (!client.second->isRequestRelevant(info))
 		{
