@@ -10,9 +10,8 @@ char* Helper::getPartFromSocket(SOCKET sc, int bytesNum)
 	}
 
 	char *data = new char[bytesNum + 1];
-	printf("Error at socket(): %ld\n", WSAGetLastError());
 	int res = recv(sc, data, bytesNum, NO_FLAGS);
-	printf("Error at socket(): %ld\n", WSAGetLastError());
+
 	if (res == INVALID_SOCKET)
 	{
 		std::string s = "Error while recieving from socket: ";
@@ -27,9 +26,10 @@ char* Helper::getPartFromSocket(SOCKET sc, int bytesNum)
 // send data to socket
 void Helper::sendData(SOCKET sc, std::string message)
 {
-	const char* data = message.c_str();
+	std::string binStr = convertToBinary(message);
+	const char* data = binStr.c_str();
 
-	if (send(sc, data, message.size(), 0) == INVALID_SOCKET)
+	if (send(sc, data, sizeof(data), 0) == INVALID_SOCKET)
 	{
 		throw std::exception("Error while sending message to client");
 	}
@@ -37,7 +37,32 @@ void Helper::sendData(SOCKET sc, std::string message)
 
 std::string Helper::getAllTheSocket(SOCKET sc)
 {
-	std::string	buffer = Helper::getPartFromSocket(sc, DATA_LEN_IN_BYTES + CODE_LEN_IN_BYTES);
-	buffer += Helper::getPartFromSocket(sc, std::stoi(buffer.substr(CODE_LEN_IN_BYTES, DATA_LEN_IN_BYTES)));
-	return buffer;
+	std::string	buffer = Helper::getPartFromSocket(sc, (DATA_LEN_IN_BYTES + CODE_LEN_IN_BYTES) * 8);
+	buffer += Helper::getPartFromSocket(sc, 8 * std::stoi(buffer.substr(CODE_LEN_IN_BYTES, DATA_LEN_IN_BYTES)));
+	return convertToAscii(buffer);
+}
+
+std::string Helper::convertToBinary(std::string str)
+{
+	std::string binString;
+	for (auto element : str)
+	{
+		binString += (std::bitset<8>(element)).to_string();
+	}
+	return binString;
+}
+
+std::string Helper::convertToAscii(std::string str)
+{
+	std::string textualStr;
+	std::stringstream sstream(str);
+
+	while (sstream.good())
+	{
+		std::bitset<8> bits;
+		sstream >> bits;
+		char c = char(bits.to_ulong());
+		textualStr += c;
+	}
+	return textualStr;
 }

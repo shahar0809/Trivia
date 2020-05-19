@@ -10,4 +10,6 @@ public:
 	static char* getPartFromSocket(SOCKET sc, int bytesNum);
 	static std::string getAllTheSocket(SOCKET sc);
 	static void sendData(SOCKET sc, std::string message);
+	static std::string convertToBinary(std::string str);
+	static std::string convertToAscii(std::string str);
 };

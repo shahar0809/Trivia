@@ -35,12 +35,6 @@ void Communicator::bindAndListen()
 
 void Communicator::handleNewClient(std::pair<SOCKET, IRequestHandler*> client)
 {
-	// Send hello message to the client.
-	Helper::sendData(client.first, HELLO_MSG);
-	
-	// Receive hello message from the client.
-	Helper::getPartFromSocket(client.first, MSG_LEN);
-
 	do
 	{
 		std::string packet = Helper::getAllTheSocket(client.first);

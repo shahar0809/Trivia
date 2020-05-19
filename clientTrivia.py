@@ -93,9 +93,13 @@ def edit_request(sock, json_request, code):
     json_request = json.dumps(json_request)  # Getting the json as a string
     json_length = str(len(json_request))
     json_length = json_length.zfill(DATA_LEN_IN_BYTES)
-    str_packet = Codes[code] + json_length + json_request  # Building the packet according to the protocol
-    binary_request = ''.join(format(ord(i), 'b') for i in str_packet) # Converting the packet to binary values
-    send_information(sock, binary_request)
+
+    str_packet = code + json_length + json_request  # Building the packet according to the protocol
+    str_packet = ''.join(format(ord(i), 'b').zfill(8) for i in code)
+    str_packet += ''.join(format(ord(i), 'b').zfill(8) for i in json_length)
+    str_packet += ''.join(format(ord(i), 'b').zfill(8) for i in json_request)
+    # binary_request = ''.join(format(ord(i), 'b') for i in json_request)  # Converting the packet to binary values
+    send_information(sock, str_packet)
 
 
 def receive_response(sock):
@@ -112,6 +116,7 @@ def receive_response(sock):
         temp_data = int(bin_data[i:i + BITS_IS_BYTE-1])
         decimal_data = binary_to_decimal(temp_data)
         str_data += chr(decimal_data)
+
     print("Received from server: " + json.dumps(str_data))
 
 
@@ -132,11 +137,6 @@ def binary_to_decimal(binary):
 
 def main():
     sock = make_socket()                         # Creating a listening socket
-    msg = receive_information(sock)  # Getting the first "Hello" message from the server
-    print("Message from server: " + msg)
-
-    if msg == HELLO_MSG:                               # Checking message's content
-        send_information(sock, HELLO_MSG)  # Responding to the server
 
     send_sign_up_request(sock)  # Sending a Sign up request
     receive_response(sock)      # Getting server's response

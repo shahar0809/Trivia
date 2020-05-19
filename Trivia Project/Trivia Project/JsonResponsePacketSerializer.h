@@ -2,6 +2,7 @@
 #include <iostream>
 #include <vector>
 #include <sstream> 
+#include <bitset>
 
 #include "include/nlohmann/json.hpp"
 using json = nlohmann::json;
