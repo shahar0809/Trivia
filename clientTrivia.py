@@ -57,12 +57,14 @@ def send_sign_up_request(sock):
     """
 
     # Getting sign up information from the user
+    print("S I G N U P")
     print("Enter username: ")
     username = input()
     print("Enter password: ")
     password = input()
     print("Enter email: ")
     email = input()
+    print("")
 
     # Creating a json object from the information
     sign_up_req = {"username": username,
@@ -79,10 +81,12 @@ def send_login_request(sock):
     """
 
     # Getting sign up information from the user
+    print("L O G I N")
     print("Enter username: ")
     username = input()
     print("Enter password: ")
     password = input()
+    print("")
 
     # Creating a json object from the information
     login_req = {"username": username,
@@ -112,7 +116,7 @@ def receive_response(sock):
     packet = sock.recv(MAX_LEN)
     bin_data = int(packet.decode(),BIN_BASE)
     data = bin_data.to_bytes((bin_data.bit_length() + BITS_IS_BYTE-1) // BITS_IS_BYTE, 'big').decode()
-    print("Received from server: " + data)
+    print("S E R V E R:\n" + data + "\n")
 
 
 def main():

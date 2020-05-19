@@ -35,9 +35,19 @@ void Communicator::bindAndListen()
 
 void Communicator::handleNewClient(std::pair<SOCKET, IRequestHandler*> client)
 {
-	do
+	while (!this->m_isEnded)
 	{
-		std::string packet = Helper::getAllTheSocket(client.first);
+		std::string packet;
+		try
+		{
+			packet = Helper::getAllTheSocket(client.first);
+		}
+		catch (const std::exception & e)
+		{
+			this->m_clients.erase(client.first);
+			return;
+		}
+		
 		RequestInfo info(packet);  
 		
 		if (!client.second->isRequestRelevant(info))
@@ -48,10 +58,10 @@ void Communicator::handleNewClient(std::pair<SOCKET, IRequestHandler*> client)
 		else
 		{
 			RequestResult result = client.second->handleRequest(info);
-			std::cout << result.requestBuffer;
+			std::cout << "Server Response: " << result.requestBuffer << std::endl << std::endl;
 			Helper::sendData(client.first, result.requestBuffer);
 		}
-	} while (!this->m_isEnded);
+	} 
 	closesocket(client.first);
 }
 

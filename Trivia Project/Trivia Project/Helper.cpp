@@ -10,6 +10,7 @@ char* Helper::getPartFromSocket(SOCKET sc, int bytesNum)
 	}
 
 	char *data = new char[bytesNum + 1];
+
 	int res = recv(sc, data, bytesNum, NO_FLAGS);
 
 	if (res == INVALID_SOCKET)
