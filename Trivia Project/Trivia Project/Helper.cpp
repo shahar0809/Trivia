@@ -29,7 +29,7 @@ void Helper::sendData(SOCKET sc, std::string message)
 	std::string binStr = convertToBinary(message);
 	const char* data = binStr.c_str();
 
-	if (send(sc, data, sizeof(data), 0) == INVALID_SOCKET)
+	if (send(sc, data, binStr.size(), 0) == INVALID_SOCKET)
 	{
 		throw std::exception("Error while sending message to client");
 	}
