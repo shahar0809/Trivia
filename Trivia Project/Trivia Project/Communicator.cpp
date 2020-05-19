@@ -44,6 +44,7 @@ void Communicator::handleNewClient(std::pair<SOCKET, IRequestHandler*> client)
 		}
 		catch (const std::exception & e)
 		{
+			closesocket(client.first);
 			this->m_clients.erase(client.first);
 			return;
 		}
