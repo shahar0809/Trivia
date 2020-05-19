@@ -6,6 +6,9 @@ SERVER_PORT = 1050
 MAX_LEN = 1024
 HELLO_MSG = "Hello"
 DATA_LEN_IN_BYTES = 4
+BIN_BASE = 2
+DECIMAL_BASE = 10
+BITS_IS_BYTE = 8
 
 # Codes for different types of requests
 Codes = {"LOGIN_CODE": "1", "SIGN_UP_CODE": "2"}
@@ -64,12 +67,7 @@ def send_sign_up_request(sock):
     sign_up_req = {"username": username,
                    "password": password,
                    "email": email}
-
-    sign_up_req = json.dumps(sign_up_req)  # Getting the json as a string
-    json_length = str(len(sign_up_req))
-    json_length = json_length.zfill(DATA_LEN_IN_BYTES)
-    str_packet = Codes["SIGN_UP_CODE"] + json_length + sign_up_req  # Building the packet according to the protocol
-    send_information(sock, str_packet)
+    edit_request(sock, sign_up_req, Codes["SIGN_UP_CODE"])
 
 
 def send_login_request(sock):
@@ -88,12 +86,16 @@ def send_login_request(sock):
     # Creating a json object from the information
     login_req = {"username": username,
                  "password": password}
+    edit_request(sock, login_req, Codes["LOGIN_CODE"])
 
-    login_req = json.dumps(login_req)  # Getting the json as a string
-    json_length = str(len(login_req))
+
+def edit_request(sock, json_request, code):
+    json_request = json.dumps(json_request)  # Getting the json as a string
+    json_length = str(len(json_request))
     json_length = json_length.zfill(DATA_LEN_IN_BYTES)
-    str_packet = Codes["LOGIN_CODE"] + json_length + login_req  # Building the packet according to the protocol
-    send_information(sock, str_packet)
+    str_packet = Codes[code] + json_length + json_request  # Building the packet according to the protocol
+    binary_request = ''.join(format(ord(i), 'b') for i in str_packet) # Converting the packet to binary values
+    send_information(sock, binary_request)
 
 
 def receive_response(sock):
@@ -103,7 +105,29 @@ def receive_response(sock):
     :return: None.
     """
     packet = sock.recv(MAX_LEN)
-    print("Received from server: " + json.dumps(packet.decode()))
+    str_data = ''
+    bin_data = packet.decode()
+    # Slicing the message to bytes and convert it to decimal
+    for i in range(0, len(bin_data), BITS_IS_BYTE-1):
+        temp_data = int(bin_data[i:i + BITS_IS_BYTE-1])
+        decimal_data = binary_to_decimal(temp_data)
+        str_data += chr(decimal_data)
+    print("Received from server: " + json.dumps(str_data))
+
+
+def binary_to_decimal(binary):
+    """
+    Converts the
+    :param binary: The binary string to convert
+    :return: decimal value.
+    """
+    decimal, i, n = 0, 0, 0
+    while binary != 0:
+        dec = binary % DECIMAL_BASE
+        decimal = decimal + dec * pow(BIN_BASE, i)
+        binary = binary//DECIMAL_BASE
+        i += 1
+    return decimal
 
 
 def main():
