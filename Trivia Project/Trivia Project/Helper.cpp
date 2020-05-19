@@ -10,8 +10,9 @@ char* Helper::getPartFromSocket(SOCKET sc, int bytesNum)
 	}
 
 	char *data = new char[bytesNum + 1];
+	printf("Error at socket(): %ld\n", WSAGetLastError());
 	int res = recv(sc, data, bytesNum, NO_FLAGS);
-
+	printf("Error at socket(): %ld\n", WSAGetLastError());
 	if (res == INVALID_SOCKET)
 	{
 		std::string s = "Error while recieving from socket: ";

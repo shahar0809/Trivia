@@ -7,15 +7,15 @@ bool LoginRequestHandler::isRequestRelevant(RequestInfo info)
 
 RequestResult LoginRequestHandler::handleRequest(RequestInfo info)
 {
-	JsonRequestPacketDeserializer::deserializeLoginRequest(info.buffer);
-
 	if (info.requestId == LOGIN_CODE)
 	{
+		JsonRequestPacketDeserializer::deserializeLoginRequest(info.buffer);
 		LoginResponse response = { 1 };
 		return RequestResult{ JsonResponsePacketSerializer::serializeResponse(response) };
 	}
 	else if (info.requestId == SIGN_UP_CODE)
 	{
+		JsonRequestPacketDeserializer::deserializeSignupRequest(info.buffer);
 		SignupResponse response = { 1 };
 		return RequestResult{ JsonResponsePacketSerializer::serializeResponse(response) };
 	}

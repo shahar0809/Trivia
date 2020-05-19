@@ -1,4 +1,6 @@
 #include "JsonRequestPacketDeserializer.h"
+#include <iostream>
+#include <iomanip>
 
 LoginRequest JsonRequestPacketDeserializer::deserializeLoginRequest(std::vector<uint8_t> buffer)
 {
@@ -14,5 +16,5 @@ SignupRequest JsonRequestPacketDeserializer::deserializeSignupRequest(std::vecto
 
 json JsonRequestPacketDeserializer::getJson(std::vector<uint8_t> packet)
 {
-	return json::from_cbor(packet);
+	return json::parse(packet);
 }

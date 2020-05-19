@@ -54,6 +54,7 @@ void Communicator::handleNewClient(std::pair<SOCKET, IRequestHandler*> client)
 		else
 		{
 			RequestResult result = client.second->handleRequest(info);
+			std::cout << result.requestBuffer;
 			Helper::sendData(client.first, result.requestBuffer);
 		}
 	} while (!this->m_isEnded);

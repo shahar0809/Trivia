@@ -5,6 +5,7 @@ SERVER_IP = "127.0.0.1"
 SERVER_PORT = 1050
 MAX_LEN = 1024
 HELLO_MSG = "Hello"
+DATA_LEN_IN_BYTES = 4
 
 # Codes for different types of requests
 Codes = {"LOGIN_CODE": "1", "SIGN_UP_CODE": "2"}
@@ -66,7 +67,7 @@ def send_sign_up_request(sock):
 
     sign_up_req = json.dumps(sign_up_req)  # Getting the json as a string
     json_length = str(len(sign_up_req))
-    json_length = json_length.zfill(4 - len(json_length))
+    json_length = json_length.zfill(DATA_LEN_IN_BYTES)
     str_packet = Codes["SIGN_UP_CODE"] + json_length + sign_up_req  # Building the packet according to the protocol
     send_information(sock, str_packet)
 
@@ -89,7 +90,9 @@ def send_login_request(sock):
                  "password": password}
 
     login_req = json.dumps(login_req)  # Getting the json as a string
-    str_packet = Codes["LOGIN_CODE"] + str(len(login_req)) + login_req  # Building the packet according to the protocol
+    json_length = str(len(login_req))
+    json_length = json_length.zfill(DATA_LEN_IN_BYTES)
+    str_packet = Codes["LOGIN_CODE"] + json_length + login_req  # Building the packet according to the protocol
     send_information(sock, str_packet)
 
 
@@ -100,8 +103,7 @@ def receive_response(sock):
     :return: None.
     """
     packet = sock.recv(MAX_LEN)
-    j = json.load(packet.decode('ascii'))
-    print("Received from server: " + json.dumps(j))
+    print("Received from server: " + json.dumps(packet.decode()))
 
 
 def main():

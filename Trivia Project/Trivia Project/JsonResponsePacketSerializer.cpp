@@ -30,14 +30,17 @@ std::string JsonResponsePacketSerializer::serializeResponse(SignupResponse signU
 std::string JsonResponsePacketSerializer::serializeResponse(json j, int code)
 {
 	// Convert the data to binary values.
-	std::vector<uint8_t> binData = json::to_cbor(j);
+	std::string g = j.dump();
+	std::vector<uint8_t> binData(g.begin(), g.end());
 	std::ostringstream os;
-	os << std::setw(DATA_LEN_IN_BYTES) << std::setfill('0') << binData.size();
+	os << std::setw(DATA_LEN_IN_BYTES+1) << std::setfill('0') << binData.size();
+	std::ostringstream ol;
+	ol.str(os.str());
+	ol << code;
 	unsigned char* dataLen = new unsigned char[DATA_LEN_IN_BYTES +1];
-	strcpy((char*)dataLen, os.str().c_str());
+	strcpy((char*)dataLen, ol.str().c_str());
 
-	std::string headers(1, static_cast<unsigned char>(code));
-	headers += reinterpret_cast<char const*>(dataLen);
+	std::string headers = reinterpret_cast<char const*>(dataLen);
 	std::string data(binData.begin(), binData.end());
 	return headers+data;
 }
