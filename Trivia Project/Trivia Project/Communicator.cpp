@@ -3,6 +3,10 @@
 #define _CRT_SECURE_NO_WARNINGS
 std::mutex isEnded;
 
+/**
+* Binds the socket and the configuration, starts listening for incoming requests.
+* return: None.
+*/
 void Communicator::bindAndListen()
 {
 	// Creating the listening socket of the server.
@@ -33,8 +37,14 @@ void Communicator::bindAndListen()
 	}
 }
 
+/**
+* Handles a new client after a socket was created.
+* @param client: contains the connecting socket, and the current request handler.
+* return: None.
+*/
 void Communicator::handleNewClient(std::pair<SOCKET, IRequestHandler*> client)
 {
+	/* Getting requests from the client */
 	while (!this->m_isEnded)
 	{
 		std::string packet;
@@ -48,6 +58,7 @@ void Communicator::handleNewClient(std::pair<SOCKET, IRequestHandler*> client)
 			this->m_clients.erase(client.first);
 			return;
 		}
+		
 		
 		RequestInfo info(packet);  
 		
@@ -66,6 +77,10 @@ void Communicator::handleNewClient(std::pair<SOCKET, IRequestHandler*> client)
 	closesocket(client.first);
 }
 
+/**
+* Accepts incoming requests (if valid), and creates a new socket and a thread that handle the client.
+* return: None.
+*/
 void Communicator::startHandleRequests()
 {
 	bindAndListen();
@@ -92,6 +107,10 @@ void Communicator::startHandleRequests()
 	}
 }
 
+/**
+* Closes all threads.
+* return: none.
+*/
 void Communicator::setIsEnded(bool _isEnded)
 {
 	// Update the variable so all the threads will know to stop executing.

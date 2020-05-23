@@ -11,8 +11,6 @@
 #include "JsonRequestPacketDeserializer.h"
 #include "JsonResponsePacketSerializer.h"
 
-#define HELLO_MSG "Hello"
-#define MSG_LEN 5
 #define PORT 1050
 
 class Communicator

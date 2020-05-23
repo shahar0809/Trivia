@@ -13,10 +13,9 @@ struct RequestInfo
 
 	RequestInfo(std::string buff)
 	{
-		std::vector<uint8_t> packet(buff.begin(), buff.end());
-		requestId = (int)(packet[0]-'0');
+		requestId = std::atoi(&buff[0]);
 		receivalTime = std::time(0);
-		buffer = std::vector<uint8_t>(packet.begin() + 5, packet.end());
+		buffer = std::vector<uint8_t>(buff.begin() + 5, buff.end());
 	}
 };
 
