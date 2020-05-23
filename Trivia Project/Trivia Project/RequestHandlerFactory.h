@@ -1,12 +1,14 @@
 #pragma once
 #include "LoginRequestHandler.h"
+#include "MenuRequestHandler.h"
 #include "LoginManager.h"
 #include "IDatabase.h"
 
 class RequestHandlerFactory
 {
 public:
-	LoginRequestHandler* createLoginRequesHandler();
+	LoginRequestHandler* createLoginRequestHandler();
+	MenuRequestHandler* createMenuRequestHandler();
 	LoginManager& getLoginManger();
 
 private:

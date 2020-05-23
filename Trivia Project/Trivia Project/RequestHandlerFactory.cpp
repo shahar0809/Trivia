@@ -1,6 +1,6 @@
 #include "RequestHandlerFactory.h"
 
-LoginRequestHandler* RequestHandlerFactory::createLoginRequesHandler()
+LoginRequestHandler* RequestHandlerFactory::createLoginRequestHandler()
 {
 	LoginRequestHandler loginReq = LoginRequestHandler();
 	return &loginReq;
@@ -10,4 +10,10 @@ LoginRequestHandler* RequestHandlerFactory::createLoginRequesHandler()
 LoginManager& RequestHandlerFactory::getLoginManger()
 {
 	return this->m_loginManager;
+}
+
+MenuRequestHandler* RequestHandlerFactory::createMenuRequestHandler()
+{
+	MenuRequestHandler menuReq = MenuRequestHandler();
+	return &menuReq;
 }
