@@ -2,15 +2,7 @@
 
 bool LoginManager::signup(std::string userName, std::string password, std::string email)
 {
-	try
-	{ 
-		this->m_database->addNewUser(userName, password, email);
-		return true;
-	}
-	catch (std::exception e)
-	{
-		return false;
-	}
+	return this->m_database->addNewUser(userName, password, email);
 }
 
 bool LoginManager::login(std::string userName, std::string password)

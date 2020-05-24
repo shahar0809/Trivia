@@ -12,7 +12,7 @@ public:
 	// QUERIES
 	bool doesUserExist(std::string userName);
 	bool doesPasswordMatch(std::string userName, std::string password);
-	void addNewUser(std::string name, std::string password, std::string email);
+	bool addNewUser(std::string name, std::string password, std::string email);
 
 	// DATABASE RELATED
 	bool openDb();

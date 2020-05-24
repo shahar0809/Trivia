@@ -46,21 +46,22 @@ int SqliteDatabase::callbackExists(void* data, int argc, char** argv, char** azC
 * @param email: the user's email.
 * return: None.
 */
-void SqliteDatabase::addNewUser(std::string name, std::string password, std::string email)
+bool SqliteDatabase::addNewUser(std::string name, std::string password, std::string email)
 {
 	if (doesUserExist(name))
 	{
-		return;
+		return false;
 	}
 
 	std::string sqlQuery = "INSERT INTO USERS"
 		"(NAME,PASSWORD,EMAIL)"
 		" VALUES("
 		"'" + name + "', "
-		"'" + password + ", "
+		"'" + password + "', "
 		"'" + email + "');";
 
 	executeMsg(sqlQuery.c_str(), nullptr, nullptr);
+	return true;
 }
 
 /**
