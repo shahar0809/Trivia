@@ -67,8 +67,8 @@ bool SqliteDatabase::openDb()
 	std::string dbFileName = "triviaDB.sqlite";
 
 	int doesFileExist = _access(dbFileName.c_str(), 0);
-
-	if (sqlite3_open(dbFileName.c_str(), &db) != SQLITE_OK)
+	int result = sqlite3_open(dbFileName.c_str(), &db);
+	if (result != SQLITE_OK)
 	{
 		db = nullptr;
 		std::cout << "Failed to open DB" << std::endl;

@@ -15,7 +15,7 @@ std::string JsonResponsePacketSerializer::serializeResponse(LoginResponse login)
 {
 	// Create data using json
 	json j;
-	j[ORDINARY_RESPONSE_FIELD] = login.status;
+	j[ORDINARY_RESPONSE_FIELD] = std::to_string(login.status);
 	return JsonResponsePacketSerializer::serializeResponse(j, LOGIN_CODE);
 }
 
@@ -23,7 +23,7 @@ std::string JsonResponsePacketSerializer::serializeResponse(SignupResponse signU
 {
 	// Create data using json
 	json j;
-	j[ORDINARY_RESPONSE_FIELD] = signUp.status;
+	j[ORDINARY_RESPONSE_FIELD] = std::to_string(signUp.status);
 	return JsonResponsePacketSerializer::serializeResponse(j, SIGN_UP_CODE);
 }
 

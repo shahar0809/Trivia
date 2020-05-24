@@ -3,7 +3,7 @@
 void Server::run()
 {
 	// Creating the database, and the handler factory.
-	this->m_database = &SqliteDatabase();
+	this->m_database = new SqliteDatabase();
 	this->m_handlerFactory = RequestHandlerFactory(this->m_database);
 
 	this->m_communicator = Communicator(m_database);

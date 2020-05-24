@@ -50,7 +50,7 @@ def receive_response(sock):
     packet = bin_data.to_bytes((bin_data.bit_length() + SIZE_OF_BYTE - 1) // SIZE_OF_BYTE, 'big').decode()
 
     # Getting the result of the request from the json object
-    j = json.loads(packet[DATA_LEN_IN_BYTES + 1 :])
+    j = json.loads(packet[DATA_LEN_IN_BYTES + 1:])
     print("S E R V E R:\n" + j["status"] + "\n")
     return j["status"]
 
