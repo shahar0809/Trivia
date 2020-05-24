@@ -9,8 +9,10 @@ class  LoginManager
 private:
 	IDatabase* m_database;
 	std::vector<LoggedUser> m_loggedUsers;
+
 public:
-	LoginManager();
+	LoginManager(IDatabase* db) { m_database = db; };
+
 	bool signup(std::string userName, std::string password, std::string email);
 	bool login(std::string userName, std::string password);
 	bool logout(std::string userName);

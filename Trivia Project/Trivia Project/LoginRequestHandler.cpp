@@ -1,5 +1,11 @@
 #include "LoginRequestHandler.h"
 
+LoginRequestHandler::LoginRequestHandler(IDatabase* db) 
+{
+	m_handlerFactory = RequestHandlerFactory(db);
+	m_loginManager = LoginManager(db);
+}
+
 bool LoginRequestHandler::isRequestRelevant(RequestInfo info)
 {
 	return info.requestId == LOGIN_CODE || info.requestId == SIGN_UP_CODE;

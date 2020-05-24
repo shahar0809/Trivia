@@ -29,6 +29,7 @@ public:
 };
 
 class IRequestHandler;
+
 struct RequestResult
 {
 	std::string requestBuffer;

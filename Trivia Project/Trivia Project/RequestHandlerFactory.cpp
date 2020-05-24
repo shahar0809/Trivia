@@ -1,14 +1,13 @@
 #include "RequestHandlerFactory.h"
 #include "LoginRequestHandler.h"
 
-RequestHandlerFactory::RequestHandlerFactory()
+RequestHandlerFactory::RequestHandlerFactory(IDatabase* db)
 {
-	this->m_database = &SqliteDatabase();
+	this->m_database = db;
 }
 
 RequestHandlerFactory::~RequestHandlerFactory()
 {
-	delete this->m_database;
 }
 
 LoginRequestHandler* RequestHandlerFactory::createLoginRequestHandler()

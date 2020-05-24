@@ -3,13 +3,17 @@
 #include "LoginManager.h"
 #include "JsonRequestPacketDeserializer.h"
 #include "RequestHandlerFactory.h"
+
 class RequestHandlerFactory;
+
 enum Statuses {FAILED = 0, SUCCEEDED};
 
 
 class LoginRequestHandler : public IRequestHandler
 {
 public:
+	LoginRequestHandler(IDatabase* db);
+
 	bool isRequestRelevant(RequestInfo info);
 	RequestResult handleRequest(RequestInfo info);
 

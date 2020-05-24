@@ -8,7 +8,7 @@ class LoginRequestHandler;
 class RequestHandlerFactory
 {
 public:
-	RequestHandlerFactory();
+	RequestHandlerFactory(IDatabase* db);
 	~RequestHandlerFactory();
 
 	LoginRequestHandler* createLoginRequestHandler();

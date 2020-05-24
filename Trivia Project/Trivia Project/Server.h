@@ -9,7 +9,7 @@
 #include <string>
 #include "Communicator.h"
 #include "RequestHandlerFactory.h"
-#include "IDatabase.h"
+#include "SqliteDatabase.h"
 
 #define EXIT_REQUEST "EXIT"
 

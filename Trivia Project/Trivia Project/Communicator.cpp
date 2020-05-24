@@ -3,6 +3,11 @@
 #define _CRT_SECURE_NO_WARNINGS
 std::mutex isEnded;
 
+Communicator::Communicator(IDatabase* db) : m_isEnded(false)
+{
+	m_handlerFactory = RequestHandlerFactory(db);
+}
+
 /**
 * Binds the socket and the configuration, starts listening for incoming requests.
 * return: None.
