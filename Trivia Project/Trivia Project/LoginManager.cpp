@@ -7,6 +7,14 @@ bool LoginManager::signup(std::string userName, std::string password, std::strin
 
 bool LoginManager::login(std::string userName, std::string password)
 {
+	for (auto loggedUser : m_loggedUsers)
+	{
+		if (loggedUser.getUsername() == userName)
+		{
+			return false;
+		}
+	}
+
 	if (this->m_database->doesUserExist(userName) && this->m_database->doesPasswordMatch(userName, password))
 	{
 		this->m_loggedUsers.push_back(LoggedUser(userName));
