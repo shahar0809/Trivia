@@ -5,8 +5,6 @@
 #include <vector>
 #include "JsonResponsePacketSerializer.h"
 
-
-
 struct RequestInfo
 {
 	int requestId;
@@ -22,6 +20,7 @@ struct RequestInfo
 };
 
 struct RequestResult;
+
 class IRequestHandler
 {
 public:

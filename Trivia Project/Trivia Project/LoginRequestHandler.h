@@ -4,8 +4,10 @@
 #include "RequestHandlerFactory.h"
 #include "JsonRequestPacketDeserializer.h"
 
-enum Statuses {FAILED = 0, SUCCEEDED};
 class RequestHandlerFactory;
+
+enum Statuses {FAILED = 0, SUCCEEDED};
+
 class LoginRequestHandler : public IRequestHandler
 {
 public:
