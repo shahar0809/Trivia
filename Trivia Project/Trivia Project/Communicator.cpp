@@ -3,6 +3,10 @@
 #define _CRT_SECURE_NO_WARNINGS
 std::mutex isEnded;
 
+/**
+* Binds the socket and the configuration, starts listening for incoming requests.
+* return: None.
+*/
 void Communicator::bindAndListen()
 {
 	// Creating the listening socket of the server.
@@ -33,10 +37,17 @@ void Communicator::bindAndListen()
 	}
 }
 
+/**
+* Handles a new client after a socket was created.
+* @param client: contains the connecting socket, and the current request handler.
+* return: None.
+*/
 void Communicator::handleNewClient(std::pair<SOCKET, IRequestHandler*> client)
 {
+	/* Getting requests from the client */
 	while (!this->m_isEnded)
 	{
+		/* Getting the packet from the socket. */
 		std::string packet;
 		try
 		{
@@ -46,10 +57,10 @@ void Communicator::handleNewClient(std::pair<SOCKET, IRequestHandler*> client)
 		{
 			closesocket(client.first);
 			this->m_clients.erase(client.first);
-			return;
+			return; // End thread execution
 		}
 		
-		RequestInfo info(packet);  
+		RequestInfo info(packet);  // Analyzing the packet
 		
 		if (!client.second->isRequestRelevant(info))
 		{
@@ -58,14 +69,19 @@ void Communicator::handleNewClient(std::pair<SOCKET, IRequestHandler*> client)
 		}
 		else
 		{
-			RequestResult result = client.second->handleRequest(info);
+			RequestResult result = client.second->handleRequest(info); // Passing the request to the handler.
 			std::cout << "Server Response: " << result.requestBuffer << std::endl << std::endl;
-			Helper::sendData(client.first, result.requestBuffer);
+			Helper::sendData(client.first, result.requestBuffer);     // Sending response to the client
+			client.second = result.newHandler;						  // Moving to the next state (updating handler).
 		}
 	} 
 	closesocket(client.first);
 }
 
+/**
+* Accepts incoming requests (if valid), and creates a new socket and a thread that handle the client.
+* return: None.
+*/
 void Communicator::startHandleRequests()
 {
 	bindAndListen();
@@ -82,8 +98,7 @@ void Communicator::startHandleRequests()
 		}
 
 		// Adding the client to the clients map.
-		LoginRequestHandler handler = LoginRequestHandler();
-		std::pair<SOCKET, IRequestHandler*> client(clientSocket, &handler);
+		std::pair<SOCKET, IRequestHandler*> client(clientSocket, m_handlerFactory.createLoginRequestHandler());
 		m_clients.insert(client);
 
 		// Creating a detached thread that handles the new client.
@@ -92,6 +107,10 @@ void Communicator::startHandleRequests()
 	}
 }
 
+/**
+* Closes all threads.
+* return: none.
+*/
 void Communicator::setIsEnded(bool _isEnded)
 {
 	// Update the variable so all the threads will know to stop executing.

@@ -1,7 +1,6 @@
 #include "Helper.h"
-#define NO_FLAGS 0
 
-// recieve data from socket according byteSize
+/* Receives a buffer from the client through socket, according to the bytesNum. */
 char* Helper::getPartFromSocket(SOCKET sc, int bytesNum)
 {
 	if (bytesNum == 0)
@@ -10,7 +9,6 @@ char* Helper::getPartFromSocket(SOCKET sc, int bytesNum)
 	}
 
 	char *data = new char[bytesNum + 1];
-
 	int res = recv(sc, data, bytesNum, NO_FLAGS);
 
 	if (res == INVALID_SOCKET)
@@ -20,11 +18,11 @@ char* Helper::getPartFromSocket(SOCKET sc, int bytesNum)
 		throw std::exception(s.c_str());
 	}
 
-	data[bytesNum] = 0;
+	data[bytesNum] = NULL;
 	return data;
 }
 
-// send data to socket
+/* Sends a buffer to the client through socket. */
 void Helper::sendData(SOCKET sc, std::string message)
 {
 	std::string binStr = convertToBinary(message);
@@ -36,13 +34,22 @@ void Helper::sendData(SOCKET sc, std::string message)
 	}
 }
 
+/* Returns the request from the client, after being converted to ASCII. */
 std::string Helper::getAllTheSocket(SOCKET sc)
 {
-	std::string	buffer = Helper::getPartFromSocket(sc, (DATA_LEN_IN_BYTES + CODE_LEN_IN_BYTES) * 8);
-	buffer += Helper::getPartFromSocket(sc, 8 * std::stoi(buffer.substr(CODE_LEN_IN_BYTES, DATA_LEN_IN_BYTES)));
+	// Getting the code of the request
+	std::string	buffer = Helper::getPartFromSocket(sc, CODE_LEN_IN_BYTES * SIZE_OF_BYTE);
+
+	// Getting the data length
+	std::string dataLength = Helper::getPartFromSocket(sc, DATA_LEN_IN_BYTES * SIZE_OF_BYTE);
+	buffer += dataLength;
+
+	// Getting the data from the packet
+	buffer += Helper::getPartFromSocket(sc, SIZE_OF_BYTE * std::stoi(dataLength));
 	return convertToAscii(buffer);
 }
 
+/* Converts a buffer from ASCII to binary. */
 std::string Helper::convertToBinary(std::string str)
 {
 	std::string binString;
@@ -53,6 +60,7 @@ std::string Helper::convertToBinary(std::string str)
 	return binString;
 }
 
+/* Converts a buffer from binary to ASCII. */
 std::string Helper::convertToAscii(std::string str)
 {
 	std::string textualStr;

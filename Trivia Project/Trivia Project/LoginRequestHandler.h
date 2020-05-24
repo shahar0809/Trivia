@@ -1,16 +1,22 @@
 #pragma once
 #include "IRequestHandler.h"
-#include "JsonRequestPacketDeserializer.h"
+#include "LoginManager.h"
 #include "RequestHandlerFactory.h"
-class RequestHandlerFactory;
+#include "JsonRequestPacketDeserializer.h"
+
+enum Statuses {FAILED = 0, SUCCEEDED};
+
 class LoginRequestHandler : public IRequestHandler
 {
-private:
-	RequestHandlerFactory* m_handlerFactory;
 public:
 	bool isRequestRelevant(RequestInfo info);
 	RequestResult handleRequest(RequestInfo info);
+
+private:
 	RequestResult login(RequestInfo info);
 	RequestResult signup(RequestInfo info);
+
+	LoginManager m_loginManager;
+	RequestHandlerFactory m_handlerFactory;
 };
 

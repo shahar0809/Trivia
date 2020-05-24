@@ -8,16 +8,17 @@
 #include <condition_variable>
 #include <string>
 #include "Communicator.h"
-#include "SqliteDatabase.h" //Can erase it, just for try...
+#include "RequestHandlerFactory.h"
+#include "IDatabase.h"
 
 #define EXIT_REQUEST "EXIT"
 
 class Server
 {
 private:
-	IDatabase* m_database;
-	RequestHandlerFactory m_handlerFactory;
 	Communicator m_communicator;
+	RequestHandlerFactory m_handlerFactory;
+	IDatabase* m_database;
 
 public:
 	void run();

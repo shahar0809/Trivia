@@ -1,42 +1,74 @@
 #include "SqliteDatabase.h"
 
+/**
+* Checks if a user exists by its username.
+* @param userName: the username we search for in the database.
+* return: exists / doesn't exist (true / false)
+*/
 bool SqliteDatabase::doesUserExist(std::string userName)
 {
 	bool userExist = false;
 	std::string sqlMsg = "SELECT * FROM USERS WHERE NAME ='" + userName + "';";
-	executeMsg((char*)sqlMsg.c_str(), callbackExists, &userExist);
+	executeMsg(sqlMsg, callbackExists, &userExist);
 	return userExist;
 }
 
+/**
+* Checks if the inputted password matches the user's password.
+* @param userName: the user's name.
+* return: matches / doesn't match (true / false)
+*/
 bool SqliteDatabase::doesPasswordMatch(std::string userName,std::string password)
 {
 	bool passwordMatch = false;
-	std::string sqlMsg = "SELECT * FROM USERS WHERE NAME ='" + userName + "' AND PASSWORD = '"
-		+ password + "';";
-	executeMsg((char*)sqlMsg.c_str(), callbackExists, &passwordMatch);
+	std::string sqlMsg = "SELECT *" 
+		"FROM USERS WHERE NAME ='" + userName + 
+		"' AND PASSWORD = '" + password + "';";
+
+	executeMsg(sqlMsg, callbackExists, &passwordMatch);
 	return passwordMatch;
 }
 
-//This function is called when the select query gets data - proves that there is such user.
+/**
+* This function is called when the SELECT query gets data. Returns in @param data if a user exists or not.
+*/
 int SqliteDatabase::callbackExists(void* data, int argc, char** argv, char** azColName)
 {
-	bool* isExist = static_cast<bool*>(data);
-	*isExist = true;
+	bool* doesExist = static_cast<bool*>(data);
+	*doesExist = true;
 	return 0;
 }
 
+/**
+* Adds a new user to the database.
+* @param name: the username.
+* @param password: the user's password.
+* @param email: the user's email.
+* return: None.
+*/
 void SqliteDatabase::addNewUser(std::string name, std::string password, std::string email)
 {
-	std::string sqlMsg("INSERT INTO USERS(NAME,PASSWORD,EMAIL) VALUES('" + name +"','"+ password+"','"+ email+ "');");
-	executeMsg((char*)sqlMsg.c_str(), nullptr, nullptr);
+	std::string sqlQuery = "INSERT INTO USERS"
+		"(NAME,PASSWORD,EMAIL)"
+		" VALUES("
+		"'" + name + "', "
+		"'" + password + ", "
+		"'" + email + "');";
+
+	executeMsg(sqlQuery.c_str(), nullptr, nullptr);
 }
 
+/**
+* Opens the database.
+* return: opened successfully / failed to open (true / false)
+*/
 bool SqliteDatabase::openDb()
 {
 	std::string dbFileName = "triviaDB.sqlite";
+
 	int doesFileExist = _access(dbFileName.c_str(), 0);
-	int res = sqlite3_open(dbFileName.c_str(), &db);
-	if (res != SQLITE_OK) 
+
+	if (sqlite3_open(dbFileName.c_str(), &db) != SQLITE_OK)
 	{
 		db = nullptr;
 		std::cout << "Failed to open DB" << std::endl;
@@ -44,10 +76,18 @@ bool SqliteDatabase::openDb()
 	}
 	return true;
 }
-bool SqliteDatabase::executeMsg(char* sqlStatement, int(*callback)(void*, int, char**, char**), void* param)
+
+/**
+* Executes a SQL query on the opened databse.
+* @param sqlStatement: the SQL query
+* @param callback: the callback function to the query (if there's one)
+* @param param: query result
+*/
+bool SqliteDatabase::executeMsg(std::string sqlStatement, int(*callback)(void*, int, char**, char**), void* param)
 {
 	char* errMessage = nullptr;
-	int res = sqlite3_exec(db, sqlStatement, callback, param, &errMessage);
+	int res = sqlite3_exec(db, sqlStatement.c_str(), callback, param, &errMessage);
+
 	if (res != SQLITE_OK)
 	{
 		std::cout << errMessage << std::endl;
@@ -56,17 +96,27 @@ bool SqliteDatabase::executeMsg(char* sqlStatement, int(*callback)(void*, int, c
 	return true;
 }
 
+/*
+Constructor
+*/
 SqliteDatabase::SqliteDatabase()
 {
 	this->openDb();
 }
 
+/**
+* Closes the opened database.
+* return: None.
+*/
 void SqliteDatabase::close()
 {
 	sqlite3_close(db);
 	db = nullptr;
 }
 
+/*
+Destructor
+*/
 SqliteDatabase::~SqliteDatabase()
 {
 	close();

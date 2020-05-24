@@ -10,8 +10,10 @@ void LoginManager::login(std::string userName, std::string password)
 	if (this->m_database->doesUserExist(userName) && this->m_database->doesPasswordMatch(userName, password))
 	{
 		this->m_loggedUsers.push_back(LoggedUser(userName));
+		return true;
 	}
-	std::cerr << "There is no such user" << std::endl;//Should do something with this?
+	std::cerr << "User doesn't exist." << std::endl;
+	return false;
 }
 
 void LoginManager::logout(std::string userName)
