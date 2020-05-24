@@ -11,6 +11,7 @@ private:
 	std::vector<LoggedUser> m_loggedUsers;
 
 public:
+	LoginManager() { m_database = NULL; };
 	LoginManager(IDatabase* db) { m_database = db; };
 
 	bool signup(std::string userName, std::string password, std::string email);

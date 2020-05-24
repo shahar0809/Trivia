@@ -37,8 +37,3 @@ bool LoginManager::logout(std::string userName)
 	}
 	return false;
 }
-
-LoginManager::LoginManager()
-{
-	this->m_database = &SqliteDatabase();
-}

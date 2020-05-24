@@ -21,6 +21,7 @@ private:
 	IDatabase* m_database;
 
 public:
+	Server() {};
 	void run();
 };
 

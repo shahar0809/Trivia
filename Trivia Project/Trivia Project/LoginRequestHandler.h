@@ -12,6 +12,7 @@ enum Statuses {FAILED = 0, SUCCEEDED};
 class LoginRequestHandler : public IRequestHandler
 {
 public:
+	LoginRequestHandler() {};
 	LoginRequestHandler(IDatabase* db);
 
 	bool isRequestRelevant(RequestInfo info);
