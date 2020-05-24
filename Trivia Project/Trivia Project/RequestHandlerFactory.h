@@ -3,7 +3,7 @@
 #include "MenuRequestHandler.h"
 #include "LoginManager.h"
 #include "IDatabase.h"
-
+class LoginRequestHandler;
 class RequestHandlerFactory
 {
 public:

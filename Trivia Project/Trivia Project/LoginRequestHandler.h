@@ -5,7 +5,7 @@
 #include "JsonRequestPacketDeserializer.h"
 
 enum Statuses {FAILED = 0, SUCCEEDED};
-
+class RequestHandlerFactory;
 class LoginRequestHandler : public IRequestHandler
 {
 public:
@@ -19,4 +19,3 @@ private:
 	LoginManager m_loginManager;
 	RequestHandlerFactory m_handlerFactory;
 };
-

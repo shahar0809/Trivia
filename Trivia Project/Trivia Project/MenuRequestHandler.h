@@ -3,6 +3,7 @@
 
 class MenuRequestHandler : public IRequestHandler
 {
-
+public:
+	MenuRequestHandler();
 };
 
