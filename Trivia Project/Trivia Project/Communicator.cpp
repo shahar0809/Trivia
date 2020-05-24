@@ -47,6 +47,7 @@ void Communicator::handleNewClient(std::pair<SOCKET, IRequestHandler*> client)
 	/* Getting requests from the client */
 	while (!this->m_isEnded)
 	{
+		IRequestHandler* currHandler = client.second, *temp = currHandler;
 		/* Getting the packet from the socket. */
 		std::string packet;
 		try
@@ -62,7 +63,7 @@ void Communicator::handleNewClient(std::pair<SOCKET, IRequestHandler*> client)
 		
 		RequestInfo info(packet);  // Analyzing the packet
 		
-		if (!client.second->isRequestRelevant(info))
+		if (!currHandler->isRequestRelevant(info))
 		{
 			ErrorResponse errResponse{ "Request is not relevant." };
 			Helper::sendData(client.first, JsonResponsePacketSerializer::serializeResponse(errResponse));
@@ -72,7 +73,8 @@ void Communicator::handleNewClient(std::pair<SOCKET, IRequestHandler*> client)
 			RequestResult result = client.second->handleRequest(info); // Passing the request to the handler.
 			std::cout << "Server Response: " << result.requestBuffer << std::endl << std::endl;
 			Helper::sendData(client.first, result.requestBuffer);     // Sending response to the client
-			client.second = result.newHandler;						  // Moving to the next state (updating handler).
+			currHandler = result.newHandler;						  // Moving to the next state (updating handler).
+			delete temp;											  // Freeing allocated memory of the previous handle.
 		}
 	} 
 	closesocket(client.first);

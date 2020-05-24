@@ -13,7 +13,7 @@ struct RequestInfo
 
 	RequestInfo(std::string buff)
 	{
-		requestId = std::atoi(&buff[0]);
+		requestId = (int)(buff[0] - '0');
 		receivalTime = std::time(0);
 		buffer = std::vector<uint8_t>(buff.begin() + CODE_LEN_IN_BYTES + DATA_LEN_IN_BYTES, buff.end());
 	}

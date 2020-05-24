@@ -43,9 +43,11 @@ std::string Helper::getAllTheSocket(SOCKET sc)
 	// Getting the data length
 	std::string dataLength = Helper::getPartFromSocket(sc, DATA_LEN_IN_BYTES * SIZE_OF_BYTE);
 	buffer += dataLength;
+	dataLength = convertToAscii(dataLength);
 
 	// Getting the data from the packet
 	buffer += Helper::getPartFromSocket(sc, SIZE_OF_BYTE * std::stoi(dataLength));
+	std::cout << convertToAscii(buffer) << std::endl;
 	return convertToAscii(buffer);
 }
 

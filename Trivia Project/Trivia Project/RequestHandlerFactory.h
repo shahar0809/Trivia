@@ -8,6 +8,9 @@ class LoginRequestHandler;
 class RequestHandlerFactory
 {
 public:
+	RequestHandlerFactory();
+	~RequestHandlerFactory();
+
 	LoginRequestHandler* createLoginRequestHandler();
 	MenuRequestHandler* createMenuRequestHandler();
 	LoginManager& getLoginManger();
