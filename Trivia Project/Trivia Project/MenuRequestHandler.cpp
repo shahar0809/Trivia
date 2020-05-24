@@ -8,12 +8,12 @@ MenuRequestHandler::~MenuRequestHandler()
 {
 }
 
-bool isRequestRelevant(RequestInfo)
+bool MenuRequestHandler::isRequestRelevant(RequestInfo)
 {
 	return false;
 }
 
-RequestResult handleRequest(RequestInfo)
+RequestResult MenuRequestHandler::handleRequest(RequestInfo)
 {
 	RequestResult res;
 	return res;

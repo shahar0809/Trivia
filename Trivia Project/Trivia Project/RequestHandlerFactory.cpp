@@ -1,5 +1,5 @@
 #include "RequestHandlerFactory.h"
-
+#include "LoginRequestHandler.h"
 LoginRequestHandler* RequestHandlerFactory::createLoginRequestHandler()
 {
 	LoginRequestHandler loginReq = LoginRequestHandler();

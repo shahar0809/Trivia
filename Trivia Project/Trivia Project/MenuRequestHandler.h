@@ -7,7 +7,7 @@ public:
 	MenuRequestHandler();
 	~MenuRequestHandler();
 
-	virtual bool isRequestRelevant(RequestInfo);
-	virtual RequestResult handleRequest(RequestInfo);
+	bool isRequestRelevant(RequestInfo);
+	RequestResult handleRequest(RequestInfo);
 };
 

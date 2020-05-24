@@ -1,10 +1,10 @@
 #pragma once
-#include "LoginRequestHandler.h"
+//#include "LoginRequestHandler.h"
+#include "LoginManager.h"
 #include "MenuRequestHandler.h"
 #include "IDatabase.h"
 
 class LoginRequestHandler;
-
 class RequestHandlerFactory
 {
 public:
