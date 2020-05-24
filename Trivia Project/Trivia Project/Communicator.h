@@ -10,6 +10,7 @@
 #include "Helper.h"
 #include "JsonRequestPacketDeserializer.h"
 #include "JsonResponsePacketSerializer.h"
+#include "RequestHandlerFactory.h"
 
 #define HELLO_MSG "Hello"
 #define MSG_LEN 5
@@ -26,6 +27,7 @@ private:
 	void handleNewClient(std::pair<SOCKET, IRequestHandler*> client);
 
 	std::map<SOCKET, IRequestHandler*> m_clients;
+	RequestHandlerFactory m_handlerFactory;
 	SOCKET m_listeningSocket;
 	bool m_isEnded;
 };
