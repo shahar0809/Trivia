@@ -83,9 +83,6 @@
     <ClInclude Include="Helper.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="IDataBase.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="SqliteDatabase.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -102,6 +99,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="MenuRequestHandler.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="IDatabase.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
