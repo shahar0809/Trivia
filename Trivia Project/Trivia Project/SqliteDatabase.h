@@ -1,5 +1,5 @@
 #pragma once
-#include "IDataBase.h"
+#include "IDatabase.h"
 #include "sqlite3.h"
 #include "io.h"
 

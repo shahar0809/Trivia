@@ -157,7 +157,7 @@
   <ItemGroup>
     <ClInclude Include="Communicator.h" />
     <ClInclude Include="Helper.h" />
-    <ClInclude Include="IDataBase.h" />
+    <ClInclude Include="IDatabase.h" />
     <ClInclude Include="include\nlohmann\json.hpp" />
     <ClInclude Include="IRequestHandler.h" />
     <ClInclude Include="JsonRequestPacketDeserializer.h" />

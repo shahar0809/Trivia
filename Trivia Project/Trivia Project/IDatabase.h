@@ -8,4 +8,3 @@ public:
 	virtual bool addNewUser(std::string name, std::string password, std::string email) = 0;
 	virtual bool openDb() = 0;
 };
-
