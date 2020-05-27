@@ -142,10 +142,10 @@ def signup_with_same_username(sock):
 
 
 def login_when_already_connected(sock):
-    send_login_request(sock, "randomUser", "randomPassword")
+    send_login_request(sock, "randomUser1", "randomPassword1")
     receive_response(sock)
 
-    send_login_request(sock, "randomUser", "randomPassword")
+    send_login_request(sock, "randomUser1", "randomPassword1")
     if receive_response(sock) == SUCCESS_CODE:
         print("Test 3 failed. Succeeded to log in when the user is already connected.\n")
         return False
