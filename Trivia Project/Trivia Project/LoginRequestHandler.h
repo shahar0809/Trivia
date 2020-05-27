@@ -8,6 +8,8 @@ class RequestHandlerFactory;
 
 enum Statuses {FAILED = 0, SUCCEEDED};
 
+enum Statuses {FAILED = 0, SUCCEEDED};
+
 class LoginRequestHandler : public IRequestHandler
 {
 public:
