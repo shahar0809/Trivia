@@ -80,6 +80,10 @@ bool SqliteDatabase::openDb()
 		std::cout << "Failed to open DB" << std::endl;
 		return false;
 	}
+	if (doesFileExist == -1)
+	{
+		initDatabase();
+	}
 	return true;
 }
 
@@ -99,6 +103,7 @@ bool SqliteDatabase::executeMsg(std::string sqlStatement, int(*callback)(void*, 
 		std::cout << errMessage << std::endl;
 		return false;
 	}
+	
 	return true;
 }
 
@@ -148,4 +153,5 @@ void SqliteDatabase::initDatabase()
 		executeMsg("ROLLBACK;", nullptr, nullptr);
 		throw std::exception("Error creating the USERS table");
 	}
+	executeMsg("COMMIT;", nullptr, nullptr);
 }

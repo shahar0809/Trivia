@@ -128,10 +128,10 @@ def login_without_signup(sock):
 
 
 def signup_with_same_username(sock):
-    send_sign_up_request(sock, "randomUser", "randomPassword", "randomEmail")
+    send_sign_up_request(sock, "randomUser1", "randomPassword1", "randomEmail1")
     receive_response(sock)
 
-    send_sign_up_request(sock, "randomUser", "randomPassword2", "randomEmail2")
+    send_sign_up_request(sock, "randomUser1", "randomPassword2", "randomEmail2")
     if receive_response(sock) == SUCCESS_CODE:
         print("Test 2 failed. Succeeded to sign up with the same username.\n")
         return False
