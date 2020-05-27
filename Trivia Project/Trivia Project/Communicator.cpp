@@ -3,6 +3,11 @@
 #define _CRT_SECURE_NO_WARNINGS
 std::mutex isEnded;
 
+Communicator::Communicator(IDatabase* db) : m_isEnded(false)
+{
+	m_handlerFactory = RequestHandlerFactory(db);
+}
+
 /**
 * Binds the socket and the configuration, starts listening for incoming requests.
 * return: None.
@@ -47,6 +52,7 @@ void Communicator::handleNewClient(std::pair<SOCKET, IRequestHandler*> client)
 	/* Getting requests from the client */
 	while (!this->m_isEnded)
 	{
+		IRequestHandler* currHandler = client.second, *temp = currHandler;
 		/* Getting the packet from the socket. */
 		std::string packet;
 		try
@@ -62,7 +68,7 @@ void Communicator::handleNewClient(std::pair<SOCKET, IRequestHandler*> client)
 		
 		RequestInfo info(packet);  // Analyzing the packet
 		
-		if (!client.second->isRequestRelevant(info))
+		if (!currHandler->isRequestRelevant(info))
 		{
 			ErrorResponse errResponse{ "Request is not relevant." };
 			Helper::sendData(client.first, JsonResponsePacketSerializer::serializeResponse(errResponse));
@@ -72,7 +78,6 @@ void Communicator::handleNewClient(std::pair<SOCKET, IRequestHandler*> client)
 			RequestResult result = client.second->handleRequest(info); // Passing the request to the handler.
 			std::cout << "Server Response: " << result.requestBuffer << std::endl << std::endl;
 			Helper::sendData(client.first, result.requestBuffer);     // Sending response to the client
-			client.second = result.newHandler;						  // Moving to the next state.
 		}
 	} 
 	closesocket(client.first);

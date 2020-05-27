@@ -1,9 +1,18 @@
 #include "RequestHandlerFactory.h"
+#include "LoginRequestHandler.h"
+
+RequestHandlerFactory::RequestHandlerFactory(IDatabase* db)
+{
+	this->m_database = db;
+}
+
+RequestHandlerFactory::~RequestHandlerFactory()
+{
+}
 
 LoginRequestHandler* RequestHandlerFactory::createLoginRequestHandler()
 {
-	LoginRequestHandler loginReq = LoginRequestHandler();
-	return &loginReq;
+	return new LoginRequestHandler(m_database);
 }
 
 // LoginManager getter
@@ -15,5 +24,5 @@ LoginManager& RequestHandlerFactory::getLoginManger()
 MenuRequestHandler* RequestHandlerFactory::createMenuRequestHandler()
 {
 	MenuRequestHandler menuReq = MenuRequestHandler();
-	return &menuReq;
+	return new MenuRequestHandler();
 }

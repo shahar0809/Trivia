@@ -6,8 +6,11 @@
 #include <thread>
 #include <string>
 #include <mutex>
+
 #include "LoginRequestHandler.h"
 #include "Helper.h"
+#include "JsonRequestPacketDeserializer.h"
+#include "JsonResponsePacketSerializer.h"
 #include "RequestHandlerFactory.h"
 
 #define PORT 1050
@@ -15,6 +18,8 @@
 class Communicator
 {
 public:
+	Communicator() {};
+	Communicator(IDatabase* db);
 	void startHandleRequests();
 	void setIsEnded(bool isEnded);
 
@@ -23,7 +28,7 @@ private:
 	void handleNewClient(std::pair<SOCKET, IRequestHandler*> client);
 
 	std::map<SOCKET, IRequestHandler*> m_clients;
-	RequestHandlerFactory& m_handlerFactory;
+	RequestHandlerFactory m_handlerFactory;
 	SOCKET m_listeningSocket;
 	bool m_isEnded;
 };
