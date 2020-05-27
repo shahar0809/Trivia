@@ -10,7 +10,7 @@ LoginRequest JsonRequestPacketDeserializer::deserializeLoginRequest(std::vector<
 	// Getting the data from the packet
 	json j = json::parse(buffer);
 
-	// Printing json fields (to make sure that the data transformation is valid.
+	// Printing json fields (to make sure that the data transformation is valid).
 	std::cout << "Login Request:\n" << 
 		"Username: " << j[fields[USERNAME]] << 
 		"\nPassword: " << j[fields[PASSWORD]] << std::endl << std::endl;

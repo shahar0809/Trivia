@@ -1,5 +1,7 @@
 #include "SqliteDatabase.h"
 
+#define	NOT_FOUND -1
+
 /**
 * Checks if a user exists by its username.
 * @param userName: the username we search for in the database.
@@ -80,6 +82,10 @@ bool SqliteDatabase::openDb()
 		std::cout << "Failed to open DB" << std::endl;
 		return false;
 	}
+	if (doesFileExist == NOT_FOUND)
+	{
+		initDatabase();
+	}
 	return true;
 }
 
@@ -135,17 +141,58 @@ SqliteDatabase::~SqliteDatabase()
 */
 void SqliteDatabase::initDatabase()
 {
-	executeMsg("BEGIN;", nullptr, nullptr);
-
-	std::string createTableQuery =
+	std::string createUserTableQuery =
 		"CREATE TABLE IF NOT EXISTS USERS ("
 		"NAME TEXT PRIMARY KEY NOT NULL, "
 		"PASSWORD TEXT NOT NULL, "
 		"EMAIL TEXT NOT NULL);";
 
+	createTable("USERS",createUserTableQuery);
+
+	std::string createQuestionsTableQuery =
+		"CREATE TABLE IF NOT EXISTS QUESTIONS ("
+		"QUESTION_ID INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "
+		"QUESTION TEXT NOT NULL, "
+		"CORRECT_ANSWER TEXT NOT NULL, "
+		"ANSWER2 TEXT NOT NULL, "
+		"ANSWER3 TEXT NOT NULL, "
+		"ANSWER4 TEXT NOT NULL);";
+
+	createTable("QUESTIONS", createQuestionsTableQuery);
+	initQuestionTable();
+}
+
+void SqliteDatabase::createTable(std::string tableName, std::string createTableQuery)
+{
+	std::string errorMsg;
+	executeMsg("BEGIN;", nullptr, nullptr);
+
 	if (!executeMsg(createTableQuery, nullptr, nullptr))
 	{
+		errorMsg = "Error creating the " + tableName + " table";
 		executeMsg("ROLLBACK;", nullptr, nullptr);
-		throw std::exception("Error creating the USERS table");
+		throw std::exception(errorMsg.c_str());
 	}
+	executeMsg("COMMIT;", nullptr, nullptr);
+}
+
+void SqliteDatabase::insertOneQuestion(std::string question,std::string correctAnswer,std::string ans2,std::string ans3,std::string ans4)
+{
+	std::string sqlMsg("INSERT INTO	QUESTIONS(QUESTION,CORRECT_ANSWER,ANSWER2,ANSWER3,ANSWER4) VALUES('"
+		+ question + "','"+ correctAnswer + "','" + ans2 + "','"+ ans3+"','"+ ans4+"');");
+	executeMsg((char*)sqlMsg.c_str(), nullptr, nullptr);
+}
+
+void SqliteDatabase::initQuestionTable()
+{
+	insertOneQuestion("Who is Eddie Vedder?", "Musician", "Computer", "Phone model", "TV Show");
+	insertOneQuestion("What is the title of Labron James?", "The king", "The elevator", "The leader", "The iceman");
+	insertOneQuestion("What is FLAC?", "Audio file", "Fast-Low-And-Crawl", "Movie file", "Computers Company name");
+	insertOneQuestion("Nokia is...?", "Connecting people", "Make you in love", "The best you will ever hear", "Small but Smart");
+	insertOneQuestion("What there is on the roof?", "Fiddler", "Cat", "Monument", "Light");
+	insertOneQuestion("What is DNS?", "Domain Name System", "Data Non-Structurable", "Do Not Scratch", "audio file");
+	insertOneQuestion("What NBA team does Omri Caspi plays for?", "Sacramento Kings", "Clevlend Cavs", "Atlanta Hawks", "Toronto Raptors");
+	insertOneQuestion("On which instruments Adler Trio play?", "Harmonicas", "Clarinet, Trombon, Trumpet", "Guitar, Keyboard, Bass", "Violin, Viola, Chelo");
+	insertOneQuestion("What is the name of the Manager of Magshimim?", "Hadas", "Michal", "Uri", "Itay");
+	insertOneQuestion("Neo is a character in which movie?", "Matrix", "Lord of the Ring", "Fight Club", "Intouchables");
 }
