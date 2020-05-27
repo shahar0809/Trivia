@@ -96,11 +96,14 @@ def edit_request(sock, json_request, code):
     json_length = str(len(json_request))
     json_length = json_length.zfill(DATA_LEN_IN_BYTES)
 
-    str_packet = code + json_length + json_request  # Building the packet according to the protocol
-    str_packet = ''.join(format(ord(i), 'b').zfill(SIZE_OF_BYTE) for i in code)
-    str_packet += ''.join(format(ord(i), 'b').zfill(SIZE_OF_BYTE) for i in json_length)
-    str_packet += ''.join(format(ord(i), 'b').zfill(SIZE_OF_BYTE) for i in json_request)
+    # Building the packet according to the protocol
+    str_packet = convert_to_binary(code) + convert_to_binary(json_length) + convert_to_binary(json_request)
+
     send_information(sock, str_packet)
+
+
+def convert_to_binary(msg):
+    return ''.join(format(ord(i), 'b').zfill(SIZE_OF_BYTE) for i in msg)
 
 
 """ ******* TESTS ******* """
