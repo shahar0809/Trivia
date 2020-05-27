@@ -127,3 +127,25 @@ SqliteDatabase::~SqliteDatabase()
 {
 	close();
 }
+
+/**
+* Initializes the database by creating all the necessary tables (USERS, ALBUMS, PICTURES, TAGS).
+* Input: None
+* Ouput: None
+*/
+void SqliteDatabase::initDatabase()
+{
+	executeMsg("BEGIN;", nullptr, nullptr);
+
+	std::string createTableQuery =
+		"CREATE TABLE IF NOT EXISTS USERS ("
+		"NAME TEXT PRIMARY KEY NOT NULL, "
+		"PASSWORD TEXT NOT NULL, "
+		"EMAIL TEXT NOT NULL);";
+
+	if (!executeMsg(createTableQuery, nullptr, nullptr))
+	{
+		executeMsg("ROLLBACK;", nullptr, nullptr);
+		throw std::exception("Error creating the USERS table");
+	}
+}

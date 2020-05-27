@@ -15,6 +15,7 @@ public:
 	bool addNewUser(std::string name, std::string password, std::string email);
 
 	// DATABASE RELATED
+	void initDatabase();
 	bool openDb();
 	void close();
 
