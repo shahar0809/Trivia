@@ -13,6 +13,11 @@ public:
 	bool doesUserExist(std::string userName);
 	bool doesPasswordMatch(std::string userName, std::string password);
 	bool addNewUser(std::string name, std::string password, std::string email);
+	std::list<std::string> getQuestions(int maybeNumOfQuestions);
+	float getPlayerAverageAnswerTime(std::string username);
+	int getNumOfCorrectAnswers(std::string username);
+	int getNumOfTotalAnswers(std::string username);
+	int getNumOfPlayerGames(std::string username);
 
 	// DATABASE RELATED
 	void initDatabase();

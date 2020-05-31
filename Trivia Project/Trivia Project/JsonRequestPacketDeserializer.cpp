@@ -36,3 +36,19 @@ SignupRequest JsonRequestPacketDeserializer::deserializeSignupRequest(std::vecto
 
 	return SignupRequest{ j[fields[USERNAME]], j[fields[PASSWORD]], j[fields[EMAIL]] };
 }
+
+GetPlayersInRoomRequest JsonRequestPacketDeserializer::deserializeGetPlayersRequest(std::vector<uint8_t> buffer)
+{
+	GetPlayersInRoomRequest g{ 1 };
+	return g;
+}
+JoinRoomRequest JsonRequestPacketDeserializer::deserializeJoinRoomRequest(std::vector<uint8_t> buffer)
+{
+	JoinRoomRequest g{ 1 };
+	return g;
+}
+CreateRoomRequest JsonRequestPacketDeserializer::deserializeCreateRoomRequest(std::vector<uint8_t> buffer)
+{
+	CreateRoomRequest g{ "F",1,1,1 };
+	return g;
+}

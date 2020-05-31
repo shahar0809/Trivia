@@ -28,6 +28,37 @@ struct SignupResponse
 	unsigned int status;
 };
 
+struct LogoutResponse
+{
+	unsigned int status;
+};
+
+struct GetRoomResponse
+{
+	unsigned int status;
+	//std::vector<RoomData> rooms;
+};
+
+struct GetPlayersInRoomResponse
+{
+	std::vector<std::string> rooms;
+};
+
+struct JoinRoomResponse
+{
+	unsigned int status;
+	std::vector<std::string> rooms;
+};
+
+struct CreateRoomResponse
+{
+	unsigned int status;
+};
+
+struct GetStatisticsResponse
+{
+	unsigned int status;
+};
 class JsonResponsePacketSerializer
 {
 public:
@@ -35,7 +66,12 @@ public:
 	static std::string serializeResponse(ErrorResponse error);
 	static std::string serializeResponse(LoginResponse login);
 	static std::string serializeResponse(SignupResponse signUp);
-
+	static std::string serializeResponse(LogoutResponse logout);
+	static std::string serializeResponse(GetRoomResponse getRoom);
+	static std::string serializerResponse(GetPlayersInRoomResponse getPlayersInRoom);
+	static std::string serializeResponse(JoinRoomResponse joinRoom);
+	static std::string serializeResponse(CreateRoomResponse createRoom);
+	static std::string serializeResponse(GetStatisticsResponse getStatistics);
 private:
 	static std::string serializeResponse(json j, int code);
 };

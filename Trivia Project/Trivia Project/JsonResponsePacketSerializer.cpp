@@ -37,3 +37,28 @@ std::string JsonResponsePacketSerializer::serializeResponse(json j, int code)
 
 	return std::to_string(code) + stream.str() + j.dump();
 }
+
+std::string JsonResponsePacketSerializer::serializeResponse(LogoutResponse logout)
+{
+	return "h";
+}
+std::string JsonResponsePacketSerializer::serializeResponse(GetRoomResponse getRoom)
+{
+	return "h";
+}
+std::string JsonResponsePacketSerializer::serializerResponse(GetPlayersInRoomResponse getPlayersInRoom)
+{
+	return "h";
+}
+std::string JsonResponsePacketSerializer::serializeResponse(JoinRoomResponse joinRoom)
+{
+	return "h";
+}
+std::string JsonResponsePacketSerializer::serializeResponse(CreateRoomResponse createRoom)
+{
+	return "h";
+}
+std::string JsonResponsePacketSerializer::serializeResponse(GetStatisticsResponse getStatistics)
+{
+	return "h";
+}

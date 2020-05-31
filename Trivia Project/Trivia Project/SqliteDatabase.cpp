@@ -196,3 +196,25 @@ void SqliteDatabase::initQuestionTable()
 	insertOneQuestion("What is the name of the Manager of Magshimim?", "Hadas", "Michal", "Uri", "Itay");
 	insertOneQuestion("Neo is a character in which movie?", "Matrix", "Lord of the Ring", "Fight Club", "Intouchables");
 }
+
+std::list<std::string> SqliteDatabase::getQuestions(int maybeNumOfQuestions)
+{
+	std::list<std::string> g;
+	return g;
+}
+float SqliteDatabase::getPlayerAverageAnswerTime(std::string username)
+{
+	return 7.0;
+}
+int SqliteDatabase::getNumOfCorrectAnswers(std::string username)
+{
+	return 7;
+}
+int SqliteDatabase::getNumOfTotalAnswers(std::string username)
+{
+	return 6;
+}
+int SqliteDatabase::getNumOfPlayerGames(std::string username)
+{
+	return 5;
+}
