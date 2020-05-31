@@ -11,7 +11,8 @@ using json = nlohmann::json;
 #define ERROR_FIELD "message"
 #define ORDINARY_RESPONSE_FIELD "status"
 
-enum Codes { ERROR_CODE = 0, LOGIN_CODE, SIGN_UP_CODE };
+enum Codes { ERROR_CODE = 0, LOGIN_CODE, SIGN_UP_CODE,CREATE_ROOM_CODE,GET_ROOM_CODE,GET_PLAYERS_IN_ROOM_CODE,
+	JOIN_ROOM_CODE,GET_STATISTICS_CODE,LOGOUT_CODE};
 
 struct ErrorResponse
 {

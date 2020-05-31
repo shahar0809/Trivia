@@ -2,9 +2,15 @@
 #include "LoginRequestHandler.h"
 #include "MenuRequestHandler.h"
 
+RequestHandlerFactory::RequestHandlerFactory()
+{ 
+	this->m_database = NULL; 
+	this->m_StatisticsManager = NULL; 
+}
 RequestHandlerFactory::RequestHandlerFactory(IDatabase* db)
 {
 	this->m_database = db;
+	this->m_StatisticsManager = StatisticsManager(db);
 }
 
 RequestHandlerFactory::~RequestHandlerFactory()
@@ -24,7 +30,6 @@ LoginManager& RequestHandlerFactory::getLoginManger()
 
 MenuRequestHandler* RequestHandlerFactory::createMenuRequestHandler()
 {
-	MenuRequestHandler menuReq = MenuRequestHandler();
 	return new MenuRequestHandler();
 }
 

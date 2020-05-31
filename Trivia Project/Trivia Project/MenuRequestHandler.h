@@ -17,7 +17,7 @@ private:
 	LoggedUser m_user;
 	RequestHandlerFactory m_handlerFactory;
 
-	RequestResult signout(RequestInfo info);
+	RequestResult logout(RequestInfo info);
 	RequestResult getRooms(RequestInfo info);
 	RequestResult getPlayersInRoom(RequestInfo info);
 	RequestResult getStatistics(RequestInfo info);

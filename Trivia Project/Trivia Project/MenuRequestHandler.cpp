@@ -8,18 +8,43 @@ MenuRequestHandler::~MenuRequestHandler()
 {
 }
 
-bool MenuRequestHandler::isRequestRelevant(RequestInfo)
+bool MenuRequestHandler::isRequestRelevant(RequestInfo info)
 {
-	return false;
+	return info.requestId >= CREATE_ROOM_CODE && info.requestId <= LOGOUT_CODE;
 }
 
-RequestResult MenuRequestHandler::handleRequest(RequestInfo)
+RequestResult MenuRequestHandler::handleRequest(RequestInfo info)
 {
-	RequestResult res;
-	return res;
+	switch (info.requestId)
+	{
+	case CREATE_ROOM_CODE:
+	{
+		return this->createRoom(info);
+	}
+	case GET_ROOM_CODE:
+	{
+		return this->getRooms(info);
+	}
+	case GET_PLAYERS_IN_ROOM_CODE:
+	{
+		return this->getPlayersInRoom(info);
+	}
+	case JOIN_ROOM_CODE:
+	{
+		return this->joinRoom(info);
+	}
+	case GET_STATISTICS_CODE:
+	{
+		return this->getStatistics(info);
+	}
+	case LOGOUT_CODE:
+	{
+		return this->logout(info);
+	}
+	}
 }
 
-RequestResult MenuRequestHandler::signout(RequestInfo info)
+RequestResult MenuRequestHandler::logout(RequestInfo info)
 {
 	RequestResult res;
 	return res;

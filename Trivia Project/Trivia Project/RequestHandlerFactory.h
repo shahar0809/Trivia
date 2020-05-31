@@ -1,23 +1,15 @@
 #pragma once
 #include "LoginManager.h"
-//#include "MenuRequestHandler.h"
 #include "IDatabase.h"
 #include "RoomManager.h"
-
-struct StatisticsManager
-{
-public:
-	void getStatistics() {  };
-private:
-	IDatabase*  m_database;
-};
+#include "StatisticsManager.h"
 
 class MenuRequestHandler;
 class LoginRequestHandler;
 class RequestHandlerFactory
 {
 public:
-	RequestHandlerFactory() { this->m_database = NULL; };
+	RequestHandlerFactory();
 	RequestHandlerFactory(IDatabase* db);
 	~RequestHandlerFactory();
 
