@@ -18,7 +18,7 @@ RequestResult MenuRequestHandler::handleRequest(RequestInfo)
 	RequestResult res;
 	return res;
 }
-/*
+
 RequestResult MenuRequestHandler::signout(RequestInfo info)
 {
 	RequestResult res;
@@ -48,4 +48,4 @@ RequestResult MenuRequestHandler::createRoom(RequestInfo info)
 {
 	RequestResult res;
 	return res;
-}*/
+}

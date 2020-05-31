@@ -14,14 +14,14 @@ public:
 	RequestResult handleRequest(RequestInfo info);
 
 private:
-	//LoggedUser m_user;
-	//RequestHandlerFactory m_handlerFactory;
+	LoggedUser m_user;
+	RequestHandlerFactory m_handlerFactory;
 
-	//RequestResult signout(RequestInfo info);
-	//RequestResult getRooms(RequestInfo info);
-	//RequestResult getPlayersInRoom(RequestInfo info);
-	//RequestResult getStatistics(RequestInfo info);
-	//RequestResult joinRoom(RequestInfo info);
-	//RequestResult createRoom(RequestInfo info);
+	RequestResult signout(RequestInfo info);
+	RequestResult getRooms(RequestInfo info);
+	RequestResult getPlayersInRoom(RequestInfo info);
+	RequestResult getStatistics(RequestInfo info);
+	RequestResult joinRoom(RequestInfo info);
+	RequestResult createRoom(RequestInfo info);
 };
 
