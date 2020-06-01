@@ -33,7 +33,7 @@ RequestResult LoginRequestHandler::login(RequestInfo info)
 	if (m_loginManager.login(loginReq.username, loginReq.password))
 	{
 		response.status = SUCCEEDED;
-		result.newHandler = m_handlerFactory.createMenuRequestHandler(); // Setting next state to the menu handler.
+		result.newHandler = m_handlerFactory.createMenuRequestHandler(loginReq.username); // Setting next state to the menu handler.
 	}
 	else
 	{

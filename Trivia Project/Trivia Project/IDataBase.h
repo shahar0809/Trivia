@@ -2,6 +2,15 @@
 #include <iostream>
 #include <list>
 
+struct Question
+{
+	std::string question;
+	std::string correctAnswer;
+	std::string answer2;
+	std::string answer3;
+	std::string answer4;
+};
+
 class IDatabase
 {
 public:
@@ -16,11 +25,4 @@ public:
 	virtual int getNumOfPlayerGames(std::string username) = 0;
 };
 
-struct Question
-{
-	std::string question;
-	std::string correctAnswer;
-	std::string answer2;
-	std::string answer3;
-	std::string answer4;
-};
+

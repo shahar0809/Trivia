@@ -4,6 +4,11 @@ MenuRequestHandler::MenuRequestHandler()
 {
 }
 
+MenuRequestHandler::MenuRequestHandler(std::string username)
+{
+	this->m_user = LoggedUser(username);
+}
+
 MenuRequestHandler::~MenuRequestHandler()
 {
 }
@@ -62,7 +67,7 @@ RequestResult MenuRequestHandler::getPlayersInRoom(RequestInfo info)
 RequestResult MenuRequestHandler::getStatistics(RequestInfo info)
 {
 	StatisticsManager statManager = this->m_handlerFactory.getStatisticsManager();
-	statManager.getStatistics(info.buffer);
+	statManager.getStatistics(this->m_user.getUsername());
 	RequestResult res;
 	return res;
 }

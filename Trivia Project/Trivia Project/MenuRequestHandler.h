@@ -8,6 +8,7 @@ class MenuRequestHandler : public IRequestHandler
 {
 public:
 	MenuRequestHandler();
+	MenuRequestHandler(std::string username);
 	~MenuRequestHandler();
 
 	bool isRequestRelevant(RequestInfo info);
