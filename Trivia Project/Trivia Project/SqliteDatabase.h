@@ -38,4 +38,10 @@ private:
 	static int callbackExists(void* data, int argc, char** argv, char** azColName);
 	static int statisticsCallback(void* data, int argc, char** argv, char** azColName);
 	static int questionsCallback(void* data, int argc, char** argv, char** azColName);
+	void createUserTable();
+
+	void createQuestionsTable();
+
+	void createStatisticsTable();
+	void createScoreTable();
 };

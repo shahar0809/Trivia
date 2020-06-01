@@ -175,14 +175,28 @@ SqliteDatabase::~SqliteDatabase()
 */
 void SqliteDatabase::initDatabase()
 {
+	createUserTable();
+
+	createQuestionsTable();
+	initQuestionTable();
+
+	createStatisticsTable();
+	createScoreTable();
+}
+
+void SqliteDatabase::createUserTable()
+{
 	std::string createUserTableQuery =
 		"CREATE TABLE IF NOT EXISTS USERS ("
 		"NAME TEXT PRIMARY KEY NOT NULL, "
 		"PASSWORD TEXT NOT NULL, "
 		"EMAIL TEXT NOT NULL);";
 
-	createTable("USERS",createUserTableQuery);
+	createTable("USERS", createUserTableQuery);
+}
 
+void SqliteDatabase::createQuestionsTable()
+{
 	std::string createQuestionsTableQuery =
 		"CREATE TABLE IF NOT EXISTS QUESTIONS ("
 		"QUESTION_ID INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "
@@ -193,8 +207,30 @@ void SqliteDatabase::initDatabase()
 		"ANSWER4 TEXT NOT NULL);";
 
 	createTable("QUESTIONS", createQuestionsTableQuery);
-	initQuestionTable();
 }
+
+void SqliteDatabase::createStatisticsTable()
+{
+	std::string createStatisticsTableQuery =
+		"CREATE TABLE IF NOT EXISTS STATISTICS ("
+		"GAME_ID INTEGER NOT NULL, "
+		"USERNAME TEXT NOT NULL, "
+		"IS_CORRECT INTEGER NOT NULL, "
+		"ANSWER_TIME INTEGER NOT NULL);";
+
+	createTable("STATISTICS", createStatisticsTableQuery);
+}
+
+void SqliteDatabase::createScoreTable()
+{
+	std::string createScoreTableQuery =
+		"CREATE TABLE IF NOT EXISTS SCORE ("
+		"USERNAME TEXT PRIMARY KEY NOT NULL, "
+		"POINTS INTEGER NOT NULL);";
+
+	createTable("SCORE", createScoreTableQuery);
+}
+
 
 void SqliteDatabase::createTable(std::string tableName, std::string createTableQuery)
 {
