@@ -41,6 +41,40 @@ int SqliteDatabase::callbackExists(void* data, int argc, char** argv, char** azC
 	return 0;
 }
 
+int SqliteDatabase::statisticsCallback(void* data, int argc, char** argv, char** azColName)
+{
+	float* queryResult = static_cast<float*>(data);
+	*queryResult = atof(argv[0]);
+	return 0;
+}
+
+int SqliteDatabase::questionsCallback(void* data, int argc, char** argv, char** azColName)
+{
+	std::list<Question>* questionsList = (std::list<Question>*)data;
+	Question question;
+
+	for (int i = 0; i < argc; i++)
+	{
+		if (std::string(azColName[i]) == "QUESTION")
+			question.question = argv[i];
+
+		else if (std::string(azColName[i]) == "CORRECT_ANSWER")
+			question.correctAnswer = argv[i];
+
+		else if (std::string(azColName[i]) == "ANSWER2")
+			question.answer2 = argv[i];
+
+		else if (std::string(azColName[i]) == "ANSWER3")
+			question.answer3 = argv[i];
+
+		else if (std::string(azColName[i]) == "ANSWER4")
+			question.answer4 = argv[i];
+	}
+
+	questionsList->push_back(question);
+	return 0;
+}
+
 /**
 * Adds a new user to the database.
 * @param name: the username.
@@ -178,9 +212,15 @@ void SqliteDatabase::createTable(std::string tableName, std::string createTableQ
 
 void SqliteDatabase::insertOneQuestion(std::string question,std::string correctAnswer,std::string ans2,std::string ans3,std::string ans4)
 {
-	std::string sqlMsg("INSERT INTO	QUESTIONS(QUESTION,CORRECT_ANSWER,ANSWER2,ANSWER3,ANSWER4) VALUES('"
-		+ question + "','"+ correctAnswer + "','" + ans2 + "','"+ ans3+"','"+ ans4+"');");
-	executeMsg((char*)sqlMsg.c_str(), nullptr, nullptr);
+	std::string sqlMsg("INSERT INTO	QUESTIONS"
+		"(QUESTION, CORRECT_ANSWER, ANSWER2, ANSWER3, ANSWER4) VALUES('" +
+		question + "','" + 
+		correctAnswer + "','" + 
+		ans2 + "','" + 
+		ans3+"','" + 
+		ans4+"');");
+
+	executeMsg(sqlMsg, nullptr, nullptr);
 }
 
 void SqliteDatabase::initQuestionTable()
@@ -197,24 +237,51 @@ void SqliteDatabase::initQuestionTable()
 	insertOneQuestion("Neo is a character in which movie?", "Matrix", "Lord of the Ring", "Fight Club", "Intouchables");
 }
 
-std::list<std::string> SqliteDatabase::getQuestions(int maybeNumOfQuestions)
+std::list<Question> SqliteDatabase::getQuestions(int maybeNumOfQuestions)
 {
-	std::list<std::string> g;
-	return g;
+	std::list<Question> questionsList;
+	executeMsg("SELECT * FROM QUESTIONS;", questionsCallback, &questionsList);
+	return questionsList;
 }
+
 float SqliteDatabase::getPlayerAverageAnswerTime(std::string username)
 {
-	return 7.0;
+	std::string sqlQuery = "SELECT AVG(ANSWER_TIME) FROM STATISTICS "
+		"WHERE USERNAME = '" + username + "';";
+
+	float queryResult;
+	executeMsg(sqlQuery, statisticsCallback, &queryResult);
+	return queryResult;
 }
+
 int SqliteDatabase::getNumOfCorrectAnswers(std::string username)
 {
-	return 7;
+	std::string sqlQuery = "SELECT COUNT(*) FROM STATISTICS "
+		"WHERE USERNAME = '" + username + "' AND "
+		"IS_CORRECT = 1;";
+
+	float queryResult;
+	executeMsg(sqlQuery, statisticsCallback, &queryResult);
+	return (int)(queryResult);
 }
+
 int SqliteDatabase::getNumOfTotalAnswers(std::string username)
 {
-	return 6;
+	// Each record in the table represents an answer of a user.
+	std::string sqlQuery = "SELECT COUNT(*) FROM STATISTICS "
+		"WHERE USERNAME = '" + username + "';";
+		
+	float queryResult;
+	executeMsg(sqlQuery, statisticsCallback, &queryResult);
+	return (int)(queryResult);
 }
+
 int SqliteDatabase::getNumOfPlayerGames(std::string username)
 {
-	return 5;
+	std::string sqlQuery = "SELECT DISTINCT COUNT(GAME_ID) FROM STATISTICS "
+		"WHERE USERNAME = '" + username + "';";
+
+	float queryResult;
+	executeMsg(sqlQuery, statisticsCallback, &queryResult);
+	return (int)(queryResult);
 }

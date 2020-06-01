@@ -1,7 +1,7 @@
 #pragma once 
 #include "IDataBase.h"
 
-struct statistics
+struct UserStatistics
 {
 	float avgAnswerTime;
 	int correctAnswers;
@@ -14,7 +14,8 @@ class StatisticsManager
 public:
 	StatisticsManager() { this->m_database = NULL; };
 	StatisticsManager(IDatabase* db);
-	statistics getStatistics(std::string username);
+	UserStatistics getStatistics(std::string username);
+
 private:
 	IDatabase* m_database;
 };

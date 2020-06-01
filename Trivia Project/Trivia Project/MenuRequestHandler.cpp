@@ -61,6 +61,8 @@ RequestResult MenuRequestHandler::getPlayersInRoom(RequestInfo info)
 }
 RequestResult MenuRequestHandler::getStatistics(RequestInfo info)
 {
+	StatisticsManager statManager = this->m_handlerFactory.getStatisticsManager();
+	statManager.getStatistics(info.buffer);
 	RequestResult res;
 	return res;
 }
