@@ -333,8 +333,9 @@ int SqliteDatabase::getNumOfTotalAnswers(std::string username)
 
 int SqliteDatabase::getNumOfPlayerGames(std::string username)
 {
-	std::string sqlQuery = "SELECT DISTINCT COUNT(GAME_ID) FROM STATISTICS "
-		"WHERE USERNAME = '" + username + "';";
+	std::string sqlQuery = "SELECT COUNT(*) FROM ("
+		"SELECT DISTINCT GAME_ID FROM STATISTICS "
+		"WHERE USERNAME = '" + username + "');";
 
 	float queryResult;
 	executeMsg(sqlQuery, statisticsCallback, &queryResult);
