@@ -75,6 +75,25 @@ int SqliteDatabase::questionsCallback(void* data, int argc, char** argv, char** 
 	return 0;
 }
 
+int SqliteDatabase::scoresCallback(void* data, int argc, char** argv, char** azColName)
+{
+	std::vector<Score>* scoresList = (std::vector<Score>*)data;
+	Score score;
+
+	for (int i = 0; i < argc; i++)
+	{
+		if (std::string(azColName[i]) == "USERNAME")
+			score.username = argv[i];
+
+		else if (std::string(azColName[i]) == "POINTS")
+			score.score = atoi(argv[i]);
+	}
+
+	scoresList->push_back(score);
+	return 0;
+}
+
+
 /**
 * Adds a new user to the database.
 * @param name: the username.
@@ -320,4 +339,12 @@ int SqliteDatabase::getNumOfPlayerGames(std::string username)
 	float queryResult;
 	executeMsg(sqlQuery, statisticsCallback, &queryResult);
 	return (int)(queryResult);
+}
+
+std::vector<Score> SqliteDatabase::getHighScores()
+{
+	std::string sqlQuery = "SELECT * FROM SCORE ORDER BY POINTS DESC LIMIT " + std::to_string(HIGHSCORE_LIMIT) + ";";
+	std::vector<Score> highScore;
+	executeMsg(sqlQuery, scoresCallback, &highScore);
+	return highScore;
 }

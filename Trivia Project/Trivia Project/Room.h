@@ -16,12 +16,14 @@ class Room
 {
 public:
 	Room();
-Room(int id, std::string name,LoggedUser user);
+	Room(int id, std::string name,LoggedUser user);
 	~Room();
+
 	bool addUser(LoggedUser user);
 	bool removeUser(LoggedUser user);
 	std::vector<LoggedUser> getAllUsers();
 	RoomData getMetadata();
+
 private:
 	RoomData m_metadata;
 	std::vector<LoggedUser> m_users;

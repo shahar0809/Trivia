@@ -6,11 +6,13 @@ RequestHandlerFactory::RequestHandlerFactory()
 { 
 	this->m_database = NULL; 
 	this->m_StatisticsManager = NULL; 
+	this->m_roomManager = RoomManager();
 }
 RequestHandlerFactory::RequestHandlerFactory(IDatabase* db)
 {
 	this->m_database = db;
 	this->m_StatisticsManager = StatisticsManager(db);
+	this->m_roomManager = RoomManager();
 }
 
 RequestHandlerFactory::~RequestHandlerFactory()

@@ -7,8 +7,18 @@
 using json = nlohmann::json;
 
 /* Easy access to the json fields. */
-static const char* fields[] = { "username", "password", "email" };
-enum fieldsIndices {USERNAME = 0, PASSWORD, EMAIL};
+static const char* fields[] = { 
+	"username", "password", "email",
+	"RoomId", 
+	"RoomName", "maxUsers", "questionCount", "answerTimeout"
+};
+
+enum fieldsIndices 
+{
+	USERNAME = 0, PASSWORD, EMAIL, 
+	ROOM_ID,
+	ROOM_NAME, MAX_USERS, QUESTIONS_COUNT, ANS_TIMEOUT
+};
 
 struct LoginRequest
 {
@@ -39,7 +49,20 @@ struct CreateRoomRequest
 	unsigned int maxUsers;
 	unsigned int questionCount;
 	unsigned int answerTimeout;
+
+	RoomData getRoomData()
+	{
+		return RoomData
+		{
+			0,
+			roomName,
+			maxUsers,
+			answerTimeout,
+			0
+		};
+	}
 };
+
 class JsonRequestPacketDeserializer
 {
 public: 

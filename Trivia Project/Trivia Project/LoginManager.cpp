@@ -7,6 +7,7 @@ bool LoginManager::signup(std::string userName, std::string password, std::strin
 
 bool LoginManager::login(std::string userName, std::string password)
 {
+	// Checking if the user is already connected to the server
 	for (auto loggedUser : m_loggedUsers)
 	{
 		if (loggedUser.getUsername() == userName)
@@ -15,6 +16,7 @@ bool LoginManager::login(std::string userName, std::string password)
 		}
 	}
 
+	// If not, the log in credintals need to be checked
 	if (this->m_database->doesUserExist(userName) && this->m_database->doesPasswordMatch(userName, password))
 	{
 		this->m_loggedUsers.push_back(LoggedUser(userName));
@@ -27,6 +29,8 @@ bool LoginManager::login(std::string userName, std::string password)
 bool LoginManager::logout(std::string userName)
 {
 	std::vector<LoggedUser>::iterator it;
+
+	/* Searching for the user in the logged users list, and if it's there, deleting it. */
 	for (it = this->m_loggedUsers.begin(); it != this->m_loggedUsers.end(); it++)
 	{
 		if (it->getUsername() == userName)

@@ -40,25 +40,56 @@ std::string JsonResponsePacketSerializer::serializeResponse(json j, int code)
 
 std::string JsonResponsePacketSerializer::serializeResponse(LogoutResponse logout)
 {
-	return "h";
+	json j;
+	j[jsonFields[STATUS]] = logout.status;
+	return JsonResponsePacketSerializer::serializeResponse(j, LOGOUT_CODE);
 }
+
 std::string JsonResponsePacketSerializer::serializeResponse(GetRoomResponse getRoom)
 {
-	return "h";
+	json j;
+	j[jsonFields[STATUS]] = getRoom.status;
+	return JsonResponsePacketSerializer::serializeResponse(j, GET_ROOM_CODE);
 }
+
 std::string JsonResponsePacketSerializer::serializerResponse(GetPlayersInRoomResponse getPlayersInRoom)
 {
-	return "h";
+	std::string playersInRoom = parseVector(getPlayersInRoom.players, DELIMETER);
+	json j;
+	j[jsonFields[PLAYERS_IN_ROOM]] = playersInRoom;
+	return JsonResponsePacketSerializer::serializeResponse(j, GET_PLAYERS_IN_ROOM_CODE);
 }
+
 std::string JsonResponsePacketSerializer::serializeResponse(JoinRoomResponse joinRoom)
 {
-	return "h";
+	json j;
+	j[jsonFields[STATUS]] = joinRoom.status;
+	return JsonResponsePacketSerializer::serializeResponse(j, JOIN_ROOM_CODE);
 }
+
 std::string JsonResponsePacketSerializer::serializeResponse(CreateRoomResponse createRoom)
 {
-	return "h";
+	json j;
+	j[jsonFields[STATUS]] = createRoom.status;
+	return JsonResponsePacketSerializer::serializeResponse(j, CREATE_ROOM_CODE);
 }
+
 std::string JsonResponsePacketSerializer::serializeResponse(GetStatisticsResponse getStatistics)
 {
-	return "h";
+	json j;
+	j[jsonFields[STATUS]] = getStatistics.status;
+	return JsonResponsePacketSerializer::serializeResponse(j, GET_STATISTICS_CODE);
+}
+
+std::string JsonResponsePacketSerializer::parseVector(std::vector<std::string> vec, std::string delimeter)
+{
+	std::string parsedVec;
+
+	for (auto element : vec)
+	{
+		parsedVec += element + delimeter;
+	}
+
+	// Returning the parsed string without the last char (extra delimeter)
+	return parsedVec.substr(parsedVec.size() - 1);
 }

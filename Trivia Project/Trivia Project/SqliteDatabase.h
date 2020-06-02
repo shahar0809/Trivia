@@ -22,6 +22,7 @@ public:
 	int getNumOfCorrectAnswers(std::string username);
 	int getNumOfTotalAnswers(std::string username);
 	int getNumOfPlayerGames(std::string username);
+	std::vector<Score> getHighScores();
 
 	// DATABASE RELATED
 	void initDatabase();
@@ -38,6 +39,7 @@ private:
 	static int callbackExists(void* data, int argc, char** argv, char** azColName);
 	static int statisticsCallback(void* data, int argc, char** argv, char** azColName);
 	static int questionsCallback(void* data, int argc, char** argv, char** azColName);
+	static int scoresCallback(void* data, int argc, char** argv, char** azColName);
 	void createUserTable();
 
 	void createQuestionsTable();

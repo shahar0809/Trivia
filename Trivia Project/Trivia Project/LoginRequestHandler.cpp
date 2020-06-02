@@ -53,7 +53,7 @@ RequestResult LoginRequestHandler::signup(RequestInfo info)
 	if (m_loginManager.signup(signupReq.username, signupReq.password, signupReq.email))
 	{
 		response.status = 1;
-		result.newHandler = m_handlerFactory.createMenuRequestHandler(); // Setting next state to the menu handler.
+		result.newHandler = m_handlerFactory.createMenuRequestHandler(signupReq.username); // Setting next state to the menu handler.
 	}
 	else
 	{

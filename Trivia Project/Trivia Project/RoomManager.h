@@ -8,11 +8,15 @@
 class RoomManager
 {
 public:
-	void createRoom(LoggedUser user);
+	RoomManager() { roomId = 0; };
+
+	// Managing rooms
+	void createRoom(LoggedUser user, RoomData data);
 	bool deleteRoom(int ID);
 	unsigned int getRoomState(int ID);
 	std::vector<RoomData> getRooms();
+
 private:
 	std::map<int,Room> m_rooms;
-	int roomId;
+	int roomId;  // Holds the id of the last room created.
 };

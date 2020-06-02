@@ -5,6 +5,8 @@
 #include <vector>
 #include "JsonResponsePacketSerializer.h"
 
+enum Statuses { FAILED = 0, SUCCEEDED };
+
 struct RequestInfo
 {
 	int requestId;
