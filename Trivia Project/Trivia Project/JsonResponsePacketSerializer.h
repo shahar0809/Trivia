@@ -73,7 +73,6 @@ struct GetStatisticsResponse
 class JsonResponsePacketSerializer
 {
 public:
-	//all these functions retruns buffer
 	static std::string serializeResponse(ErrorResponse error);
 	static std::string serializeResponse(LoginResponse login);
 	static std::string serializeResponse(SignupResponse signUp);

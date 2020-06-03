@@ -158,6 +158,7 @@ bool SqliteDatabase::executeMsg(std::string sqlStatement, int(*callback)(void*, 
 		std::cout << errMessage << std::endl;
 		return false;
 	}
+	
 	return true;
 }
 

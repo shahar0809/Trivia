@@ -1,7 +1,7 @@
 #pragma once
+
 #include <vector>
 #include <iostream>
-
 #include "IDataBase.h"
 #include "sqlite3.h"
 #include "io.h"

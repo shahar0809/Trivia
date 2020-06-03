@@ -17,3 +17,4 @@ std::pair<UserStatistics, std::vector<Score>> StatisticsManager::getStatistics(s
 
 	return std::pair<UserStatistics, std::vector<Score>> { userStats, m_database->getHighScores() };
 }
+
