@@ -16,6 +16,8 @@ Codes = {"LOGIN_CODE": "1", "SIGN_UP_CODE": "2"}
 SUCCESS_CODE = "1"
 
 """ ****** SOCKET RELATED ****** """
+
+
 def make_socket():
     """
     Creates a socket.
@@ -89,7 +91,7 @@ def send_login_request(sock, username, password):
     edit_request(sock, login_req, Codes["LOGIN_CODE"])
 
 
-def edit_request(json_request, code):
+def edit_request(sock, json_request, code):
     json_request = json.dumps(json_request)  # Getting the json as a string
     json_length = str(len(json_request))
     json_length = json_length.zfill(DATA_LEN_IN_BYTES)
