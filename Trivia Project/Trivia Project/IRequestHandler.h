@@ -5,8 +5,6 @@
 #include <vector>
 #include "JsonResponsePacketSerializer.h"
 
-enum Statuses { FAILED = 0, SUCCEEDED };
-
 struct RequestInfo
 {
 	int requestId;
@@ -15,27 +13,24 @@ struct RequestInfo
 
 	RequestInfo(std::string buff)
 	{
-		requestId = (int)(buff[0] - '0');
+		std::vector<uint8_t> packet(buff.begin(), buff.end());
+		requestId = (int)(packet[0]-'0');
 		receivalTime = std::time(0);
-		buffer = std::vector<uint8_t>(buff.begin() + CODE_LEN_IN_BYTES + DATA_LEN_IN_BYTES, buff.end());
+		buffer = std::vector<uint8_t>(packet.begin() + 5, packet.end());
 	}
 };
 
-struct RequestResult;
+struct RequestResult
+{
+	std::string requestBuffer;
+	//IRequestHandler* newHandler;
+};
 
 class IRequestHandler
 {
 public:
 	virtual bool isRequestRelevant(RequestInfo) = 0;
 	virtual RequestResult handleRequest(RequestInfo) = 0;
-};
-
-class IRequestHandler;
-
-struct RequestResult
-{
-	std::string requestBuffer;
-	IRequestHandler* newHandler;
 };
 
 
