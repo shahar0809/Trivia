@@ -3,6 +3,8 @@
 #include "LoggedUser.h"
 #include "RequestHandlerFactory.h"
 #include "JsonRequestPacketDeserializer.h"
+#include "RoomManager.h"
+#include "StatisticsManager.h"
 
 class RequestHandlerFactory;
 class MenuRequestHandler : public IRequestHandler
