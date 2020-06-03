@@ -1,14 +1,12 @@
 #pragma once
-#include "IDatabase.h"
+
+#include "MenuRequestHandler.h"
 #include "IRequestHandler.h"
 #include "LoginManager.h"
 #include "JsonRequestPacketDeserializer.h"
 #include "RequestHandlerFactory.h"
 
 class RequestHandlerFactory;
-
-enum Statuses {FAILED = 0, SUCCEEDED};
-
 
 class LoginRequestHandler : public IRequestHandler
 {

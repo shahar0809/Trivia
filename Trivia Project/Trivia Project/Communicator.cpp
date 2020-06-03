@@ -75,9 +75,12 @@ void Communicator::handleNewClient(std::pair<SOCKET, IRequestHandler*> client)
 		}
 		else
 		{
-			RequestResult result = client.second->handleRequest(info); // Passing the request to the handler.
-			std::cout << "Server Response: " << result.requestBuffer << std::endl << std::endl;
-			Helper::sendData(client.first, result.requestBuffer);     // Sending response to the client
+			RequestResult result = client.second->handleRequest(info);  // Passing the request to the handler.
+			std::cout << "S E R V E R:" << std::endl << result.requestBuffer << std::endl << std::endl;
+			Helper::sendData(client.first, result.requestBuffer);       // Sending response to the client
+
+			currHandler = result.newHandler;						    // Moving to the next state (updating handler).
+			delete temp;											    // Freeing allocated memory of the previous handle.
 		}
 	} 
 	closesocket(client.first);

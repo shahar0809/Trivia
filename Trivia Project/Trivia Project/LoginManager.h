@@ -4,7 +4,7 @@
 #include "LoggedUser.h"
 #include "SqliteDatabase.h"
 
-class  LoginManager
+class LoginManager
 {
 private:
 	IDatabase* m_database;
