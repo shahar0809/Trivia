@@ -30,7 +30,7 @@
         <Button Name="MyButton2" Grid.Row="5" Grid.Column="1" Content="כניסה" HorizontalAlignment="Left" VerticalAlignment="Top" Width="250" Height="76" Click="MyButton2_Click" />
         <TextBlock Grid.Row="1" Grid.Column="5" Text="שם משתמש:" FlowDirection="RightToLeft"/>
         <TextBlock Grid.Row="3" Grid.Column="5" Text="סיסמא:" FlowDirection="RightToLeft"/>
-        <TextBox Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="3"/>
-        <TextBox Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="3"/>
+        <TextBox x:Name="userName" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="3"/>
+        <TextBox x:Name="password" Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="3"/>
     </Grid>
 </Window>

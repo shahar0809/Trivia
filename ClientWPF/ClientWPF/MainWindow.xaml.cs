@@ -23,6 +23,12 @@ namespace ClientWPF
     public partial class MainWindow : Window
     {
         private NetworkStream clientStream;
+        public enum Codes
+        {
+            ERROR_CODE = 0, LOGIN_CODE, SIGN_UP_CODE, CREATE_ROOM_CODE,
+            GET_ROOM_CODE, GET_PLAYERS_IN_ROOM_CODE,
+            JOIN_ROOM_CODE, GET_STATISTICS_CODE, LOGOUT_CODE
+        };
         public MainWindow()
         {
             InitializeComponent();
@@ -46,9 +52,9 @@ namespace ClientWPF
 
         private void MyButton3_Click(object sender, RoutedEventArgs e)
         {
-            var CreateRoom = new CreateRoom(clientStream);
+            /*var CreateRoom = new CreateRoom(clientStream);
             CreateRoom.Show();
-            this.Close();
+            this.Close();*/
         }
 
         private void MyButton4_Click(object sender, RoutedEventArgs e)
@@ -69,5 +75,22 @@ namespace ClientWPF
         {
             this.Close();
         }
+
+        public static byte[] ConvertToByteArray(string str)
+        {
+            return Encoding.ASCII.GetBytes(str);
+        }
+
+        public static string ToBinary(string str)
+        {
+            byte[] data = ConvertToByteArray(str);
+            return string.Join("", data.Select(byt => Convert.ToString(byt, 2).PadLeft(8, '0')));
+        }
+
+        public static string EditRequest(int code, string request)
+        {
+            return ToBinary(code.ToString())+ ToBinary((request.Length).ToString().PadLeft(4, '0')) + ToBinary(request);
+        }
     }
+    
 }
