@@ -11,6 +11,8 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using System.Net.Sockets;
+using System.Net;
 
 namespace ClientWPF
 {
@@ -19,9 +21,11 @@ namespace ClientWPF
     /// </summary>
     public partial class JoinRoom : Window
     {
-        public JoinRoom()
+        private NetworkStream clientStream;
+        public JoinRoom(NetworkStream clientStream)
         {
             InitializeComponent();
+            this.clientStream = clientStream;
         }
     }
 }

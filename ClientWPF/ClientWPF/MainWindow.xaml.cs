@@ -12,6 +12,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Net.Sockets;
+using System.Net;
 
 namespace ClientWPF
 {
@@ -20,40 +22,45 @@ namespace ClientWPF
     /// </summary>
     public partial class MainWindow : Window
     {
+        private NetworkStream clientStream;
         public MainWindow()
         {
             InitializeComponent();
+            TcpClient client = new TcpClient();
+            IPEndPoint serverEndPoint = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 1050);
+            client.Connect(serverEndPoint);
+            this.clientStream = client.GetStream();
         }
         private void MyButton_Click(object sender, RoutedEventArgs e)
         {
-            var Login = new Login(); //create the login form.
+            var Login = new Login(clientStream); //create the login form.
             Login.Show(); //show the form.
             this.Close(); 
         }
         private void MyButton2_Click(object sender, RoutedEventArgs e)
         {
-            var SignUp = new SignUp();
+            var SignUp = new SignUp(clientStream);
             SignUp.Show(); 
             this.Close();
         }
 
         private void MyButton3_Click(object sender, RoutedEventArgs e)
         {
-            var CreateRoom = new CreateRoom();
+            var CreateRoom = new CreateRoom(clientStream);
             CreateRoom.Show();
             this.Close();
         }
 
         private void MyButton4_Click(object sender, RoutedEventArgs e)
         {
-            var JoinRoom = new JoinRoom();
+            var JoinRoom = new JoinRoom(clientStream);
             JoinRoom.Show();
             this.Close();
         }
 
         private void MyButton5_Click(object sender, RoutedEventArgs e)
         {
-            var Statistics = new Statistics();
+            var Statistics = new Statistics(clientStream);
             Statistics.Show();
             this.Close();
         }
