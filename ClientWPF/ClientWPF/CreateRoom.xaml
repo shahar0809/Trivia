@@ -61,7 +61,7 @@
                    Margin="50, 5, 8, 5"
         ></TextBlock>
 
-        <TextBox x:Name="roomNam"
+        <TextBox x:Name="roomName"
                  Grid.Row="2"
                  Grid.Column="2"
                  Margin="10"
@@ -85,12 +85,13 @@
                  Margin="10"
         ></TextBox>
 
-        <Button Grid.Column="2" Grid.Row="6" Margin="40, 5, 40, 20" >
+        <Button Grid.Column="2" Grid.Row="6" Margin="40, 5, 40, 20" Click="Submit_Button_Click">
             Submit
             <Button.Resources>
                 <Style TargetType="Border">
                     <Setter Property="CornerRadius" Value="5"/>
                 </Style>
+
             </Button.Resources>
         </Button>
 

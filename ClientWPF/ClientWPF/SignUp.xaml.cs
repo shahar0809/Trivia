@@ -45,16 +45,16 @@ namespace ClientWPF
         }
         private void SubmitButton_Click(object sender, RoutedEventArgs e)
         {
-            SignUpRequest signUp = new SignUpRequest { password = password.Text, username = username.Text ,email=email.Text};
+            SignUpRequest signUp = new SignUpRequest 
+            {
+                password = password.Text,
+                username = username.Text,
+                email=email.Text
+            };
 
             //Edit and send signUp request.
             string json = JsonConvert.SerializeObject(signUp, Formatting.Indented);
-            json = MainWindow.EditRequest((int)MainWindow.Codes.SIGN_UP_CODE, json);
-            MainWindow.SendRequest(json, this.clientStream);
-
-            //Get login response.
-            string textStrData = MainWindow.GetData(this.clientStream).Substring(DATA_START_INDEX, DATA_END_INDEX);
-            MainWindow.Response signUpResponse = JsonConvert.DeserializeObject<MainWindow.Response>(textStrData);
+            MainWindow.Response signUpResponse = MainWindow.ManageSendAndGetData(json, clientStream);
 
             if (signUpResponse.status == ERROR_CODE)
             {
@@ -62,7 +62,7 @@ namespace ClientWPF
             }
             var MainWindowMenu = new MainWindow();
             MainWindowMenu.Show();
-            this.Close();
+            Close();
         }
     }
 }

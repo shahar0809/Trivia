@@ -130,5 +130,17 @@ namespace ClientWPF
             string binStr = Encoding.ASCII.GetString(buffer);
             return GetAsciiValueFromBinaryString(binStr);
         }
+
+        public static Response ManageSendAndGetData(string json, NetworkStream clientStream)
+        {
+            //Edit and send login request.
+            json = EditRequest((int)Codes.LOGIN_CODE, json);
+            SendRequest(json, clientStream);
+
+            //Get login response.
+            string textStrData = GetData(clientStream).Substring(DATA_START_INDEX, DATA_END_INDEX);
+            Response loginResponse = JsonConvert.DeserializeObject<Response>(textStrData);
+            return Response;
+        }
     }
 }

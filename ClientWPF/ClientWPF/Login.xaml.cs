@@ -45,16 +45,15 @@ namespace ClientWPF
         }
         private void SubmitButton_Click(object sender, RoutedEventArgs e)
         {
-            LoginRequest login = new LoginRequest { password = password.Text, username = userName.Text };
+            LoginRequest login = new LoginRequest 
+            { 
+                password = password.Text,
+                username = userName.Text
+            };
 
             //Edit and send login request.
             string json = JsonConvert.SerializeObject(login, Formatting.Indented);
-            json = MainWindow.EditRequest((int)MainWindow.Codes.LOGIN_CODE, json);
-            MainWindow.SendRequest(json, this.clientStream);
-
-            //Get login response.
-            string textStrData = MainWindow.GetData(this.clientStream).Substring(DATA_START_INDEX ,DATA_END_INDEX);
-            MainWindow.Response loginResponse = JsonConvert.DeserializeObject<MainWindow.Response>(textStrData);
+            MainWindow.Response loginResponse = MainWindow.ManageSendAndGetData(json, clientStream);
 
             if (loginResponse.status == ERROR_CODE)
             {

@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.Net.Sockets;
 using System.Net;
+using Newtonsoft.Json;
 
 namespace ClientWPF
 {
@@ -22,10 +23,42 @@ namespace ClientWPF
     public partial class CreateRoom : Window
     {
         private NetworkStream clientStream;
+        public const int ERROR_CODE = 0;
+        private struct CreateRoomRequest
+        {
+            public string roomName { set; get; }
+            public int numOfPlayers { set; get; }
+            public int numOfQuestions { set; get; }
+            public int timePerQuestion { set; get; }
+        }
         public CreateRoom(NetworkStream clientStream)
         {
             InitializeComponent();
             this.clientStream = clientStream;
+        }
+
+        private void Submit_Button_Click(object sender, RoutedEventArgs e)
+        {
+            CreateRoomRequest createRoom = new CreateRoomRequest 
+            {
+                roomName = roomName.Text,
+                numOfPlayers = int.Parse(numOfPlayers.Text),
+                numOfQuestions = int.Parse(numOfQuestion.Text),
+                timePerQuestion = int.Parse(timeout.Text),
+            };
+
+
+            string json = JsonConvert.SerializeObject(createRoom, Formatting.Indented);
+            MainWindow.Response createRoomResponse = MainWindow.ManageSendAndGetData(json, clientStream);
+
+            if (createRoomResponse.status == ERROR_CODE)
+            {
+                MessageBox.Show("Error! , can't create room");
+            }
+            //Should show the room details.
+            var MainWindowMenu = new MainWindow();
+            MainWindowMenu.Show();
+            Close();
         }
     }
 }
