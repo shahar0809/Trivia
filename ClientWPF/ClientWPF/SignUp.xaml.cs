@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.Net.Sockets;
 using System.Net;
+using Newtonsoft.Json;
 
 namespace ClientWPF
 {
@@ -22,18 +23,46 @@ namespace ClientWPF
     public partial class SignUp : Window
     {
         private NetworkStream clientStream;
+        public const int DATA_START_INDEX = 5;
+        public const int DATA_END_INDEX = 14;
+        public const int ERROR_CODE = 0;
+        private struct SignUpRequest
+        {
+            public string username { set; get; }
+            public string password { set; get; }
+            public string email { set; get; }
+        }
         public SignUp(NetworkStream clientStream)
         {
             InitializeComponent();
             this.clientStream = clientStream;
         }
-        private void MyButton_Click(object sender, RoutedEventArgs e)
+        private void CancelButton_Click(object sender, RoutedEventArgs e)
         {
-
+            var MainWindow = new MainWindow();
+            MainWindow.Show();
+            this.Close();
         }
-        private void MyButton2_Click(object sender, RoutedEventArgs e)
+        private void SubmitButton_Click(object sender, RoutedEventArgs e)
         {
+            SignUpRequest signUp = new SignUpRequest { password = password.Text, username = username.Text ,email=email.Text};
 
+            //Edit and send signUp request.
+            string json = JsonConvert.SerializeObject(signUp, Formatting.Indented);
+            json = MainWindow.EditRequest((int)MainWindow.Codes.SIGN_UP_CODE, json);
+            MainWindow.SendRequest(json, this.clientStream);
+
+            //Get login response.
+            string textStrData = MainWindow.GetData(this.clientStream).Substring(DATA_START_INDEX, DATA_END_INDEX);
+            MainWindow.Response signUpResponse = JsonConvert.DeserializeObject<MainWindow.Response>(textStrData);
+
+            if (signUpResponse.status == ERROR_CODE)
+            {
+                MessageBox.Show("Sorry! Username was taken \n please change your username ");
+            }
+            var MainWindowMenu = new MainWindow();
+            MainWindowMenu.Show();
+            this.Close();
         }
     }
 }

@@ -22,6 +22,11 @@ namespace ClientWPF
     /// </summary>
     public partial class MainWindow : Window
     {
+        public const int BIN_BASE = 2;
+        public const int SIZE_OF_BYTE = 8;
+        public const int SIZE_OF_DATA_LEN = 4;
+        public const int MAX_LEN = 4096;
+
         private NetworkStream clientStream;
         public enum Codes
         {
@@ -57,9 +62,9 @@ namespace ClientWPF
 
         private void createRoomButtonClicked(object sender, RoutedEventArgs e)
         {
-            /*var CreateRoom = new CreateRoom(clientStream);
+            var CreateRoom = new CreateRoom(clientStream);
             CreateRoom.Show();
-            this.Close();*/
+            this.Close();
         }
 
         private void joinRoomButtonClicked(object sender, RoutedEventArgs e)
@@ -81,33 +86,49 @@ namespace ClientWPF
             this.Close();
         }
 
-        public static byte[] ConvertToByteArray(string str)
-        {
-            return Encoding.ASCII.GetBytes(str);
-        }
-
         public static string ToBinary(string str)
         {
-            byte[] data = ConvertToByteArray(str);
-            return string.Join("", data.Select(byt => Convert.ToString(byt, 2).PadLeft(8, '0')));
+            //Convert the data to byte array.
+            byte[] data = Encoding.ASCII.GetBytes(str);
+
+            return string.Join("", data.Select(byt => Convert.ToString(byt, BIN_BASE).PadLeft(SIZE_OF_BYTE, '0')));
         }
 
         public static string EditRequest(int code, string request)
         {
-            return ToBinary(code.ToString())+ ToBinary((request.Length).ToString().PadLeft(4, '0')) + ToBinary(request);
+            //Create the request acording to the protocol.
+            return ToBinary(code.ToString())+ 
+                ToBinary((request.Length).ToString().PadLeft(SIZE_OF_DATA_LEN, '0')) + 
+                ToBinary(request);
         }
-        public static string GetBytesFromBinaryString(string binary)
+
+        public static void SendRequest(string json, NetworkStream clientStream)
+        {
+            byte[] buffer = new ASCIIEncoding().GetBytes(json);
+            clientStream.Write(buffer, 0, buffer.Length);
+            clientStream.Flush();
+        }
+        public static string GetAsciiValueFromBinaryString(string binary)
         {
             List<byte> list = new List<Byte>();
 
-            for (int i = 0; binary[i] == '0' || binary[i] == '1'; i += 8)
+            for (int i = 0; binary[i] == '0' || binary[i] == '1'; i += SIZE_OF_BYTE)
             {
-                String t = binary.Substring(i, 8);
+                string t = binary.Substring(i, SIZE_OF_BYTE);
 
-                list.Add(Convert.ToByte(t, 2));
+                list.Add(Convert.ToByte(t, BIN_BASE));
             }
             return Encoding.ASCII.GetString(list.ToArray()); 
         }
+
+        public static string GetData(NetworkStream clientStream)
+        {
+            byte[] buffer = new byte[MAX_LEN];
+            int bytesRead = clientStream.Read(buffer, 0, MAX_LEN);
+
+            //Convert the data to string with ascii values.
+            string binStr = Encoding.ASCII.GetString(buffer);
+            return GetAsciiValueFromBinaryString(binStr);
+        }
     }
-    
 }

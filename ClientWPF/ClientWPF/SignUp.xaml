@@ -28,13 +28,13 @@
             <RowDefinition Height="*"/>
             <RowDefinition Height="20"/>
         </Grid.RowDefinitions>
-        <Button Name="MyButton" Grid.Row="7" Grid.Column="3" Grid.ColumnSpan="3" Content="ביטול" HorizontalAlignment="Left" VerticalAlignment="Top" Width="350" Height="76" Click="MyButton_Click" />
-        <Button Name="MyButton2" Grid.Row="7" Grid.Column="1" Content="כניסה" HorizontalAlignment="Left" VerticalAlignment="Top" Width="250" Height="76" Click="MyButton2_Click" />
+        <Button Name="MyButton" Grid.Row="7" Grid.Column="3" Grid.ColumnSpan="3" Content="ביטול" HorizontalAlignment="Left" VerticalAlignment="Top" Width="350" Height="76" Click="CancelButton_Click" />
+        <Button Name="MyButton2" Grid.Row="7" Grid.Column="1" Content="כניסה" HorizontalAlignment="Left" VerticalAlignment="Top" Width="250" Height="76" Click="SubmitButton_Click" />
         <TextBlock Grid.Row="1" Grid.Column="5" Text="שם משתמש:" FlowDirection="RightToLeft"/>
         <TextBlock Grid.Row="3" Grid.Column="5" Text="סיסמא:" FlowDirection="RightToLeft"/>
         <TextBlock Grid.Row="5" Grid.Column="5" Text="אימייל:" FlowDirection="RightToLeft"/>
-        <TextBox Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="3"/>
-        <TextBox Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="3"/>
-        <TextBox Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="3"/>
+        <TextBox x:Name ="email" Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="3"/>
+        <TextBox x:Name ="username" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="3"/>
+        <TextBox x:Name="password" Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="3"/>
     </Grid>
 </Window>
