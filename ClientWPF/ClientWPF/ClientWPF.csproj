@@ -143,5 +143,11 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\goodl.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="goodl.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

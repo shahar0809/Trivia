@@ -33,8 +33,8 @@ namespace ClientWPF
         }
         private void MyButton_Click(object sender, RoutedEventArgs e)
         {
-            var Login = new Login(clientStream); //create the login form.
-            Login.Show(); //show the form.
+            var Login = new Login(clientStream); // Create the login form.
+            Login.Show(); // Show the form.
             this.Close(); 
         }
         private void MyButton2_Click(object sender, RoutedEventArgs e)
