@@ -31,41 +31,41 @@ namespace ClientWPF
             client.Connect(serverEndPoint);
             this.clientStream = client.GetStream();
         }
-        private void MyButton_Click(object sender, RoutedEventArgs e)
+        private void loginButtonClicked(object sender, RoutedEventArgs e)
         {
             var Login = new Login(clientStream); // Create the login form.
             Login.Show(); // Show the form.
             this.Close(); 
         }
-        private void MyButton2_Click(object sender, RoutedEventArgs e)
+        private void signupButtonClicked(object sender, RoutedEventArgs e)
         {
             var SignUp = new SignUp(clientStream);
             SignUp.Show(); 
             this.Close();
         }
 
-        private void MyButton3_Click(object sender, RoutedEventArgs e)
+        private void createRoomButtonClicked(object sender, RoutedEventArgs e)
         {
             var CreateRoom = new CreateRoom(clientStream);
             CreateRoom.Show();
             this.Close();
         }
 
-        private void MyButton4_Click(object sender, RoutedEventArgs e)
+        private void joinRoomButtonClicked(object sender, RoutedEventArgs e)
         {
             var JoinRoom = new JoinRoom(clientStream);
             JoinRoom.Show();
             this.Close();
         }
 
-        private void MyButton5_Click(object sender, RoutedEventArgs e)
+        private void statsButtonClicked(object sender, RoutedEventArgs e)
         {
             var Statistics = new Statistics(clientStream);
             Statistics.Show();
             this.Close();
         }
 
-        private void MyButton6_Click(object sender, RoutedEventArgs e)
+        private void exitButtonClicked(object sender, RoutedEventArgs e)
         {
             this.Close();
         }
