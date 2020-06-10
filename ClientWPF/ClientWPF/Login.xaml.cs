@@ -23,8 +23,6 @@ namespace ClientWPF
     public partial class Login : Window
     {
         private NetworkStream clientStream;
-        public const int DATA_START_INDEX = 5;
-        public const int DATA_END_INDEX = 14;
         public const int ERROR_CODE = 0;
         private struct LoginRequest
         {
@@ -53,7 +51,7 @@ namespace ClientWPF
 
             //Edit and send login request.
             string json = JsonConvert.SerializeObject(login, Formatting.Indented);
-            MainWindow.Response loginResponse = MainWindow.ManageSendAndGetData(json, clientStream);
+            Communicator.Response loginResponse = Communicator.ManageSendAndGetData(json, clientStream);
 
             if (loginResponse.status == ERROR_CODE)
             {

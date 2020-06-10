@@ -58,6 +58,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Communicator.cs" />
     <Compile Include="CreateRoom.xaml.cs">
       <DependentUpon>CreateRoom.xaml</DependentUpon>
     </Compile>
