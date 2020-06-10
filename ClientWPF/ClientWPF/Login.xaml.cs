@@ -47,6 +47,21 @@ namespace ClientWPF
             json = MainWindow.EditRequest((int)MainWindow.Codes.LOGIN_CODE, json);
             byte[] buffer = new ASCIIEncoding().GetBytes(json);
             clientStream.Write(buffer, 0, buffer.Length);
+
+            buffer = new byte[4096];
+            int bytesRead = clientStream.Read(buffer, 0, 4096);
+            string s  =  Encoding.ASCII.GetString(buffer);
+            string x = MainWindow.GetBytesFromBinaryString(s);
+            Console.WriteLine(x.Substring(5, 14));
+            MainWindow.Response d = JsonConvert.DeserializeObject<MainWindow.Response>(x.Substring(5,14));
+            if(d.status == 0)
+            {
+                MessageBox.Show("Sorry! There is no such user\n please sign up");
+               
+            }
+            var MainWindowMenu = new MainWindow();
+            MainWindowMenu.Show();
+            this.Close();
         }
     }
 }

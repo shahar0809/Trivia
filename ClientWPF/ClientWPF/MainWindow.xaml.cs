@@ -29,6 +29,11 @@ namespace ClientWPF
             GET_ROOM_CODE, GET_PLAYERS_IN_ROOM_CODE,
             JOIN_ROOM_CODE, GET_STATISTICS_CODE, LOGOUT_CODE
         };
+
+        public struct Response
+        {
+            public int status { set; get; }
+        }
         public MainWindow()
         {
             InitializeComponent();
@@ -90,6 +95,18 @@ namespace ClientWPF
         public static string EditRequest(int code, string request)
         {
             return ToBinary(code.ToString())+ ToBinary((request.Length).ToString().PadLeft(4, '0')) + ToBinary(request);
+        }
+        public static string GetBytesFromBinaryString(string binary)
+        {
+            List<byte> list = new List<Byte>();
+
+            for (int i = 0; binary[i] == '0' || binary[i] == '1'; i += 8)
+            {
+                String t = binary.Substring(i, 8);
+
+                list.Add(Convert.ToByte(t, 2));
+            }
+            return Encoding.ASCII.GetString(list.ToArray()); 
         }
     }
     
