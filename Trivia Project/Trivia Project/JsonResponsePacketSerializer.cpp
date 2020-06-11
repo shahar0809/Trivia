@@ -52,7 +52,7 @@ std::string JsonResponsePacketSerializer::serializeResponse(GetRoomResponse getR
 	return JsonResponsePacketSerializer::serializeResponse(j, GET_ROOM_CODE);
 }
 
-std::string JsonResponsePacketSerializer::serializerResponse(GetPlayersInRoomResponse getPlayersInRoom)
+std::string JsonResponsePacketSerializer::serializeResponse(GetPlayersInRoomResponse getPlayersInRoom)
 {
 	std::string playersInRoom = parseVector(getPlayersInRoom.players, DELIMETER);
 	json j;

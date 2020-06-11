@@ -49,10 +49,11 @@ void Communicator::bindAndListen()
 */
 void Communicator::handleNewClient(std::pair<SOCKET, IRequestHandler*> client)
 {
+	IRequestHandler* currHandler = client.second;
+
 	/* Getting requests from the client */
 	while (!this->m_isEnded)
 	{
-		IRequestHandler* currHandler = client.second, *temp = currHandler;
 		/* Getting the packet from the socket. */
 		std::string packet;
 		try
@@ -79,8 +80,7 @@ void Communicator::handleNewClient(std::pair<SOCKET, IRequestHandler*> client)
 			std::cout << "S E R V E R:" << std::endl << result.requestBuffer << std::endl << std::endl;
 			Helper::sendData(client.first, result.requestBuffer);       // Sending response to the client
 
-			currHandler = result.newHandler;						    // Moving to the next state (updating handler).
-			delete temp;											    // Freeing allocated memory of the previous handle.
+			currHandler = result.newHandler; // Moving to the next state (updating handler).
 		}
 	} 
 	closesocket(client.first);

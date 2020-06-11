@@ -52,9 +52,9 @@ namespace ClientWPF
                 email=email.Text
             };
 
-            //Edit and send signUp request.
+            // Edit and send signUp request.
             string json = JsonConvert.SerializeObject(signUp, Formatting.Indented);
-            Communicator.Response signUpResponse = Communicator.ManageSendAndGetData(json, clientStream);
+            Response signUpResponse = Communicator.ManageSendAndGetData<Response>(json, clientStream, Codes.SIGN_UP_CODE);
 
             if (signUpResponse.status == ERROR_CODE)
             {

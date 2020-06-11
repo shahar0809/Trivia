@@ -4,9 +4,68 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ClientWPF"
-        mc:Ignorable="d"
-        Title="JoinRoom" Height="450" Width="800">
+        mc:Ignorable="d" FontSize="36" FontFamily="Forte"
+        Title="JoinRoom" Height="600" Width="800">
     <Grid>
-        
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="20"/>
+            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="20"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+
+            <RowDefinition Height="20"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="20"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Grid.Row="1" Grid.Column="1"
+                   Text="Join Room"
+                   FontFamily="Ravie"
+                   FontSize="50"
+                   Margin="200, 0, 200, 10"
+        ></TextBlock>
+
+        <ScrollViewer Grid.Row="2" Grid.Column="1" Margin="150,10,150,20">
+            <ListBox x:Name="availableRooms" MinHeight="170" SelectionChanged="availableRooms_SelectionChanged">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding name}"/>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+        </ScrollViewer>
+
+        <TextBlock x:Name="showRoomPlayers"
+                   Grid.Column="1" Grid.Row="3"
+                   Visibility="Visible"
+                   Text="Room Players:" FontSize="28"
+                   Margin="50, 5, 150, 5"
+        />
+
+        <ScrollViewer Grid.Row="4" Grid.Column="1" Margin="250,10,250,10">
+            <ListBox x:Name="playersInRoom" MinHeight="100" SelectionChanged="availableRooms_SelectionChanged">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding}"/>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+        </ScrollViewer>
+
+        <Button x:Name="joinRoomButton" 
+                Grid.Column="1" Grid.Row="5"
+                Content="Join"
+                Margin="270, 35, 270, 0"
+                Click="joinRoomButton_Click"
+        />
+
     </Grid>
 </Window>

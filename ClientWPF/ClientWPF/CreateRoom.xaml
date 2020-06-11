@@ -4,9 +4,13 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ClientWPF"
-        mc:Ignorable="d" FontFamily="Magneto" FontSize="36"
-        Title="CreateRoom" Height="450" Width="800">
+        mc:Ignorable="d" FontFamily="Forte" FontSize="36"
+        Title="CreateRoom" Height="600" Width="800">
     <Grid>
+        <Grid.Background>
+            <ImageBrush ImageSource="Images/genBackground.png" Stretch="UniformToFill"/>
+        </Grid.Background>
+        
         <Grid.ColumnDefinitions>
         <ColumnDefinition Width="20"/>
         <ColumnDefinition Width="auto"/>
@@ -24,7 +28,6 @@
             <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
-            <RowDefinition Height="auto"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="20"/>
         </Grid.RowDefinitions>
@@ -33,7 +36,7 @@
                    Grid.Row="1"
                    Grid.Column="1"
                    Grid.ColumnSpan="2"
-                   Margin="155, 0, 0, 5"
+                   Margin="155, 0, 0, 20"
                    FontSize="50" FontFamily="Ravie"
         ></TextBlock>
 
@@ -65,12 +68,15 @@
                  Grid.Row="2"
                  Grid.Column="2"
                  Margin="10"
+                 MinWidth="200"
+                 FontFamily="Arial"
         ></TextBox>
 
         <TextBox x:Name="numOfPlayers"
                  Grid.Row="3"
                  Grid.Column="2"
                  Margin="10"
+                 FontFamily="Arial"
         ></TextBox>
 
         <TextBox x:Name="numOfQuestion"
@@ -83,15 +89,18 @@
                  Grid.Row="5"
                  Grid.Column="2"
                  Margin="10"
+                 FontFamily="Arial"
         ></TextBox>
 
-        <Button Grid.Column="2" Grid.Row="6" Margin="40, 5, 40, 20" Click="Submit_Button_Click">
+        <Button Grid.Column="2" Grid.Row="6" 
+                Margin="10, 60, 10, 60" 
+                Grid.ColumnSpan="2"
+                Click="Submit_Button_Click">
             Submit
             <Button.Resources>
                 <Style TargetType="Border">
                     <Setter Property="CornerRadius" Value="5"/>
                 </Style>
-
             </Button.Resources>
         </Button>
 

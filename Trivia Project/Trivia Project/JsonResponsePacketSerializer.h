@@ -78,7 +78,7 @@ public:
 	static std::string serializeResponse(SignupResponse signUp);
 	static std::string serializeResponse(LogoutResponse logout);
 	static std::string serializeResponse(GetRoomResponse getRoom);
-	static std::string serializerResponse(GetPlayersInRoomResponse getPlayersInRoom);
+	static std::string serializeResponse(GetPlayersInRoomResponse getPlayersInRoom);
 	static std::string serializeResponse(JoinRoomResponse joinRoom);
 	static std::string serializeResponse(CreateRoomResponse createRoom);
 	static std::string serializeResponse(GetStatisticsResponse getStatistics);

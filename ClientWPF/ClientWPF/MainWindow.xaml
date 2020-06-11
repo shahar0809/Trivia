@@ -8,7 +8,7 @@
         Title="Trivia" Height="600" Width="800">
     <Grid>
         <Grid.Background>
-            <ImageBrush ImageSource="goodl.png" Stretch="UniformToFill"/>
+            <ImageBrush ImageSource="Images/goodl.png" Stretch="UniformToFill"/>
         </Grid.Background>
         
         <Grid.ColumnDefinitions>
