@@ -40,11 +40,11 @@ namespace ClientWPF
 
         public static T ManageSendAndGetData<T>(string json, NetworkStream clientStream, Codes code)
         {
-            // Edit and send login request.
+            // Edit and send request.
             json = EditRequest((int)code, json);
             SendRequest(json, clientStream);
 
-            // Get login response.
+            // Get response.
             string s = Helper.GetData(clientStream);
             string textStrData = s.Substring(DATA_START_INDEX);
             T response = JsonConvert.DeserializeObject<T>(textStrData);

@@ -127,8 +127,23 @@ RequestResult MenuRequestHandler::createRoom(RequestInfo info)
 {
 	CreateRoomRequest createReq = JsonRequestPacketDeserializer::deserializeCreateRoomRequest(info.buffer);
 	RoomManager roomManager = m_handlerFactory.getRoomManager();
+
+	CreateRoomResponse resp;
+	try
+	{
+		roomManager.createRoom(*m_user, createReq.getRoomData());
+	}
+	catch (const std::exception & e)
+	{
+		resp.status = FAILED;
+		return RequestResult{ JsonResponsePacketSerializer::serializeResponse(resp), nullptr };
+	}
 	
-	roomManager.createRoom(*m_user, createReq.getRoomData());
-	RequestResult res;
-	return res;
+	resp.status = SUCCEEDED;
+	resp.roomId = createReq.getRoomData().id;
+	return RequestResult
+	{
+		JsonResponsePacketSerializer::serializeResponse(resp),
+		m_handlerFactory.createMenuRequestHandler(this->m_user->getUsername(),&this->m_handlerFactory)
+	};
 }

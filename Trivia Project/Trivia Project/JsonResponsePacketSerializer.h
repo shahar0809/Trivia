@@ -5,6 +5,7 @@
 #include <bitset>
 #include "Helper.h"
 #include "Room.h"
+#include "JsonRequestPacketDeserializer.h"
 
 #include "include/nlohmann/json.hpp"
 using json = nlohmann::json;
@@ -63,6 +64,7 @@ struct JoinRoomResponse
 struct CreateRoomResponse
 {
 	unsigned int status;
+	unsigned int roomId;
 };
 
 struct GetStatisticsResponse

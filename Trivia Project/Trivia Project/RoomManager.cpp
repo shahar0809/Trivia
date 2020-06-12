@@ -2,8 +2,8 @@
 
 void RoomManager::createRoom(LoggedUser user, RoomData data)
 {
-	std::string roomData("ROOM" + std::to_string(this->m_rooms.size()));
-	m_rooms[roomId] = *new Room(this->roomId, roomData, user);
+	std::string roomData();
+	m_rooms[roomId] = *new Room(this->roomId, data, user);
 	this->roomId++;
 }
 

@@ -71,6 +71,7 @@ std::string JsonResponsePacketSerializer::serializeResponse(CreateRoomResponse c
 {
 	json j;
 	j[jsonFields[STATUS]] = createRoom.status;
+	j[fields[ROOM_ID]] = createRoom.roomId;
 	return JsonResponsePacketSerializer::serializeResponse(j, CREATE_ROOM_CODE);
 }
 

@@ -10,7 +10,7 @@ using json = nlohmann::json;
 static const char* fields[] = { 
 	"username", "password", "email",
 	"RoomId", 
-	"RoomName", "maxUsers", "questionCount", "answerTimeout"
+	"roomName", "numOfPlayers", "numOfQuestions", "timePerQuestion"
 };
 
 enum fieldsIndices 
