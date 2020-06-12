@@ -24,7 +24,7 @@ struct Score
 	{
 		return
 			username +
-			"-"+
+			","+
 			std::to_string(score);
 	}
 };

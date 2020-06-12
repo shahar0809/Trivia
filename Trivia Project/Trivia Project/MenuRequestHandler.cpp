@@ -61,7 +61,11 @@ RequestResult MenuRequestHandler::getRooms(RequestInfo info)
 	RoomManager roomManager = m_handlerFactory.getRoomManager();
 
 	GetRoomResponse resp{ 1, roomManager.getRooms() };
-	return RequestResult{ JsonResponsePacketSerializer::serializeResponse(resp), nullptr };
+	return RequestResult
+	{
+		JsonResponsePacketSerializer::serializeResponse(resp),
+		m_handlerFactory.createMenuRequestHandler(this->m_user->getUsername(),&this->m_handlerFactory)
+	};
 }
 
 RequestResult MenuRequestHandler::getPlayersInRoom(RequestInfo info)
@@ -76,7 +80,11 @@ RequestResult MenuRequestHandler::getPlayersInRoom(RequestInfo info)
 		roomPlayers.push_back(user.getUsername());
 	}
 
-	return RequestResult{ JsonResponsePacketSerializer::serializeResponse(GetPlayersInRoomResponse { roomPlayers }) };
+	return RequestResult
+	{
+		JsonResponsePacketSerializer::serializeResponse(GetPlayersInRoomResponse { roomPlayers }),
+		m_handlerFactory.createMenuRequestHandler(this->m_user->getUsername(),&this->m_handlerFactory)
+	};
 }
 
 RequestResult MenuRequestHandler::getStatistics(RequestInfo info)
@@ -99,7 +107,12 @@ RequestResult MenuRequestHandler::getStatistics(RequestInfo info)
 	resp.highScore = highScore;
 	resp.userStatistics = stats.first.toString();
 	resp.status = SUCCEEDED;
-	return RequestResult{ JsonResponsePacketSerializer::serializeResponse(resp), nullptr };
+	return RequestResult
+	{
+		JsonResponsePacketSerializer::serializeResponse(resp),
+		m_handlerFactory.createMenuRequestHandler(this->m_user->getUsername(),&this->m_handlerFactory)
+	};
+
 }
 
 RequestResult MenuRequestHandler::joinRoom(RequestInfo info)

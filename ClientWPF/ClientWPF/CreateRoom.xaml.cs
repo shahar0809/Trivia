@@ -28,10 +28,10 @@ namespace ClientWPF
 
         private struct CreateRoomRequest
         {
-            public string roomName { set; get; }
-            public int numOfPlayers { set; get; }
-            public int numOfQuestions { set; get; }
-            public int timePerQuestion { set; get; }
+            public string ROOM_NAME { set; get; }
+            public int NUM_OF_PLAYERS { set; get; }
+            public int NUM_OF_QUESTIONS { set; get; }
+            public int TIME_PER_QUESTION { set; get; }
         }
         public CreateRoom(NetworkStream clientStream,MainWindow mainWindow)
         {
@@ -44,10 +44,10 @@ namespace ClientWPF
         {
             CreateRoomRequest createRoom = new CreateRoomRequest 
             {
-                roomName = roomName.Text,
-                numOfPlayers = int.Parse(numOfPlayers.Text),
-                numOfQuestions = int.Parse(numOfQuestion.Text),
-                timePerQuestion = int.Parse(timeout.Text),
+                ROOM_NAME = roomName.Text,
+                NUM_OF_PLAYERS = int.Parse(numOfPlayers.Text),
+                NUM_OF_QUESTIONS = int.Parse(numOfQuestion.Text),
+                TIME_PER_QUESTION = int.Parse(timeout.Text),
             };
 
             string json = JsonConvert.SerializeObject(createRoom, Formatting.Indented);

@@ -33,6 +33,12 @@ namespace ClientWPF
             client.Connect(serverEndPoint);
             this.clientStream = client.GetStream();
         }
+
+        public MainWindow(NetworkStream clientStream)
+        {
+            InitializeComponent();
+            this.clientStream = clientStream;
+        }
         private void loginButtonClicked(object sender, RoutedEventArgs e)
         {
             var Login = new Login(clientStream,this); // Create the login form.

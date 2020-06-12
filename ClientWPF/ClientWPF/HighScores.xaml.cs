@@ -28,10 +28,24 @@ namespace ClientWPF
             InitializeComponent();
             this.clientStream = clientStream;
             this.mainWindow = mainWindow;
+
+            string[] highScoresArr = new string[10];
+            highScoresArr = highScores.Split(',');
+            firstName.Text = highScoresArr[0];
+            firstScore.Text = highScoresArr[1];
+            secondName.Text = highScoresArr[2];
+            secondScore.Text = highScoresArr[3];
+            thirdName.Text = highScoresArr[4];
+            thirdScore.Text = highScoresArr[5];
+            fourthName.Text = highScoresArr[6];
+            fourthScore.Text = highScoresArr[7];
+            fifthName.Text = highScoresArr[8];
+            fifthScore.Text = highScoresArr[9];
         }
         private void goBackButton_Click(object sender, RoutedEventArgs e)
         {
-            this.mainWindow.Show();
+            var mainWindow = new MainWindow(this.clientStream);
+            mainWindow.Show();
             this.Close();
         }
         

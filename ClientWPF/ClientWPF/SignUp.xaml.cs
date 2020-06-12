@@ -61,6 +61,7 @@ namespace ClientWPF
             {
                 MessageBox.Show("Sorry! Username was taken \n please change your username ");
             }
+            var mainWindow = new MainWindow(this.clientStream);
             mainWindow.Show();
             Close();
         }
