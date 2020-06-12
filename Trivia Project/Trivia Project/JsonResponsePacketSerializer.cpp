@@ -78,6 +78,8 @@ std::string JsonResponsePacketSerializer::serializeResponse(GetStatisticsRespons
 {
 	json j;
 	j[jsonFields[STATUS]] = getStatistics.status;
+	j[jsonFields[USER_STATS]] = getStatistics.userStatistics;
+	j[jsonFields[HIGH_SCORES]] = parseVector(getStatistics.highScore, DELIMETER);
 	return JsonResponsePacketSerializer::serializeResponse(j, GET_STATISTICS_CODE);
 }
 
@@ -91,5 +93,5 @@ std::string JsonResponsePacketSerializer::parseVector(std::vector<std::string> v
 	}
 
 	// Returning the parsed string without the last char (extra delimeter)
-	return parsedVec.substr(parsedVec.size() - 1);
+	return parsedVec.substr(0, parsedVec.size() - 1);
 }

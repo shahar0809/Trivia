@@ -45,7 +45,8 @@ namespace ClientWPF
             SendRequest(json, clientStream);
 
             // Get login response.
-            string textStrData = Helper.GetData(clientStream).Substring(DATA_START_INDEX, DATA_END_INDEX);
+            string s = Helper.GetData(clientStream);
+            string textStrData = s.Substring(DATA_START_INDEX);
             T response = JsonConvert.DeserializeObject<T>(textStrData);
             return response;
         }

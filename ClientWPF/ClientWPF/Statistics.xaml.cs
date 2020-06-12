@@ -21,21 +21,36 @@ namespace ClientWPF
     /// </summary>
     public partial class Statistics : Window
     {
+        private struct GetStatisticsResponse
+        {
+            public int status;
+            public string HighScores;
+            public string UserStatistics;
+        }
+
         private NetworkStream clientStream;
-        public Statistics(NetworkStream clientStream)
+        private MainWindow mainWindow;
+        private GetStatisticsResponse resp;
+        public Statistics(NetworkStream clientStream,MainWindow mainWindow)
         {
             InitializeComponent();
             this.clientStream = clientStream;
+            this.mainWindow = mainWindow;
+
+            // Getting the available rooms.
+             resp = Communicator.ManageSendAndGetData<GetStatisticsResponse>("", clientStream, Codes.GET_STATISTICS_CODE);
+            
         }
+
         private void MyButton_Click(object sender, RoutedEventArgs e)
         {
-            var MyStatistics = new MyStatistics(clientStream); //create the login form.
+            var MyStatistics = new MyStatistics(clientStream,mainWindow,resp.UserStatistics); //create the login form.
             MyStatistics.Show(); //show the form.
             this.Close();
         }
         private void MyButton2_Click(object sender, RoutedEventArgs e)
         {
-            var HighScores = new HighScores(clientStream);
+            var HighScores = new HighScores(clientStream,mainWindow,resp.HighScores);
             HighScores.Show();
             this.Close();
         }

@@ -22,10 +22,18 @@ namespace ClientWPF
     public partial class HighScores : Window
     {
         private NetworkStream clientStream;
-        public HighScores(NetworkStream clientStream)
+        private MainWindow mainWindow;
+        public HighScores(NetworkStream clientStream,MainWindow mainWindow,string highScores)
         {
             InitializeComponent();
             this.clientStream = clientStream;
+            this.mainWindow = mainWindow;
         }
+        private void goBackButton_Click(object sender, RoutedEventArgs e)
+        {
+            this.mainWindow.Show();
+            this.Close();
+        }
+        
     }
 }
