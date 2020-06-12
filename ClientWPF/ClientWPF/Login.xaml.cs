@@ -49,14 +49,16 @@ namespace ClientWPF
                 username = userName.Text
             };
 
-            //Edit and send login request.
+            // Edit and send login request.
             string json = JsonConvert.SerializeObject(login, Formatting.Indented);
-            Communicator.Response loginResponse = Communicator.ManageSendAndGetData(json, clientStream);
+            Response loginResponse = Communicator.ManageSendAndGetData<Response>(json, clientStream, Codes.LOGIN_CODE);
 
             if (loginResponse.status == ERROR_CODE)
             {
-                MessageBox.Show("Sorry! There is no such user\n please sign up");
+                MessageBox.Show("Sorry! There is no such user\n Please sign up.");
             }
+
+            // Closing the Log in window and returing to the menu.
             var MainWindowMenu = new MainWindow();
             MainWindowMenu.Show();
             this.Close();

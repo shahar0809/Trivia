@@ -24,6 +24,7 @@ namespace ClientWPF
     {
         private NetworkStream clientStream;
         public const int ERROR_CODE = 0;
+
         private struct CreateRoomRequest
         {
             public string roomName { set; get; }
@@ -47,17 +48,17 @@ namespace ClientWPF
                 timePerQuestion = int.Parse(timeout.Text),
             };
 
-
             string json = JsonConvert.SerializeObject(createRoom, Formatting.Indented);
-            Communicator.Response createRoomResponse = Communicator.ManageSendAndGetData(json, clientStream);
+            Response createRoomResponse = Communicator.ManageSendAndGetData<Response>(json, clientStream, Codes.CREATE_ROOM_CODE);
 
             if (createRoomResponse.status == ERROR_CODE)
             {
                 MessageBox.Show("Error! , can't create room");
             }
-            //Should show the room details.
-            var MainWindowMenu = new MainWindow();
-            MainWindowMenu.Show();
+
+            // Should show the room details.
+            var roomAdmin = new RoomAdmin();
+            roomAdmin.Show();
             Close();
         }
     }

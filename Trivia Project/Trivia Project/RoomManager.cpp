@@ -42,3 +42,8 @@ std::vector<RoomData> RoomManager::getRooms()
 	}
 	return rooms;
 }
+
+Room RoomManager::getRoom(int roomId)
+{
+	return this->m_rooms[roomId];
+}

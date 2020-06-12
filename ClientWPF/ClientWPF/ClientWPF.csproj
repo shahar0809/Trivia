@@ -62,6 +62,7 @@
     <Compile Include="CreateRoom.xaml.cs">
       <DependentUpon>CreateRoom.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Helper.cs" />
     <Compile Include="HighScores.xaml.cs">
       <DependentUpon>HighScores.xaml</DependentUpon>
     </Compile>
@@ -73,6 +74,9 @@
     </Compile>
     <Compile Include="MyStatistics.xaml.cs">
       <DependentUpon>MyStatistics.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="RoomAdmin.xaml.cs">
+      <DependentUpon>RoomAdmin.xaml</DependentUpon>
     </Compile>
     <Compile Include="SignUp.xaml.cs">
       <DependentUpon>SignUp.xaml</DependentUpon>
@@ -109,6 +113,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="MyStatistics.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="RoomAdmin.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -152,7 +160,10 @@
     <Resource Include="Images\goodl.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="goodl.png" />
+    <Resource Include="Images\genBackground.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="genBackground.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -57,7 +57,6 @@ RequestResult MenuRequestHandler::logout(RequestInfo info)
 
 RequestResult MenuRequestHandler::getRooms(RequestInfo info)
 {
-	JoinRoomRequest joinReq = JsonRequestPacketDeserializer::deserializeJoinRoomRequest(info.buffer);
 	RoomManager roomManager = m_handlerFactory.getRoomManager();
 
 	GetRoomResponse resp{ 1, roomManager.getRooms() };
@@ -66,10 +65,17 @@ RequestResult MenuRequestHandler::getRooms(RequestInfo info)
 
 RequestResult MenuRequestHandler::getPlayersInRoom(RequestInfo info)
 {
-	JoinRoomRequest joinReq = JsonRequestPacketDeserializer::deserializeJoinRoomRequest(info.buffer);
+	GetPlayersInRoomRequest req = JsonRequestPacketDeserializer::deserializeGetPlayersRequest(info.buffer);
 	RoomManager roomManager = m_handlerFactory.getRoomManager();
-	
-	return RequestResult{ "", nullptr };
+	std::vector<LoggedUser> loggedUsers = roomManager.getRoom(req.roomId).getAllUsers();
+	std::vector<std::string> roomPlayers;
+
+	for (auto user : loggedUsers)
+	{
+		roomPlayers.push_back(user.getUsername());
+	}
+
+	return RequestResult{ JsonResponsePacketSerializer::serializeResponse(GetPlayersInRoomResponse { roomPlayers }) };
 }
 
 RequestResult MenuRequestHandler::getStatistics(RequestInfo info)
