@@ -34,11 +34,11 @@ namespace ClientWPF
     public struct GetRoomsResponse
     {
         public int Status;
-        public List<RoomData> Rooms;
+        public List<string> Rooms;
     }
     public struct GetPlayersInRoomResponse
     {
-        public List<string> Players;
+        public List<string> PlayersInRoom;
     }
     public struct JoinRoomRequest
     {
@@ -71,7 +71,16 @@ namespace ClientWPF
 
             // Getting the available rooms.
             GetRoomsResponse resp = Communicator.ManageSendAndGetData<GetRoomsResponse>("", clientStream, Codes.GET_ROOM_CODE);
-            availableRooms.ItemsSource = resp.Rooms;
+            List<Tuple<string, int>> rooms = new List<Tuple<string, int>>();
+
+            foreach(string room in resp.Rooms)
+            {
+                var splitted = room.Split(',');
+                int id = Int32.Parse(splitted[1]);
+                string name = splitted[0];
+                rooms.Add(Tuple.Create(name, id));
+            }
+            availableRooms.ItemsSource = rooms;
         }
 
         private void availableRooms_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -87,7 +96,7 @@ namespace ClientWPF
             GetPlayersInRoomResponse resp = Communicator.ManageSendAndGetData<GetPlayersInRoomResponse>(json, clientStream, Codes.GET_PLAYERS_IN_ROOM_CODE);
 
             // Displaying the room players in a listBox
-            playersInRoom.ItemsSource = resp.Players;
+            playersInRoom.ItemsSource = resp.PlayersInRoom;
         }
 
         private void joinRoomButton_Click(object sender, RoutedEventArgs e)

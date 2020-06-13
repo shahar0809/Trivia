@@ -76,7 +76,7 @@
                  Grid.Row="3"
                  Grid.Column="2"
                  Margin="10"
-                 FontFamily="Arial"
+                 FontFamily="Forte"
         ></TextBox>
 
         <TextBox x:Name="numOfQuestions"
@@ -84,21 +84,36 @@
                  Grid.Column="2"
                  Grid.ColumnSpan="2"
                  Margin="10"
+                 FontFamily="Forte"
         ></TextBox>
 
         <TextBox x:Name="timeout"
                  Grid.Row="5"
                  Grid.Column="2"
                  Margin="10"
-                 FontFamily="Arial"
+                 FontFamily="Forte"
         ></TextBox>
 
-        <Button Grid.Column="2" Grid.Row="6" 
+        <Button x:Name="submitRoom"
+            Grid.Column="2" Grid.Row="6" 
                 Margin="10, 60, 10, 60" 
                 Grid.ColumnSpan="2"
                 Click="Submit_Button_Click"
                 Content="Submit"
                 >
+
+            <Button.Resources>
+                <Style TargetType="Border">
+                    <Setter Property="CornerRadius" Value="5"/>
+                </Style>
+            </Button.Resources>
+        </Button>
+
+        <Button Name="cancel"
+            Grid.Column="1" Grid.Row="6" 
+                Margin="180, 60, 100, 60" 
+                Click="cancel_Click"
+                Content="Cancel">
 
             <Button.Resources>
                 <Style TargetType="Border">

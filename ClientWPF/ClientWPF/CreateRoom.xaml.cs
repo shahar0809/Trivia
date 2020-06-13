@@ -89,5 +89,15 @@ namespace ClientWPF
             roomAdmin.Show();
             Close();
         }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void cancel_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }

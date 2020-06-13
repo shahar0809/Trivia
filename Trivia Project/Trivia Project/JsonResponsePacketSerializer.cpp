@@ -45,18 +45,20 @@ std::string JsonResponsePacketSerializer::serializeResponse(LogoutResponse logou
 	return JsonResponsePacketSerializer::serializeResponse(j, LOGOUT_CODE);
 }
 
-std::string JsonResponsePacketSerializer::serializeResponse(GetRoomResponse getRoom)
+std::string JsonResponsePacketSerializer::serializeResponse(GetRoomResponse getRooms)
 {
+	json j_vec(getRooms.rooms);
 	json j;
-	j[jsonFields[STATUS]] = getRoom.status;
-	return JsonResponsePacketSerializer::serializeResponse(j, GET_ROOMS_CODE);
+	j[jsonFields[STATUS]] = getRooms.status;
+	j[jsonFields[ROOMS]] = j_vec;
+ 	return JsonResponsePacketSerializer::serializeResponse(j, GET_ROOMS_CODE);
 }
 
 std::string JsonResponsePacketSerializer::serializeResponse(GetPlayersInRoomResponse getPlayersInRoom)
 {
-	std::string playersInRoom = parseVector(getPlayersInRoom.players, DELIMETER);
+	json players(getPlayersInRoom.players);
 	json j;
-	j[jsonFields[PLAYERS_IN_ROOM]] = playersInRoom;
+	j[jsonFields[PLAYERS_IN_ROOM]] = players;
 	return JsonResponsePacketSerializer::serializeResponse(j, GET_PLAYERS_IN_ROOM_CODE);
 }
 

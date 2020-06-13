@@ -44,7 +44,7 @@ struct LogoutResponse
 struct GetRoomResponse
 {
 	unsigned int status;
-	std::vector<RoomData> rooms;
+	std::vector<std::string> rooms;
 };
 
 struct GetPlayersInRoomResponse

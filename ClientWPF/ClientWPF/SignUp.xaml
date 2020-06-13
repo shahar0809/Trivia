@@ -61,18 +61,21 @@
                  Grid.Row="2" Grid.Column="2"
                  Grid.ColumnSpan="2"
                  Margin="0, 0, 70, 0"
+                 FontFamily="Arial"
         />
 
         <TextBox x:Name="passwordBox"
                  Grid.Row="3" Grid.Column="2"
                  Grid.ColumnSpan="2"
                  Margin="0, 15, 70, 0"
+                 FontFamily="Arial"
         />
 
         <TextBox x:Name="emailBox"
                  Grid.Row="4" Grid.Column="2"
                  Grid.ColumnSpan="2"
                  Margin="0, 15, 70, 0"
+                 FontFamily="Arial"
         />
 
         <Button x:Name="submitSignUp"

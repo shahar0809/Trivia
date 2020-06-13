@@ -29,7 +29,6 @@ namespace ClientWPF
         private NetworkStream clientStream;
         private bool stopUpdatingUsers;
 
-        
         public RoomAdmin(MainWindow mainWindow, RoomData data, NetworkStream clientStream, bool isAdmin)
         {
             InitializeComponent();
@@ -52,32 +51,23 @@ namespace ClientWPF
             // Showing room data to the admin
             displayMaxNumPlayers.Text = roomData.MaxPlayers.ToString();
             displayNumOfQuestions.Text = roomData.NumOfQuesstions.ToString();
+            displayTimePerQuestion.Text = roomData.TimeForQuestion.ToString();
             displayRoomName.Text = roomData.Name;
-            displayRoomName.Text = roomData.Name;
-
-            List<string> roomPlayers = new List<string>();
-            playersInRoom.ItemsSource = roomPlayers;
-
-            Thread updateList = new Thread(() => updateRoomPlayers(roomPlayers));
-            updateList.IsBackground = true;
-            updateList.Start();
-            // Creating a background worker that will update the players connected to the room (into the listBox).
-            /*updatePlayersWorker = new BackgroundWorker();
-            updatePlayersWorker.DoWork += updateRoomPlayers;
-            updatePlayersWorker.ProgressChanged += updateListBox;
-            updatePlayersWorker.RunWorkerAsync();*/
-
-
+            roomName.Text = roomData.Name;
         }
 
         private void closeRoom_Click(object sender, RoutedEventArgs e)
         {
             stopUpdatingUsers = true;
+            this.mainWindow.Show();
+            this.Close();
         }
 
         private void leaveRoom_Click(object sender, RoutedEventArgs e)
         {
             stopUpdatingUsers = true;
+            this.mainWindow.Show();
+            this.Close();
         }
 
         private void startGame_Click(object sender, RoutedEventArgs e)
@@ -85,21 +75,22 @@ namespace ClientWPF
             stopUpdatingUsers = true;
         }
 
-        public void updateRoomPlayers(List<string> roomPlayers)
+        public List<string> updateRoomPlayers()
         {
-            // Refreshing while the room hasn't been closed or the game hasn't started.
-            while (!stopUpdatingUsers)
-            {
-                // Getting the players connected to the room
-                GetPlayersInRoomRequest request = new GetPlayersInRoomRequest { RoomId = this.roomData.Id };
+            // Getting the players connected to the room
+            GetPlayersInRoomRequest request = new GetPlayersInRoomRequest { RoomId = this.roomData.Id };
 
-                GetPlayersInRoomResponse resp = Communicator.ManageSendAndGetData<GetPlayersInRoomResponse>(
+            GetPlayersInRoomResponse resp = Communicator.ManageSendAndGetData<GetPlayersInRoomResponse>(
                     JsonConvert.SerializeObject(request),
                     clientStream,
                     Codes.GET_PLAYERS_IN_ROOM_CODE);
 
-                roomPlayers = resp.Players;
-            }
+            return resp.PlayersInRoom;
+        }
+
+        private void refreshPlayers_Click(object sender, RoutedEventArgs e)
+        {
+            playersInRoom.ItemsSource = updateRoomPlayers();
         }
     }
 }

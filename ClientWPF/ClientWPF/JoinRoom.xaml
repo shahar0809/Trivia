@@ -64,7 +64,7 @@
                      SelectionChanged="availableRooms_SelectionChanged">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
-                        <TextBlock Text="{Binding}"/>
+                        <TextBlock Text="{Binding Item1}"/>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>

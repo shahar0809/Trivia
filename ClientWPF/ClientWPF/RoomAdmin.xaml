@@ -129,13 +129,9 @@
                       HorizontalAlignment="Center"
         >
             <ListBox x:Name="playersInRoom" 
-                     MinHeight="100" >
-                <ListBox.ItemTemplate>
-                    <DataTemplate>
-                        <TextBlock Text="{Binding Mode=OneWay}"/>
-                    </DataTemplate>
-                </ListBox.ItemTemplate>
-            </ListBox>
+                     MinHeight="100" 
+                     ItemsSource="{Binding roomPlayers, Mode=OneWayToSource}"
+                     />
         </ScrollViewer>
 
         <Button x:Name="closeRoom"
@@ -184,6 +180,16 @@
                 </Style>
             </Button.Resources>
         </Button>
+
+        <Button x:Name="refreshPlayers"
+                Content="Refresh"
+                FontSize="24"
+                Grid.Column="1"
+                Grid.Row="5"
+                Margin="0, 70"
+                Padding="5, 7"
+                HorizontalAlignment="Center"
+                Click="refreshPlayers_Click"/>
 
     </Grid>
 </Window>
