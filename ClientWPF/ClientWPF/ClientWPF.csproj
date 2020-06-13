@@ -63,9 +63,6 @@
       <DependentUpon>CreateRoom.xaml</DependentUpon>
     </Compile>
     <Compile Include="Helper.cs" />
-    <Compile Include="HighScores.xaml.cs">
-      <DependentUpon>HighScores.xaml</DependentUpon>
-    </Compile>
     <Compile Include="JoinRoom.xaml.cs">
       <DependentUpon>JoinRoom.xaml</DependentUpon>
     </Compile>
@@ -81,16 +78,12 @@
     <Compile Include="SignUp.xaml.cs">
       <DependentUpon>SignUp.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Statistics.xaml.cs">
-      <DependentUpon>Statistics.xaml</DependentUpon>
+    <Compile Include="StatisticsWindow.xaml.cs">
+      <DependentUpon>StatisticsWindow.xaml</DependentUpon>
     </Compile>
     <Page Include="CreateRoom.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
-    </Page>
-    <Page Include="HighScores.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="JoinRoom.xaml">
       <SubType>Designer</SubType>
@@ -124,7 +117,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Statistics.xaml">
+    <Page Include="StatisticsWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -161,9 +154,6 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\genBackground.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="genBackground.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -15,6 +15,7 @@ using System.Net.Sockets;
 using System.Net;
 using Newtonsoft.Json;
 
+
 namespace ClientWPF
 {
     /// <summary>
@@ -25,7 +26,7 @@ namespace ClientWPF
         private NetworkStream clientStream;
         public const int ERROR_CODE = 0;
 
-        private struct CreateRoomRequest
+        public struct CreateRoomRequest
         {
             public string roomName { set; get; }
             public int numOfPlayers { set; get; }
@@ -40,11 +41,18 @@ namespace ClientWPF
 
         private void Submit_Button_Click(object sender, RoutedEventArgs e)
         {
+            if (string.IsNullOrWhiteSpace(roomName.Text) || string.IsNullOrWhiteSpace(numOfPlayers.Text)
+                || string.IsNullOrWhiteSpace(numOfQuestions.Text) || string.IsNullOrWhiteSpace(timeout.Text))
+            {
+                MessageBox.Show("Please fill all the fields!");
+                return;
+            }
+
             CreateRoomRequest createRoom = new CreateRoomRequest 
             {
                 roomName = roomName.Text,
                 numOfPlayers = int.Parse(numOfPlayers.Text),
-                numOfQuestions = int.Parse(numOfQuestion.Text),
+                numOfQuestions = int.Parse(numOfQuestions.Text),
                 timePerQuestion = int.Parse(timeout.Text),
             };
 

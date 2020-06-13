@@ -22,10 +22,17 @@ namespace ClientWPF
     public partial class MyStatistics : Window
     {
         private NetworkStream clientStream;
-        public MyStatistics(NetworkStream clientStream)
+        public MyStatistics(NetworkStream clientStream, UserStats userStats)
         {
             InitializeComponent();
             this.clientStream = clientStream;
+        }
+
+        private void backToMainWindow_Click(object sender, RoutedEventArgs e)
+        {
+            var MainWindowMenu = new MainWindow();
+            MainWindowMenu.Show();
+            this.Close();
         }
     }
 }

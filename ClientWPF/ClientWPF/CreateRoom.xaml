@@ -46,7 +46,7 @@
                    Margin="50, 5, 8, 5"
         ></TextBlock>
 
-        <TextBlock Text="Nuber of players:"
+        <TextBlock Text="Max Number of players:"
                    Grid.Row="3"
                    Grid.Column="1"
                    Margin="50, 5, 8, 5"
@@ -79,9 +79,10 @@
                  FontFamily="Arial"
         ></TextBox>
 
-        <TextBox x:Name="numOfQuestion"
+        <TextBox x:Name="numOfQuestions"
                  Grid.Row="4"
                  Grid.Column="2"
+                 Grid.ColumnSpan="2"
                  Margin="10"
         ></TextBox>
 
@@ -95,14 +96,15 @@
         <Button Grid.Column="2" Grid.Row="6" 
                 Margin="10, 60, 10, 60" 
                 Grid.ColumnSpan="2"
-                Click="Submit_Button_Click">
-            Submit
+                Click="Submit_Button_Click"
+                Content="Submit"
+                >
+
             <Button.Resources>
                 <Style TargetType="Border">
                     <Setter Property="CornerRadius" Value="5"/>
                 </Style>
             </Button.Resources>
         </Button>
-
     </Grid>
 </Window>

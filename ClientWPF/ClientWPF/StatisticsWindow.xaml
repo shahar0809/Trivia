@@ -1,11 +1,11 @@
-﻿<Window x:Class="ClientWPF.MyStatistics"
+﻿<Window x:Class="ClientWPF.StatisticsWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ClientWPF"
-        mc:Ignorable="d"
-        Title="MyStatistics" Height="600" Width="800">
+        mc:Ignorable="d" FontFamily="Forte" FontSize="36"
+        Title="StatisticsWindow" Height="600" Width="800">
     <Grid>
         <Grid.Background>
             <ImageBrush ImageSource="Images/genBackground.png" Stretch="UniformToFill"/>
@@ -17,9 +17,10 @@
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="20"/>
         </Grid.ColumnDefinitions>
-
+        
         <Grid.RowDefinitions>
             <RowDefinition Height="20"/>
+            <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
@@ -32,7 +33,6 @@
                 HorizontalAlignment="Left"
                 Grid.ColumnSpan="2"
                 Content="Back"
-                FontFamily="Forte"
                 FontSize="24"
                 Padding="10, 3"
                 Name="backToMainWindow"
@@ -43,48 +43,44 @@
                 </Style>
             </Button.Resources>
         </Button>
-
-        <TextBlock Grid.Row="2"
-                   Grid.Column="1"
-                   Grid.ColumnSpan="2"
+        
+        <TextBlock Grid.Row="2" Grid.Column="1"
+                   Text="Statistics"
                    HorizontalAlignment="Center"
-                   Text="My Statistics"
-                   FontSize="65"
+                   Grid.ColumnSpan="2"
+                   FontSize="72"
                    FontFamily="Ravie"
+                   Margin='0, 0, 0, 30'
         />
 
-        <StackPanel Grid.Row="3"
-                    Grid.Column="1"
-                    Grid.ColumnSpan="2"
-                    HorizontalAlignment="Center"
-                    Margin="0, 20">
-            <TextBlock x:Name="displayAvgTime"
-                       Text="{Binding}"
-                       HorizontalAlignment="Center"
-                       FontSize="36"
-                       Margin="0, 10"
-                       ></TextBlock>
-            
-            <TextBlock x:Name="displayNumOfCorrectAns"
-                       Text="{Binding}"
-                       HorizontalAlignment="Center"
-                       FontSize="36"
-                       Margin="0, 10"
-                       ></TextBlock>
-            
-            <TextBlock x:Name="displayNumOfAns"
-                       Text="{Binding}"
-                       HorizontalAlignment="Center"
-                       FontSize="36"
-                       Margin="0, 10"
-                       ></TextBlock>
-            
-            <TextBlock x:Name="displayNumOfGames"
-                       Text="{Binding}"
-                       HorizontalAlignment="Center"
-                       FontSize="36"
-                       Margin="0, 10"
-                       ></TextBlock>
-        </StackPanel>
+        <Button x:Name="myStatisticsButton"
+                Content="My Statistics"
+                Grid.Column="1" Grid.Row="3"
+                HorizontalAlignment="Center"
+                Grid.ColumnSpan="2"
+                Padding="20, 10"
+                Margin="0, 20" FontSize="36"
+                Click="myStatisticsButton_Click">
+            <Button.Resources>
+                <Style TargetType="Border">
+                    <Setter Property="CornerRadius" Value="5"/>
+                </Style>
+            </Button.Resources>
+        </Button>
+
+        <Button x:Name="highScoresButton"
+                Content="High Scores"
+                Grid.Column="1" Grid.Row="4"
+                Margin="0,20" FontSize="36"
+                Click="highScoresButton_Click"
+                HorizontalAlignment="Center"
+                Padding="35, 10"
+                Grid.ColumnSpan="2">
+            <Button.Resources>
+                <Style TargetType="Border">
+                    <Setter Property="CornerRadius" Value="5"/>
+                </Style>
+            </Button.Resources>
+        </Button>
     </Grid>
 </Window>
