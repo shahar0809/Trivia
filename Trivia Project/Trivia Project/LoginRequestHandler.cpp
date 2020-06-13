@@ -3,7 +3,7 @@
 LoginRequestHandler::LoginRequestHandler(IDatabase* db) 
 {
 	m_handlerFactory = RequestHandlerFactory(db);
-	m_loginManager = LoginManager(db);
+	m_loginManager = m_handlerFactory.getLoginManger();
 }
 
 bool LoginRequestHandler::isRequestRelevant(RequestInfo info)
@@ -33,7 +33,8 @@ RequestResult LoginRequestHandler::login(RequestInfo info)
 	if (m_loginManager.login(loginReq.username, loginReq.password))
 	{
 		response.status = SUCCEEDED;
-		result.newHandler = m_handlerFactory.createMenuRequestHandler(loginReq.username); // Setting next state to the menu handler.
+		result.newHandler = m_handlerFactory.createMenuRequestHandler(loginReq.username,&m_handlerFactory); // Setting next state to the menu handler.
+		
 	}
 	else
 	{
@@ -53,7 +54,7 @@ RequestResult LoginRequestHandler::signup(RequestInfo info)
 	if (m_loginManager.signup(signupReq.username, signupReq.password, signupReq.email))
 	{
 		response.status = 1;
-		result.newHandler = m_handlerFactory.createMenuRequestHandler(signupReq.username); // Setting next state to the menu handler.
+		result.newHandler = m_handlerFactory.createMenuRequestHandler(signupReq.username, &this->m_handlerFactory); // Setting next state to the menu handler.
 	}
 	else
 	{

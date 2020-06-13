@@ -11,15 +11,15 @@ class MenuRequestHandler : public IRequestHandler
 {
 public:
 	MenuRequestHandler();
-	MenuRequestHandler(std::string username);
+	MenuRequestHandler(std::string username, RequestHandlerFactory *m_handlerFactory);
 	~MenuRequestHandler();
 
 	bool isRequestRelevant(RequestInfo info);
 	RequestResult handleRequest(RequestInfo info);
 
 private:
-	LoggedUser m_user;
-	RequestHandlerFactory m_handlerFactory;
+	LoggedUser * m_user;
+	RequestHandlerFactory  m_handlerFactory;
 
 	RequestResult logout(RequestInfo info);
 	RequestResult getRooms(RequestInfo info);

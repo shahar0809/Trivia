@@ -23,6 +23,7 @@ namespace ClientWPF
     public partial class SignUp : Window
     {
         private NetworkStream clientStream;
+        private MainWindow mainWindow;
         public const int DATA_START_INDEX = 5;
         public const int DATA_END_INDEX = 14;
         public const int ERROR_CODE = 0;
@@ -32,15 +33,15 @@ namespace ClientWPF
             public string password { set; get; }
             public string email { set; get; }
         }
-        public SignUp(NetworkStream clientStream)
+        public SignUp(NetworkStream clientStream,MainWindow mainWindow)
         {
             InitializeComponent();
             this.clientStream = clientStream;
+            this.mainWindow = mainWindow;
         }
         private void CancelButton_Click(object sender, RoutedEventArgs e)
         {
-            var MainWindow = new MainWindow();
-            MainWindow.Show();
+            mainWindow.Show();
             this.Close();
         }
         private void SubmitButton_Click(object sender, RoutedEventArgs e)
@@ -60,8 +61,8 @@ namespace ClientWPF
             {
                 MessageBox.Show("Sorry! Username was taken \n please change your username ");
             }
-            var MainWindowMenu = new MainWindow();
-            MainWindowMenu.Show();
+            var mainWindow = new MainWindow(this.clientStream);
+            mainWindow.Show();
             Close();
         }
     }

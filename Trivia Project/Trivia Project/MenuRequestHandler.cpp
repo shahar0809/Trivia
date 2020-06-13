@@ -4,9 +4,10 @@ MenuRequestHandler::MenuRequestHandler()
 {
 }
 
-MenuRequestHandler::MenuRequestHandler(std::string username)
+MenuRequestHandler::MenuRequestHandler(std::string username,RequestHandlerFactory* m_handlerFactory)
 {
-	this->m_user = LoggedUser(username);
+	this->m_handlerFactory = *m_handlerFactory;
+	this->m_user = new LoggedUser(username);
 }
 
 MenuRequestHandler::~MenuRequestHandler()
@@ -60,7 +61,11 @@ RequestResult MenuRequestHandler::getRooms(RequestInfo info)
 	RoomManager roomManager = m_handlerFactory.getRoomManager();
 
 	GetRoomResponse resp{ 1, roomManager.getRooms() };
-	return RequestResult{ JsonResponsePacketSerializer::serializeResponse(resp), nullptr };
+	return RequestResult
+	{
+		JsonResponsePacketSerializer::serializeResponse(resp),
+		m_handlerFactory.createMenuRequestHandler(this->m_user->getUsername(),&this->m_handlerFactory)
+	};
 }
 
 RequestResult MenuRequestHandler::getPlayersInRoom(RequestInfo info)
@@ -75,26 +80,39 @@ RequestResult MenuRequestHandler::getPlayersInRoom(RequestInfo info)
 		roomPlayers.push_back(user.getUsername());
 	}
 
-	return RequestResult{ JsonResponsePacketSerializer::serializeResponse(GetPlayersInRoomResponse { roomPlayers }) };
+	return RequestResult
+	{
+		JsonResponsePacketSerializer::serializeResponse(GetPlayersInRoomResponse { roomPlayers }),
+		m_handlerFactory.createMenuRequestHandler(this->m_user->getUsername(),&this->m_handlerFactory)
+	};
 }
 
 RequestResult MenuRequestHandler::getStatistics(RequestInfo info)
 {
 	StatisticsManager statsManager = this->m_handlerFactory.getStatisticsManager();
 	GetStatisticsResponse resp;
-
+	std::pair<UserStatistics, std::vector<Score>> stats;
 	try
 	{
-		std::pair<UserStatistics, std::vector<Score>> stats = statsManager.getStatistics(this->m_user.getUsername());
+		stats= statsManager.getStatistics(this->m_user->getUsername());
 	}
 	catch (const std::exception& e)
 	{
 		resp.status = FAILED;
 		return RequestResult{ JsonResponsePacketSerializer::serializeResponse(resp), nullptr };
 	}
-	
+	std::vector<std::string>highScore;
+	for (std::vector<Score>::iterator it = stats.second.begin(); it != stats.second.end(); it++)
+		highScore.push_back(it->toString());
+	resp.highScore = highScore;
+	resp.userStatistics = stats.first.toString();
 	resp.status = SUCCEEDED;
-	return RequestResult{ JsonResponsePacketSerializer::serializeResponse(resp), nullptr };
+	return RequestResult
+	{
+		JsonResponsePacketSerializer::serializeResponse(resp),
+		m_handlerFactory.createMenuRequestHandler(this->m_user->getUsername(),&this->m_handlerFactory)
+	};
+
 }
 
 RequestResult MenuRequestHandler::joinRoom(RequestInfo info)
@@ -109,8 +127,23 @@ RequestResult MenuRequestHandler::createRoom(RequestInfo info)
 {
 	CreateRoomRequest createReq = JsonRequestPacketDeserializer::deserializeCreateRoomRequest(info.buffer);
 	RoomManager roomManager = m_handlerFactory.getRoomManager();
+
+	CreateRoomResponse resp;
+	try
+	{
+		roomManager.createRoom(*m_user, createReq.getRoomData());
+	}
+	catch (const std::exception & e)
+	{
+		resp.status = FAILED;
+		return RequestResult{ JsonResponsePacketSerializer::serializeResponse(resp), nullptr };
+	}
 	
-	roomManager.createRoom(m_user, createReq.getRoomData());
-	RequestResult res;
-	return res;
+	resp.status = SUCCEEDED;
+	resp.roomId = createReq.getRoomData().id;
+	return RequestResult
+	{
+		JsonResponsePacketSerializer::serializeResponse(resp),
+		m_handlerFactory.createMenuRequestHandler(this->m_user->getUsername(),&this->m_handlerFactory)
+	};
 }

@@ -5,6 +5,7 @@
 #include <bitset>
 #include "Helper.h"
 #include "Room.h"
+#include "JsonRequestPacketDeserializer.h"
 
 #include "include/nlohmann/json.hpp"
 using json = nlohmann::json;
@@ -22,7 +23,7 @@ enum Codes
 
 static const char* jsonFields[] = { "status", "PlayersInRoom", "Rooms", "UserStatistics", "HighScores" };
 
-enum jsonIndices { STATUS = 0, PLAYERS_IN_ROOM, ROOMS, USER_STATS, HIGH_SCORES };
+enum jsonIndices { STATUS = 0, PLAYERS_IN_ROOM, ROOMS, USER_STATS, HIGH_SCORES ,USER_STATISTICS};
 
 struct ErrorResponse
 {
@@ -63,11 +64,14 @@ struct JoinRoomResponse
 struct CreateRoomResponse
 {
 	unsigned int status;
+	unsigned int roomId;
 };
 
 struct GetStatisticsResponse
 {
 	unsigned int status;
+	std::string userStatistics;
+	std::vector<std::string> highScore;
 };
 
 class JsonResponsePacketSerializer

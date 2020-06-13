@@ -70,16 +70,16 @@ CreateRoomRequest JsonRequestPacketDeserializer::deserializeCreateRoomRequest(st
 	// Printing json fields (to make sure that the data transformation is valid).
 	std::cout <<
 		"Create Room Request:" << std::endl <<
-		"Room Name: " << j[fields[USERNAME]] << std::endl <<
-		"Max Amount of Users: " << j[fields[PASSWORD]] << std::endl <<
-		"Questions Count: " << j[fields[EMAIL]] << std::endl <<
-		"Answer Time out: " << j[fields[PASSWORD]] << std::endl << std::endl;
+		"Room Name: " << j[fields[ROOM_NAME]] << std::endl <<
+		"Max Amount of Users: " << j[fields[MAX_USERS]] << std::endl <<
+		"Questions Count: " << j[fields[QUESTIONS_COUNT]] << std::endl <<
+		"Answer Time out: " << j[fields[ANS_TIMEOUT]] << std::endl << std::endl;
 
 	return CreateRoomRequest 
 	{
-		j[jsonFields[ROOM_NAME]],
-		j[jsonFields[MAX_USERS]],
-		j[jsonFields[QUESTIONS_COUNT]],
-		j[jsonFields[ANS_TIMEOUT]] 
+		j[fields[ROOM_NAME]],
+		j[fields[MAX_USERS]],
+		j[fields[QUESTIONS_COUNT]],
+		j[fields[ANS_TIMEOUT]]
 	};
 }

@@ -53,10 +53,12 @@ namespace ClientWPF
         }
 
         private NetworkStream clientStream;
-        public JoinRoom(NetworkStream clientStream)
+        private MainWindow mainWindow;
+        public JoinRoom(NetworkStream clientStream,MainWindow mainWindow)
         {
             InitializeComponent();
             this.clientStream = clientStream;
+            this.mainWindow = mainWindow;
 
             // Getting the available rooms.
             GetRoomsResponse resp = Communicator.ManageSendAndGetData<GetRoomsResponse>("", clientStream, Codes.GET_ROOM_CODE);

@@ -16,7 +16,7 @@ class Room
 {
 public:
 	Room();
-	Room(int id, std::string name,LoggedUser user);
+	Room(int id, RoomData data,LoggedUser user);
 	~Room();
 
 	bool addUser(LoggedUser user);

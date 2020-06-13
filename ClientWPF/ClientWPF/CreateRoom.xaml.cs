@@ -24,6 +24,7 @@ namespace ClientWPF
     public partial class CreateRoom : Window
     {
         private NetworkStream clientStream;
+        private MainWindow mainWindow;
         public const int ERROR_CODE = 0;
 
         public struct CreateRoomRequest
@@ -33,10 +34,17 @@ namespace ClientWPF
             public int numOfQuestions { set; get; }
             public int timePerQuestion { set; get; }
         }
-        public CreateRoom(NetworkStream clientStream)
+
+        private struct CreateRoomResponse
+        {
+            public int status { set; get; }
+            public int RoomId { set; get; }
+        }
+        public CreateRoom(NetworkStream clientStream,MainWindow mainWindow)
         {
             InitializeComponent();
             this.clientStream = clientStream;
+            this.mainWindow = mainWindow;
         }
 
         private void Submit_Button_Click(object sender, RoutedEventArgs e)
@@ -57,15 +65,15 @@ namespace ClientWPF
             };
 
             string json = JsonConvert.SerializeObject(createRoom, Formatting.Indented);
-            Response createRoomResponse = Communicator.ManageSendAndGetData<Response>(json, clientStream, Codes.CREATE_ROOM_CODE);
+            CreateRoomResponse createRoomResponse = Communicator.ManageSendAndGetData<CreateRoomResponse>(json, clientStream, Codes.CREATE_ROOM_CODE);
 
             if (createRoomResponse.status == ERROR_CODE)
             {
                 MessageBox.Show("Error! , can't create room");
             }
-
-            // Should show the room details.
-            var roomAdmin = new RoomAdmin();
+            int roomId = createRoomResponse.RoomId;
+            //Show the room details.
+            var roomAdmin = new RoomAdmin(mainWindow);
             roomAdmin.Show();
             Close();
         }

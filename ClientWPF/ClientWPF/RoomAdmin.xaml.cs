@@ -19,9 +19,12 @@ namespace ClientWPF
     /// </summary>
     public partial class RoomAdmin : Window
     {
-        public RoomAdmin()
+        private MainWindow mainWindow;
+        public RoomAdmin(MainWindow mainWindow)
         {
             InitializeComponent();
+            this.mainWindow = mainWindow;
+
         }
 
         private RoomData data;

@@ -11,9 +11,9 @@ struct UserStatistics
 	std::string toString()
 	{
 		return 
-			std::to_string(avgAnswerTime) +
-			std::to_string(correctAnswers) +
-			std::to_string(totalAnswers) +
+			std::to_string(avgAnswerTime) + ","+
+			std::to_string(correctAnswers) + "," +
+			std::to_string(totalAnswers) + "," +
 			std::to_string(numOfGames);
 	}
 };
