@@ -58,7 +58,7 @@ RequestResult MenuRequestHandler::logout(RequestInfo info)
 
 RequestResult MenuRequestHandler::getRooms(RequestInfo info)
 {
-	RoomManager roomManager = m_handlerFactory.getRoomManager();
+	RoomManager& roomManager = m_handlerFactory.getRoomManager();
 
 	GetRoomResponse resp{ 1, roomManager.getRooms() };
 	return RequestResult
@@ -71,7 +71,7 @@ RequestResult MenuRequestHandler::getRooms(RequestInfo info)
 RequestResult MenuRequestHandler::getPlayersInRoom(RequestInfo info)
 {
 	GetPlayersInRoomRequest req = JsonRequestPacketDeserializer::deserializeGetPlayersRequest(info.buffer);
-	RoomManager roomManager = m_handlerFactory.getRoomManager();
+	RoomManager& roomManager = m_handlerFactory.getRoomManager();
 	std::vector<LoggedUser> loggedUsers = roomManager.getRoom(req.roomId).getAllUsers();
 	std::vector<std::string> roomPlayers;
 
@@ -89,7 +89,7 @@ RequestResult MenuRequestHandler::getPlayersInRoom(RequestInfo info)
 
 RequestResult MenuRequestHandler::getStatistics(RequestInfo info)
 {
-	StatisticsManager statsManager = this->m_handlerFactory.getStatisticsManager();
+	StatisticsManager& statsManager = this->m_handlerFactory.getStatisticsManager();
 	GetStatisticsResponse resp;
 	std::pair<UserStatistics, std::vector<Score>> stats;
 
@@ -123,7 +123,7 @@ RequestResult MenuRequestHandler::getStatistics(RequestInfo info)
 RequestResult MenuRequestHandler::joinRoom(RequestInfo info)
 {
 	JoinRoomRequest joinReq = JsonRequestPacketDeserializer::deserializeJoinRoomRequest(info.buffer);
-	RoomManager roomManager = m_handlerFactory.getRoomManager();
+	RoomManager& roomManager = m_handlerFactory.getRoomManager();
 	RoomData roomData = roomManager.getRoom(joinReq.roomId).getMetadata();
 
 	RequestResult res;
@@ -133,7 +133,7 @@ RequestResult MenuRequestHandler::joinRoom(RequestInfo info)
 RequestResult MenuRequestHandler::createRoom(RequestInfo info)
 {
 	CreateRoomRequest createReq = JsonRequestPacketDeserializer::deserializeCreateRoomRequest(info.buffer);
-	RoomManager roomManager = m_handlerFactory.getRoomManager();
+	RoomManager& roomManager = m_handlerFactory.getRoomManager();
 
 	CreateRoomResponse resp;
 	try

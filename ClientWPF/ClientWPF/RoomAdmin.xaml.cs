@@ -28,7 +28,7 @@ namespace ClientWPF
         private bool isAdmin;
         private NetworkStream clientStream;
         private bool stopUpdatingUsers;
-        private BackgroundWorker updatePlayersWorker;
+
         
         public RoomAdmin(MainWindow mainWindow, RoomData data, NetworkStream clientStream, bool isAdmin)
         {
@@ -48,7 +48,6 @@ namespace ClientWPF
             {
                 leaveRoom.Visibility = Visibility.Collapsed;
             }
-            
 
             // Showing room data to the admin
             displayMaxNumPlayers.Text = roomData.MaxPlayers.ToString();
@@ -56,27 +55,19 @@ namespace ClientWPF
             displayRoomName.Text = roomData.Name;
             displayRoomName.Text = roomData.Name;
 
-            updatePlayersWorker = new BackgroundWorker();
+            List<string> roomPlayers = new List<string>();
+            playersInRoom.ItemsSource = roomPlayers;
+
+            Thread updateList = new Thread(() => updateRoomPlayers(roomPlayers));
+            updateList.IsBackground = true;
+            updateList.Start();
+            // Creating a background worker that will update the players connected to the room (into the listBox).
+            /*updatePlayersWorker = new BackgroundWorker();
             updatePlayersWorker.DoWork += updateRoomPlayers;
-        }
+            updatePlayersWorker.ProgressChanged += updateListBox;
+            updatePlayersWorker.RunWorkerAsync();*/
 
-        public void updateRoomPlayers(object sender, DoWorkEventArgs e)
-        {
-            List<string> roomPlayers = (List<string>)sender;
 
-            // Refreshing while the room hasn't been closed or the game hasn't started.
-            while (!stopUpdatingUsers)
-            {
-                // Getting the players connected to the room
-                GetPlayersInRoomRequest request = new GetPlayersInRoomRequest { RoomId = this.roomData.Id };
-
-                GetPlayersInRoomResponse resp = Communicator.ManageSendAndGetData<GetPlayersInRoomResponse>(
-                    JsonConvert.SerializeObject(request),
-                    clientStream,
-                    Codes.GET_PLAYERS_IN_ROOM_CODE);
-
-                playersInRoom.ItemsSource = resp.Players;
-            }
         }
 
         private void closeRoom_Click(object sender, RoutedEventArgs e)
@@ -92,6 +83,23 @@ namespace ClientWPF
         private void startGame_Click(object sender, RoutedEventArgs e)
         {
             stopUpdatingUsers = true;
+        }
+
+        public void updateRoomPlayers(List<string> roomPlayers)
+        {
+            // Refreshing while the room hasn't been closed or the game hasn't started.
+            while (!stopUpdatingUsers)
+            {
+                // Getting the players connected to the room
+                GetPlayersInRoomRequest request = new GetPlayersInRoomRequest { RoomId = this.roomData.Id };
+
+                GetPlayersInRoomResponse resp = Communicator.ManageSendAndGetData<GetPlayersInRoomResponse>(
+                    JsonConvert.SerializeObject(request),
+                    clientStream,
+                    Codes.GET_PLAYERS_IN_ROOM_CODE);
+
+                roomPlayers = resp.Players;
+            }
         }
     }
 }
