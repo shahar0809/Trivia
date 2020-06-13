@@ -13,10 +13,10 @@ LoginRequest JsonRequestPacketDeserializer::deserializeLoginRequest(std::vector<
 	// Printing json fields (to make sure that the data transformation is valid).
 	std::cout <<
 		"Log In request:" << std::endl <<
-		"Username: " << j[fields[USERNAME]] << std::endl <<
-		"Password: " << j[fields[PASSWORD]] << std::endl << std::endl;
+		"Username: " << j[jsonFields[USERNAME]] << std::endl <<
+		"Password: " << j[jsonFields[PASSWORD]] << std::endl << std::endl;
 
-	return LoginRequest{ j[fields[USERNAME]], j[fields[PASSWORD]]};
+	return LoginRequest{ j[jsonFields[USERNAME]], j[jsonFields[PASSWORD]]};
 }
 
 /**
@@ -32,11 +32,11 @@ SignupRequest JsonRequestPacketDeserializer::deserializeSignupRequest(std::vecto
 	// Printing json fields (to make sure that the data transformation is valid.
 	std::cout << 
 		"Sign Up request:" << std::endl <<
-		"Username: " << j[fields[USERNAME]] << std::endl <<
-		"Password: " << j[fields[PASSWORD]] << std::endl <<
-		"Email: " << j[fields[EMAIL]] << std::endl << std::endl;
+		"Username: " << j[jsonFields[USERNAME]] << std::endl <<
+		"Password: " << j[jsonFields[PASSWORD]] << std::endl <<
+		"Email: " << j[jsonFields[EMAIL]] << std::endl << std::endl;
 
-	return SignupRequest{ j[fields[USERNAME]], j[fields[PASSWORD]], j[fields[EMAIL]] };
+	return SignupRequest{ j[jsonFields[USERNAME]], j[jsonFields[PASSWORD]], j[jsonFields[EMAIL]] };
 }
 
 GetPlayersInRoomRequest JsonRequestPacketDeserializer::deserializeGetPlayersRequest(std::vector<uint8_t> buffer)
@@ -70,16 +70,16 @@ CreateRoomRequest JsonRequestPacketDeserializer::deserializeCreateRoomRequest(st
 	// Printing json fields (to make sure that the data transformation is valid).
 	std::cout <<
 		"Create Room Request:" << std::endl <<
-		"Room Name: " << j[fields[ROOM_NAME]] << std::endl <<
-		"Max Amount of Users: " << j[fields[MAX_USERS]] << std::endl <<
-		"Questions Count: " << j[fields[QUESTIONS_COUNT]] << std::endl <<
-		"Answer Time out: " << j[fields[ANS_TIMEOUT]] << std::endl << std::endl;
+		"Room Name: " << j[jsonFields[ROOM_NAME]] << std::endl <<
+		"Max Amount of Users: " << j[jsonFields[MAX_USERS]] << std::endl <<
+		"Questions Count: " << j[jsonFields[QUESTIONS_COUNT]] << std::endl <<
+		"Answer Time out: " << j[jsonFields[ANS_TIMEOUT]] << std::endl << std::endl;
 
 	return CreateRoomRequest 
 	{
-		j[fields[ROOM_NAME]],
-		j[fields[MAX_USERS]],
-		j[fields[QUESTIONS_COUNT]],
-		j[fields[ANS_TIMEOUT]]
+		j[jsonFields[ROOM_NAME]],
+		j[jsonFields[MAX_USERS]],
+		j[jsonFields[QUESTIONS_COUNT]],
+		j[jsonFields[ANS_TIMEOUT]]
 	};
 }

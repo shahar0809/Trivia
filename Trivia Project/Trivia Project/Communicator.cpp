@@ -69,7 +69,7 @@ void Communicator::handleNewClient(std::pair<SOCKET, IRequestHandler*> client)
 		}
 		
 		RequestInfo info(packet);  // Analyzing the packet
-		
+		std::cout << "C L I E N T\n" << packet << std::endl;
 		if (!client.second->isRequestRelevant(info))
 		{
 			ErrorResponse errResponse{ "Request is not relevant." };

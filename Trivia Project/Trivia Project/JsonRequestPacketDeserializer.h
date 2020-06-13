@@ -7,17 +7,19 @@
 using json = nlohmann::json;
 
 /* Easy access to the json fields. */
-static const char* fields[] = { 
-	"username", "password", "email",
+static const char* jsonFields[] = { 
+	"Username", "Password", "Email",
 	"RoomId", 
-	"roomName", "numOfPlayers", "numOfQuestions", "timePerQuestion"
+	"RoomName", "NumOfPlayers", "NumOfQuestions", "TimeForQuestion",
+	"Status", "PlayersInRoom", "Rooms", "UserStatistics", "HighScores"
 };
 
-enum fieldsIndices 
+enum JsonFieldsIndices 
 {
 	USERNAME = 0, PASSWORD, EMAIL, 
 	ROOM_ID,
-	ROOM_NAME, MAX_USERS, QUESTIONS_COUNT, ANS_TIMEOUT
+	ROOM_NAME, MAX_USERS, QUESTIONS_COUNT, ANS_TIMEOUT,
+	STATUS, PLAYERS_IN_ROOM, ROOMS, USER_STATS, HIGH_SCORES
 };
 
 struct LoginRequest

@@ -23,13 +23,13 @@ namespace ClientWPF
     {
         private NetworkStream clientStream;
         private MainWindow mainWindow;
-        public HighScores(NetworkStream clientStream,MainWindow mainWindow,string highScores)
+        public HighScores(NetworkStream clientStream, MainWindow mainWindow, List<HighScore> highScores)
         {
             InitializeComponent();
             this.clientStream = clientStream;
             this.mainWindow = mainWindow;
 
-            string[] highScoresArr = new string[10];
+            /*string[] highScoresArr = new string[10];
             highScoresArr = highScores.Split(',');
             firstName.Text = highScoresArr[0];
             firstScore.Text = highScoresArr[1];
@@ -40,7 +40,7 @@ namespace ClientWPF
             fourthName.Text = highScoresArr[6];
             fourthScore.Text = highScoresArr[7];
             fifthName.Text = highScoresArr[8];
-            fifthScore.Text = highScoresArr[9];
+            fifthScore.Text = highScoresArr[9];*/
         }
         private void goBackButton_Click(object sender, RoutedEventArgs e)
         {

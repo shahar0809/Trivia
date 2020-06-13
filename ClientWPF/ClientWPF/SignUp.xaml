@@ -4,37 +4,105 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ClientWPF"
-        mc:Ignorable="d" FontSize="40"
-        Title="SignUp" Height="450" Width="800">
+        mc:Ignorable="d" FontSize="36" FontFamily="Forte"
+        Title="SignUp" Height="600" Width="800">
+    
     <Grid>
+        <Grid.Background>
+            <ImageBrush ImageSource="Images/genBackground.png" Stretch="UniformToFill"/>
+        </Grid.Background>
+
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="70"/>
+            <ColumnDefinition Width="20"/>
             <ColumnDefinition Width="auto"/>
-            <ColumnDefinition Width="50"/>
-            <ColumnDefinition Width="50"/>
-            <ColumnDefinition Width="50"/>
             <ColumnDefinition Width="auto"/>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="20"/>
         </Grid.ColumnDefinitions>
+
         <Grid.RowDefinitions>
-            <RowDefinition Height="40"/>
+            <RowDefinition Height="20"/>
             <RowDefinition Height="auto"/>
-            <RowDefinition Height="40"/>
             <RowDefinition Height="auto"/>
-            <RowDefinition Height="40"/>
             <RowDefinition Height="auto"/>
-            <RowDefinition Height="40"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="20"/>
         </Grid.RowDefinitions>
-        <Button Name="MyButton" Grid.Row="7" Grid.Column="3" Grid.ColumnSpan="3" Content="ביטול" HorizontalAlignment="Left" VerticalAlignment="Top" Width="350" Height="76" Click="CancelButton_Click" />
-        <Button Name="MyButton2" Grid.Row="7" Grid.Column="1" Content="כניסה" HorizontalAlignment="Left" VerticalAlignment="Top" Width="250" Height="76" Click="SubmitButton_Click" />
-        <TextBlock Grid.Row="1" Grid.Column="5" Text="שם משתמש:" FlowDirection="RightToLeft"/>
-        <TextBlock Grid.Row="3" Grid.Column="5" Text="סיסמא:" FlowDirection="RightToLeft"/>
-        <TextBlock Grid.Row="5" Grid.Column="5" Text="אימייל:" FlowDirection="RightToLeft"/>
-        <TextBox x:Name ="email" Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="3"/>
-        <TextBox x:Name ="username" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="3"/>
-        <TextBox x:Name="password" Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="3"/>
+
+        <TextBlock Grid.Row="1" Grid.Column="1"
+                   Grid.ColumnSpan="3"
+                   HorizontalAlignment="Center"
+                   Text="Sign Up"
+                   FontFamily="Ravie"
+                   Margin="0, 10, 0, 35"
+                   FontSize="72"/>
+
+        <TextBlock Text="User Name:"
+                   Grid.Column="1"
+                   Grid.Row="2"
+                   Margin="100, 0, 40, 15"
+                   VerticalAlignment="Center"/>
+
+        <TextBlock Text="Password:"
+                   Grid.Column="1"
+                   Grid.Row="3"
+                   Margin="100, 15, 40, 15"
+                   VerticalAlignment="Center"/>
+
+        <TextBlock Text="Email:"
+                   Grid.Column="1"
+                   Grid.Row="4"
+                   Margin="100, 15, 40, 15"
+                   VerticalAlignment="Center"/>
+
+        <TextBox x:Name="usernameBox"
+                 Grid.Row="2" Grid.Column="2"
+                 Grid.ColumnSpan="2"
+                 Margin="0, 0, 70, 0"
+        />
+
+        <TextBox x:Name="passwordBox"
+                 Grid.Row="3" Grid.Column="2"
+                 Grid.ColumnSpan="2"
+                 Margin="0, 15, 70, 0"
+        />
+
+        <TextBox x:Name="emailBox"
+                 Grid.Row="4" Grid.Column="2"
+                 Grid.ColumnSpan="2"
+                 Margin="0, 15, 70, 0"
+        />
+
+        <Button x:Name="submitSignUp"
+                Grid.Column="3"
+                Grid.Row="5"
+                Grid.RowSpan="3"
+                Margin="130, 40, 100, 90"
+                Click="SubmitButton_Click"
+                Content="Sign Up">
+            <Button.Resources>
+                <Style TargetType="Border">
+                    <Setter Property="CornerRadius" Value="5"/>
+                </Style>
+            </Button.Resources>
+        </Button>
+
+        <Button x:Name="cancelLogin"
+                Grid.Column="1"
+                Grid.Row="5"
+                Grid.RowSpan="3"
+                Grid.ColumnSpan="3"
+                Margin="180, 40, 380, 90"
+         
+                Click="CancelButton_Click"
+                Content="Cancel">
+            <Button.Resources>
+                <Style TargetType="Border">
+                    <Setter Property="CornerRadius" Value="5"/>
+                </Style>
+            </Button.Resources>
+        </Button>
     </Grid>
 </Window>

@@ -22,35 +22,44 @@ namespace ClientWPF
     /// </summary>
     /// 
 
-    struct RoomData
+    public struct RoomData
     {
-        public int id { set; get; }
-        public string name { set; get; }
-        public int maxPlayers { set; get; }
-        public int timeForQuestion { set; get; }
-        public int isActive { set; get; }
+        public int Id { set; get; }
+        public string Name { set; get; }
+        public int MaxPlayers { set; get; }
+        public int NumOfQuesstions { set; get; }
+        public int TimeForQuestion { set; get; }
+        public int IsActive { set; get; }
     };
+    public struct GetRoomsResponse
+    {
+        public int Status;
+        public List<RoomData> Rooms;
+    }
+    public struct GetPlayersInRoomResponse
+    {
+        public List<string> Players;
+    }
+    public struct JoinRoomRequest
+    {
+        public int RoomId;
+    }
+    public struct JoinRoomResponse
+    {
+        public int Status;
+        public RoomData RoomData;
+    }
+    public struct GetPlayersInRoomRequest
+    {
+        public int RoomId;
+    }
+    public struct GetRoomRequest
+    {
+        public int RoomId;
+    }
+
     public partial class JoinRoom : Window
     {
-        
-        private struct GetRoomsResponse
-        {
-            public int status;
-            public List<RoomData> rooms;
-        }
-        private struct GetPlayersInRoomResponse
-        {
-            public List<string> players;
-        }
-        private struct JoinRoomRequest
-        {
-            public int roomId;
-        }
-        
-        private struct GetPlayersInRoomRequest
-        {
-            public int roomId;
-        }
 
         private NetworkStream clientStream;
         private MainWindow mainWindow;
@@ -62,7 +71,7 @@ namespace ClientWPF
 
             // Getting the available rooms.
             GetRoomsResponse resp = Communicator.ManageSendAndGetData<GetRoomsResponse>("", clientStream, Codes.GET_ROOM_CODE);
-            availableRooms.ItemsSource = resp.rooms;
+            availableRooms.ItemsSource = resp.Rooms;
         }
 
         private void availableRooms_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -71,14 +80,14 @@ namespace ClientWPF
                 return;
 
             var rooms = (ListBox)sender;
-            GetPlayersInRoomRequest req = new GetPlayersInRoomRequest { roomId = ((RoomData)rooms.SelectedItem).id };
+            GetPlayersInRoomRequest req = new GetPlayersInRoomRequest { RoomId = ((RoomData)rooms.SelectedItem).Id };
             string json = JsonConvert.SerializeObject(req);
 
             // Getting the players in the room changed
             GetPlayersInRoomResponse resp = Communicator.ManageSendAndGetData<GetPlayersInRoomResponse>(json, clientStream, Codes.GET_PLAYERS_IN_ROOM_CODE);
 
             // Displaying the room players in a listBox
-            playersInRoom.ItemsSource = resp.players;
+            playersInRoom.ItemsSource = resp.Players;
         }
 
         private void joinRoomButton_Click(object sender, RoutedEventArgs e)
@@ -87,11 +96,21 @@ namespace ClientWPF
                 return;
 
             var rooms = (ListBox)sender;
-            JoinRoomRequest req = new JoinRoomRequest{ roomId = ((RoomData)rooms.SelectedItem).id };
+            JoinRoomRequest req = new JoinRoomRequest{ RoomId = ((RoomData)rooms.SelectedItem).Id };
             string json = JsonConvert.SerializeObject(req);
 
             // Requesting to join the selected items
-            Response resp = Communicator.ManageSendAndGetData<Response>(json, clientStream, Codes.JOIN_ROOM_CODE);
+            JoinRoomResponse resp = Communicator.ManageSendAndGetData<JoinRoomResponse>(json, clientStream, Codes.JOIN_ROOM_CODE);
+
+            if (resp.Status == 0)
+            {
+                MessageBox.Show("Couldn't join room! Please try again");
+                return;
+            }
+
+            var roomAdmin = new RoomAdmin(mainWindow, resp.RoomData, clientStream, false);
+            roomAdmin.Show();
+            this.Close();
         }
     }
 }

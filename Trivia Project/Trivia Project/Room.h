@@ -7,8 +7,9 @@ struct RoomData
 {
 	unsigned int id;
 	std::string name;
-	unsigned int maxPlayers = 5;
-	unsigned int timePerQuestion = 1;
+	unsigned int maxPlayers;
+	unsigned int timeForQuestion ;
+	unsigned int numOfQuestions;
 	unsigned int isActive;
 };
 

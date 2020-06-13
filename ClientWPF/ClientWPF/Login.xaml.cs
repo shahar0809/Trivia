@@ -27,8 +27,8 @@ namespace ClientWPF
         public const int ERROR_CODE = 0;
         private struct LoginRequest
         {
-            public string username { set; get; }
-            public string password { set; get; }  
+            public string Username { set; get; }
+            public string Password { set; get; }  
         }
         public Login(NetworkStream clientStream, MainWindow mainWindow)
         {
@@ -46,8 +46,8 @@ namespace ClientWPF
         {
             LoginRequest login = new LoginRequest 
             { 
-                password = password.Text,
-                username = userName.Text
+                Password = passwordBox.Text,
+                Username = usernameBox.Text
             };
 
             // Edit and send login request.
@@ -56,7 +56,7 @@ namespace ClientWPF
 
             if (loginResponse.status == ERROR_CODE)
             {
-                MessageBox.Show("Sorry! There is no such user\n Please sign up.");
+                MessageBox.Show("Login Failed. Please make sure you're signed up!");
             }
 
             // Closing the Log in window and returing to the menu.

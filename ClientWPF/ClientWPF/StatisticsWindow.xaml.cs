@@ -30,10 +30,10 @@ namespace ClientWPF
 
     public struct UserStats
     {
-        public float avgAnswerTime;
-        public int correctAnswers;
-        public int totalAnswers;
-        public int numOfGames;
+        public float AvgAnswerTime;
+        public int CorrectAnswers;
+        public int TotalAnswers;
+        public int NumOfGames;
     }
 
     public struct HighScore
@@ -51,29 +51,35 @@ namespace ClientWPF
     public partial class StatisticsWindow : Window
     {
         private NetworkStream clientStream;
-        public StatisticsWindow(NetworkStream clientStream)
+        private MainWindow mainWindow;
+        private Statistics stats;
+        public StatisticsWindow(NetworkStream clientStream, MainWindow main)
         {
             InitializeComponent();
             this.clientStream = clientStream;
+            this.mainWindow = main;
+
+            // Sending message.
+            stats = Communicator.ManageSendAndGetData<Statistics>("", clientStream, Codes.GET_STATISTICS_CODE);
         }
 
         private void myStatisticsButton_Click(object sender, RoutedEventArgs e)
         {
-            UserStats userStats = new UserStats { };
-            var MyStatistics = new MyStatistics(clientStream, userStats);
+            var MyStatistics = new MyStatistics(clientStream, mainWindow, stats.userStats);
             MyStatistics.Show();
             this.Close();
         }
 
         private void highScoresButton_Click(object sender, RoutedEventArgs e)
         {
-
+            var HighScores = new HighScores(clientStream, mainWindow, stats.highScore);
+            HighScores.Show();
+            this.Close();
         }
 
         private void backToMainWindow_Click(object sender, RoutedEventArgs e)
         {
-            var MainWindow = new MainWindow();
-            MainWindow.Show();
+            mainWindow.Show();
             this.Close();
         }
     }

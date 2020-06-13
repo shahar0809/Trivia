@@ -49,7 +49,7 @@ std::string JsonResponsePacketSerializer::serializeResponse(GetRoomResponse getR
 {
 	json j;
 	j[jsonFields[STATUS]] = getRoom.status;
-	return JsonResponsePacketSerializer::serializeResponse(j, GET_ROOM_CODE);
+	return JsonResponsePacketSerializer::serializeResponse(j, GET_ROOMS_CODE);
 }
 
 std::string JsonResponsePacketSerializer::serializeResponse(GetPlayersInRoomResponse getPlayersInRoom)
@@ -64,6 +64,11 @@ std::string JsonResponsePacketSerializer::serializeResponse(JoinRoomResponse joi
 {
 	json j;
 	j[jsonFields[STATUS]] = joinRoom.status;
+	j[jsonFields[ROOM_ID]] = joinRoom.roomData.id;
+	j[jsonFields[ROOM_NAME]] = joinRoom.roomData.name;
+	j[jsonFields[MAX_USERS]] = joinRoom.roomData.maxPlayers;
+	j[jsonFields[QUESTIONS_COUNT]] = joinRoom.roomData.numOfQuestions;
+	j[jsonFields[ANS_TIMEOUT]] = joinRoom.roomData.timeForQuestion;
 	return JsonResponsePacketSerializer::serializeResponse(j, JOIN_ROOM_CODE);
 }
 
@@ -71,7 +76,7 @@ std::string JsonResponsePacketSerializer::serializeResponse(CreateRoomResponse c
 {
 	json j;
 	j[jsonFields[STATUS]] = createRoom.status;
-	j[fields[ROOM_ID]] = createRoom.roomId;
+	j[jsonFields[ROOM_ID]] = createRoom.roomId;
 	return JsonResponsePacketSerializer::serializeResponse(j, CREATE_ROOM_CODE);
 }
 

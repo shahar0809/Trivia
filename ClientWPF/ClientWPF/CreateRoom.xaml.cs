@@ -29,15 +29,15 @@ namespace ClientWPF
 
         public struct CreateRoomRequest
         {
-            public string roomName { set; get; }
-            public int numOfPlayers { set; get; }
-            public int numOfQuestions { set; get; }
-            public int timePerQuestion { set; get; }
+            public string RoomName { set; get; }
+            public int NumOfPlayers { set; get; }
+            public int NumOfQuestions { set; get; }
+            public int TimeForQuestion { set; get; }
         }
 
         private struct CreateRoomResponse
         {
-            public int status { set; get; }
+            public int Status { set; get; }
             public int RoomId { set; get; }
         }
         public CreateRoom(NetworkStream clientStream,MainWindow mainWindow)
@@ -58,22 +58,34 @@ namespace ClientWPF
 
             CreateRoomRequest createRoom = new CreateRoomRequest 
             {
-                roomName = roomName.Text,
-                numOfPlayers = int.Parse(numOfPlayers.Text),
-                numOfQuestions = int.Parse(numOfQuestions.Text),
-                timePerQuestion = int.Parse(timeout.Text),
+                RoomName = roomName.Text,
+                NumOfPlayers = int.Parse(numOfPlayers.Text),
+                NumOfQuestions = int.Parse(numOfQuestions.Text),
+                TimeForQuestion = int.Parse(timeout.Text),
             };
 
             string json = JsonConvert.SerializeObject(createRoom, Formatting.Indented);
             CreateRoomResponse createRoomResponse = Communicator.ManageSendAndGetData<CreateRoomResponse>(json, clientStream, Codes.CREATE_ROOM_CODE);
 
-            if (createRoomResponse.status == ERROR_CODE)
+            if (createRoomResponse.Status == ERROR_CODE)
             {
                 MessageBox.Show("Error! , can't create room");
             }
             int roomId = createRoomResponse.RoomId;
-            //Show the room details.
-            var roomAdmin = new RoomAdmin(mainWindow);
+
+            RoomData roomData = new RoomData
+            {
+                Id = roomId,
+                MaxPlayers = createRoom.NumOfPlayers,
+                NumOfQuesstions = createRoom.NumOfQuestions,
+                Name = createRoom.RoomName,
+                TimeForQuestion = createRoom.TimeForQuestion,
+                IsActive = 1
+            };
+
+            MessageBox.Show("about to open room admin.");
+            // Show the room details to the admin.
+            var roomAdmin = new RoomAdmin(mainWindow, roomData, clientStream, true);
             roomAdmin.Show();
             Close();
         }

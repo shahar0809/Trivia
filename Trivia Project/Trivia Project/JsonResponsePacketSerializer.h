@@ -17,13 +17,9 @@ using json = nlohmann::json;
 enum Codes 
 { 
 	ERROR_CODE = 0, LOGIN_CODE, SIGN_UP_CODE, CREATE_ROOM_CODE, 
-	GET_ROOM_CODE, GET_PLAYERS_IN_ROOM_CODE,
+	GET_ROOMS_CODE, GET_PLAYERS_IN_ROOM_CODE,
 	JOIN_ROOM_CODE, GET_STATISTICS_CODE, LOGOUT_CODE
 };
-
-static const char* jsonFields[] = { "status", "PlayersInRoom", "Rooms", "UserStatistics", "HighScores" };
-
-enum jsonIndices { STATUS = 0, PLAYERS_IN_ROOM, ROOMS, USER_STATS, HIGH_SCORES ,USER_STATISTICS};
 
 struct ErrorResponse
 {
@@ -59,6 +55,7 @@ struct GetPlayersInRoomResponse
 struct JoinRoomResponse
 {
 	unsigned int status;
+	RoomData roomData;
 };
 
 struct CreateRoomResponse

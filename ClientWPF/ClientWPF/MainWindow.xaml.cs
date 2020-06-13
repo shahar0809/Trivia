@@ -68,8 +68,8 @@ namespace ClientWPF
 
         private void statsButtonClicked(object sender, RoutedEventArgs e)
         {
-            var Statistics = new Statistics(clientStream,this);
-            Statistics.Show();
+            var StatisticsWindow = new StatisticsWindow(clientStream, this);
+            StatisticsWindow.Show();
             this.Close();
         }
 

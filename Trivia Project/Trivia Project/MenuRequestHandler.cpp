@@ -27,7 +27,7 @@ RequestResult MenuRequestHandler::handleRequest(RequestInfo info)
 		{
 			return this->createRoom(info);
 		}
-		case GET_ROOM_CODE:
+		case GET_ROOMS_CODE:
 		{
 			return this->getRooms(info);
 		}
@@ -92,6 +92,7 @@ RequestResult MenuRequestHandler::getStatistics(RequestInfo info)
 	StatisticsManager statsManager = this->m_handlerFactory.getStatisticsManager();
 	GetStatisticsResponse resp;
 	std::pair<UserStatistics, std::vector<Score>> stats;
+
 	try
 	{
 		stats= statsManager.getStatistics(this->m_user->getUsername());
@@ -101,12 +102,16 @@ RequestResult MenuRequestHandler::getStatistics(RequestInfo info)
 		resp.status = FAILED;
 		return RequestResult{ JsonResponsePacketSerializer::serializeResponse(resp), nullptr };
 	}
-	std::vector<std::string>highScore;
-	for (std::vector<Score>::iterator it = stats.second.begin(); it != stats.second.end(); it++)
-		highScore.push_back(it->toString());
+
+	std::vector<std::string> highScore;
+
+	for (auto score : stats.second)
+		highScore.push_back(score.toString());
+
 	resp.highScore = highScore;
 	resp.userStatistics = stats.first.toString();
 	resp.status = SUCCEEDED;
+
 	return RequestResult
 	{
 		JsonResponsePacketSerializer::serializeResponse(resp),
@@ -119,10 +124,12 @@ RequestResult MenuRequestHandler::joinRoom(RequestInfo info)
 {
 	JoinRoomRequest joinReq = JsonRequestPacketDeserializer::deserializeJoinRoomRequest(info.buffer);
 	RoomManager roomManager = m_handlerFactory.getRoomManager();
+	RoomData roomData = roomManager.getRoom(joinReq.roomId).getMetadata();
 
 	RequestResult res;
 	return res;
 }
+
 RequestResult MenuRequestHandler::createRoom(RequestInfo info)
 {
 	CreateRoomRequest createReq = JsonRequestPacketDeserializer::deserializeCreateRoomRequest(info.buffer);

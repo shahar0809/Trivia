@@ -1,6 +1,7 @@
 #pragma once 
 #include "IDataBase.h"
 #include <tuple>
+
 struct UserStatistics
 {
 	float avgAnswerTime;

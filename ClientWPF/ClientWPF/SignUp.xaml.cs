@@ -29,9 +29,9 @@ namespace ClientWPF
         public const int ERROR_CODE = 0;
         private struct SignUpRequest
         {
-            public string username { set; get; }
-            public string password { set; get; }
-            public string email { set; get; }
+            public string Username { set; get; }
+            public string Password { set; get; }
+            public string Email { set; get; }
         }
         public SignUp(NetworkStream clientStream,MainWindow mainWindow)
         {
@@ -48,9 +48,9 @@ namespace ClientWPF
         {
             SignUpRequest signUp = new SignUpRequest 
             {
-                password = password.Text,
-                username = username.Text,
-                email=email.Text
+                Password = passwordBox.Text,
+                Username = usernameBox.Text,
+                Email= emailBox.Text
             };
 
             // Edit and send signUp request.
