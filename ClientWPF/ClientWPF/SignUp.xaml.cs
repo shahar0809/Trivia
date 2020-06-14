@@ -23,7 +23,6 @@ namespace ClientWPF
     public partial class SignUp : Window
     {
         private NetworkStream clientStream;
-        private MainWindow mainWindow;
         public const int DATA_START_INDEX = 5;
         public const int DATA_END_INDEX = 14;
         public const int ERROR_CODE = 0;
@@ -33,14 +32,14 @@ namespace ClientWPF
             public string Password { set; get; }
             public string Email { set; get; }
         }
-        public SignUp(NetworkStream clientStream,MainWindow mainWindow)
+        public SignUp(NetworkStream clientStream)
         {
             InitializeComponent();
             this.clientStream = clientStream;
-            this.mainWindow = mainWindow;
         }
         private void CancelButton_Click(object sender, RoutedEventArgs e)
         {
+            var mainWindow = new MainWindow(this.clientStream);
             mainWindow.Show();
             this.Close();
         }

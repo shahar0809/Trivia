@@ -46,3 +46,8 @@ Room RoomManager::getRoom(int roomId)
 {
 	return this->m_rooms[roomId];
 }
+
+int RoomManager::getLastId()
+{
+	return this->roomId-1;
+}

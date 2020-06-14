@@ -22,12 +22,10 @@ namespace ClientWPF
     public partial class HighScores : Window
     {
         private NetworkStream clientStream;
-        private MainWindow mainWindow;
-        public HighScores(NetworkStream clientStream, MainWindow mainWindow, List<HighScore> highScores)
+        public HighScores(NetworkStream clientStream, List<HighScore> highScores)
         {
             InitializeComponent();
             this.clientStream = clientStream;
-            this.mainWindow = mainWindow;
 
             /*string[] highScoresArr = new string[10];
             highScoresArr = highScores.Split(',');

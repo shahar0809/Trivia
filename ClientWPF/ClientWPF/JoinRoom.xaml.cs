@@ -62,12 +62,10 @@ namespace ClientWPF
     {
 
         private NetworkStream clientStream;
-        private MainWindow mainWindow;
-        public JoinRoom(NetworkStream clientStream,MainWindow mainWindow)
+        public JoinRoom(NetworkStream clientStream)
         {
             InitializeComponent();
             this.clientStream = clientStream;
-            this.mainWindow = mainWindow;
 
             // Getting the available rooms.
             GetRoomsResponse resp = Communicator.ManageSendAndGetData<GetRoomsResponse>("", clientStream, Codes.GET_ROOM_CODE);
@@ -117,9 +115,30 @@ namespace ClientWPF
                 return;
             }
 
-            var roomAdmin = new RoomAdmin(mainWindow, resp.RoomData, clientStream, false);
+            var roomAdmin = new RoomAdmin(resp.RoomData, clientStream, false);
             roomAdmin.Show();
             this.Close();
+        }
+        private void refreshGames_Click(object sender, RoutedEventArgs e)
+        {
+            availableRooms.ItemsSource = updateAvailableRooms();
+        }
+
+        public List<Tuple<string, int>> updateAvailableRooms()
+        {
+            GetRoomsResponse resp = Communicator.ManageSendAndGetData<GetRoomsResponse>(
+                    JsonConvert.SerializeObject(""),
+                    clientStream,
+                    Codes.GET_PLAYERS_IN_ROOM_CODE);
+            List<Tuple<string, int>> rooms = new List<Tuple<string, int>>();
+            foreach (string room in resp.Rooms)
+            {
+                var splitted = room.Split(',');
+                int id = Int32.Parse(splitted[1]);
+                string name = splitted[0];
+                rooms.Add(Tuple.Create(name, id));
+            }
+            return rooms;
         }
     }
 }

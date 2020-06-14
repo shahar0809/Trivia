@@ -23,22 +23,21 @@ namespace ClientWPF
     public partial class Login : Window
     {
         private NetworkStream clientStream;
-        private MainWindow mainWindow;
         public const int ERROR_CODE = 0;
         private struct LoginRequest
         {
             public string Username { set; get; }
             public string Password { set; get; }  
         }
-        public Login(NetworkStream clientStream, MainWindow mainWindow)
+        public Login(NetworkStream clientStream)
         {
             InitializeComponent();
             this.clientStream = clientStream;
-            this.mainWindow = mainWindow;
         }
 
         private void CancelButton_Click(object sender, RoutedEventArgs e)
         {
+            var mainWindow = new MainWindow(this.clientStream);
             mainWindow.Show();
             this.Close();
         }
@@ -60,7 +59,8 @@ namespace ClientWPF
             }
 
             // Closing the Log in window and returing to the menu.
-            this.mainWindow.Show();
+            var mainWindow = new MainWindow(this.clientStream);
+            mainWindow.Show();
             this.Close();
         }
     }

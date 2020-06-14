@@ -16,6 +16,7 @@ public:
 	unsigned int getRoomState(int ID);
 	std::vector<RoomData> getRooms();
 	Room getRoom(int roomId);
+	int getLastId();
 
 private:
 	std::map<int,Room> m_rooms;

@@ -5,8 +5,7 @@ std::mutex isEnded;
 
 Communicator::Communicator(IDatabase* db) : m_isEnded(false)
 {
-	m_handlerFactory = RequestHandlerFactory(db);
-	
+	this->m_handlerFactory = *new RequestHandlerFactory(db);
 }
 
 /**

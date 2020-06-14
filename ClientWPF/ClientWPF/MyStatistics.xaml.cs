@@ -22,12 +22,10 @@ namespace ClientWPF
     public partial class MyStatistics : Window
     {
         private NetworkStream clientStream;
-        private MainWindow mainWindow; 
-        public MyStatistics(NetworkStream clientStream, MainWindow mainWindow, UserStats userStats)
+        public MyStatistics(NetworkStream clientStream, UserStats userStats)
         {
             InitializeComponent();
             this.clientStream = clientStream;
-            this.mainWindow = mainWindow;
 
             // Displaying each statistic in its own text box.
             displayNumOfGames.Text = "Games Played: " + userStats.NumOfGames;
@@ -38,7 +36,8 @@ namespace ClientWPF
 
         private void backToMainWindow_Click(object sender, RoutedEventArgs e)
         {
-            this.mainWindow.Show();
+            var mainWindow = new MainWindow(this.clientStream);
+            mainWindow.Show();
             this.Close();
         }
     }

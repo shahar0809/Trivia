@@ -6,13 +6,13 @@ RequestHandlerFactory::RequestHandlerFactory()
 { 
 	this->m_database = NULL; 
 	this->m_StatisticsManager = NULL; 
-	this->m_roomManager = RoomManager();
+	//this->m_roomManager;
 }
 RequestHandlerFactory::RequestHandlerFactory(IDatabase* db)
 {
 	this->m_database = db;
 	this->m_StatisticsManager = StatisticsManager(db);
-	this->m_roomManager = RoomManager();
+	this->m_roomManager = new RoomManager();
 	this->m_loginManager = *new LoginManager(db);
 }
 
@@ -22,7 +22,7 @@ RequestHandlerFactory::~RequestHandlerFactory()
 
 LoginRequestHandler* RequestHandlerFactory::createLoginRequestHandler()
 {
-	return new LoginRequestHandler(m_database);
+	return new LoginRequestHandler(this);
 }
 
 // LoginManager getter
@@ -31,16 +31,16 @@ LoginManager& RequestHandlerFactory::getLoginManger()
 	return this->m_loginManager;
 }
 
-MenuRequestHandler* RequestHandlerFactory::createMenuRequestHandler(std::string username, RequestHandlerFactory* m_handlerFactory)
+MenuRequestHandler* RequestHandlerFactory::createMenuRequestHandler(std::string username)
 {
-	return new MenuRequestHandler(username, m_handlerFactory);
+	return new MenuRequestHandler(username, this);
 }
 
 StatisticsManager& RequestHandlerFactory::getStatisticsManager()
 {
 	return this->m_StatisticsManager;
 }
-RoomManager& RequestHandlerFactory::getRoomManager()
+RoomManager* RequestHandlerFactory::getRoomManager()
 {
 	return this->m_roomManager;
 }

@@ -23,16 +23,14 @@ namespace ClientWPF
     /// </summary>
     public partial class RoomAdmin : Window
     {
-        private MainWindow mainWindow;
         private RoomData roomData;
         private bool isAdmin;
         private NetworkStream clientStream;
         private bool stopUpdatingUsers;
 
-        public RoomAdmin(MainWindow mainWindow, RoomData data, NetworkStream clientStream, bool isAdmin)
+        public RoomAdmin(RoomData data, NetworkStream clientStream, bool isAdmin)
         {
             InitializeComponent();
-            this.mainWindow = mainWindow;
             this.roomData= data;
             this.clientStream = clientStream;
             this.isAdmin = isAdmin;
@@ -58,15 +56,18 @@ namespace ClientWPF
 
         private void closeRoom_Click(object sender, RoutedEventArgs e)
         {
+            //Should send close room request.
             stopUpdatingUsers = true;
-            this.mainWindow.Show();
+            var mainWindow = new MainWindow(this.clientStream);
+            mainWindow.Show();
             this.Close();
         }
 
         private void leaveRoom_Click(object sender, RoutedEventArgs e)
         {
             stopUpdatingUsers = true;
-            this.mainWindow.Show();
+            var mainWindow = new MainWindow(this.clientStream);
+            mainWindow.Show();
             this.Close();
         }
 

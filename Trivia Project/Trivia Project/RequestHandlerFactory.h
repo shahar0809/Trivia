@@ -14,15 +14,15 @@ public:
 	~RequestHandlerFactory();
 
 	LoginRequestHandler* createLoginRequestHandler();
-	MenuRequestHandler* createMenuRequestHandler(std::string username,RequestHandlerFactory *m_handlerFactory);
+	MenuRequestHandler* createMenuRequestHandler(std::string username);
 	LoginManager& getLoginManger();
 	StatisticsManager& getStatisticsManager();
-	RoomManager& getRoomManager();
+	RoomManager* getRoomManager();
 
 private:
 	LoginManager m_loginManager;
 	IDatabase* m_database;
-	RoomManager m_roomManager;
+	RoomManager* m_roomManager;
 	StatisticsManager m_StatisticsManager;
 };
 

@@ -11,8 +11,8 @@ class RequestHandlerFactory;
 class LoginRequestHandler : public IRequestHandler
 {
 public:
-	LoginRequestHandler() {};
-	LoginRequestHandler(IDatabase* db);
+	//LoginRequestHandler() {};
+	LoginRequestHandler(RequestHandlerFactory* handler);
 
 	bool isRequestRelevant(RequestInfo info);
 	RequestResult handleRequest(RequestInfo info);

@@ -60,7 +60,8 @@ struct CreateRoomRequest
 			roomName,
 			maxUsers,
 			answerTimeout,
-			0
+			questionCount,
+			true
 		};
 	}
 };

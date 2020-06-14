@@ -24,7 +24,6 @@ namespace ClientWPF
     public partial class CreateRoom : Window
     {
         private NetworkStream clientStream;
-        private MainWindow mainWindow;
         public const int ERROR_CODE = 0;
 
         public struct CreateRoomRequest
@@ -40,11 +39,10 @@ namespace ClientWPF
             public int Status { set; get; }
             public int RoomId { set; get; }
         }
-        public CreateRoom(NetworkStream clientStream,MainWindow mainWindow)
+        public CreateRoom(NetworkStream clientStream)
         {
             InitializeComponent();
             this.clientStream = clientStream;
-            this.mainWindow = mainWindow;
         }
 
         private void Submit_Button_Click(object sender, RoutedEventArgs e)
@@ -85,7 +83,7 @@ namespace ClientWPF
 
             MessageBox.Show("about to open room admin.");
             // Show the room details to the admin.
-            var roomAdmin = new RoomAdmin(mainWindow, roomData, clientStream, true);
+            var roomAdmin = new RoomAdmin(roomData, clientStream, true);
             roomAdmin.Show();
             Close();
         }

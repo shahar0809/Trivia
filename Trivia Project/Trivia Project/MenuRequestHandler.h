@@ -10,7 +10,7 @@ class RequestHandlerFactory;
 class MenuRequestHandler : public IRequestHandler
 {
 public:
-	MenuRequestHandler();
+	//MenuRequestHandler();
 	MenuRequestHandler(std::string username, RequestHandlerFactory *m_handlerFactory);
 	~MenuRequestHandler();
 

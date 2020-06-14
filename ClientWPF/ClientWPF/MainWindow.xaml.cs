@@ -41,34 +41,34 @@ namespace ClientWPF
         }
         private void loginButtonClicked(object sender, RoutedEventArgs e)
         {
-            var Login = new Login(clientStream,this); // Create the login form.
+            var Login = new Login(clientStream); // Create the login form.
             Login.Show(); // Show the form.
-            //this.Close(); 
+            this.Close(); 
         }
         private void signupButtonClicked(object sender, RoutedEventArgs e)
         {
-            var SignUp = new SignUp(clientStream,this);
+            var SignUp = new SignUp(clientStream);
             SignUp.Show(); 
             this.Close();
         }
 
         private void createRoomButtonClicked(object sender, RoutedEventArgs e)
         {
-            var CreateRoom = new CreateRoom(clientStream,this);
+            var CreateRoom = new CreateRoom(clientStream);
             CreateRoom.Show();
             this.Close();
         }
 
         private void joinRoomButtonClicked(object sender, RoutedEventArgs e)
         {
-            var JoinRoom = new JoinRoom(clientStream,this);
+            var JoinRoom = new JoinRoom(clientStream);
             JoinRoom.Show();
             this.Close();
         }
 
         private void statsButtonClicked(object sender, RoutedEventArgs e)
         {
-            var StatisticsWindow = new StatisticsWindow(clientStream, this);
+            var StatisticsWindow = new StatisticsWindow(clientStream);
             StatisticsWindow.Show();
             this.Close();
         }

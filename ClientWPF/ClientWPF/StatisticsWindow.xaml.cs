@@ -51,13 +51,11 @@ namespace ClientWPF
     public partial class StatisticsWindow : Window
     {
         private NetworkStream clientStream;
-        private MainWindow mainWindow;
         private Statistics stats;
-        public StatisticsWindow(NetworkStream clientStream, MainWindow main)
+        public StatisticsWindow(NetworkStream clientStream)
         {
             InitializeComponent();
             this.clientStream = clientStream;
-            this.mainWindow = main;
 
             // Sending message.
             stats = Communicator.ManageSendAndGetData<Statistics>("", clientStream, Codes.GET_STATISTICS_CODE);
@@ -65,20 +63,21 @@ namespace ClientWPF
 
         private void myStatisticsButton_Click(object sender, RoutedEventArgs e)
         {
-            var MyStatistics = new MyStatistics(clientStream, mainWindow, stats.userStats);
+            var MyStatistics = new MyStatistics(clientStream, stats.userStats);
             MyStatistics.Show();
             this.Close();
         }
 
         private void highScoresButton_Click(object sender, RoutedEventArgs e)
         {
-            var HighScores = new HighScores(clientStream, mainWindow, stats.highScore);
+            var HighScores = new HighScores(clientStream, stats.highScore);
             HighScores.Show();
             this.Close();
         }
 
         private void backToMainWindow_Click(object sender, RoutedEventArgs e)
         {
+            var mainWindow = new MainWindow(this.clientStream);
             mainWindow.Show();
             this.Close();
         }
