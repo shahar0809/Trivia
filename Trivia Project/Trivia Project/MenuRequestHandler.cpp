@@ -129,10 +129,21 @@ RequestResult MenuRequestHandler::joinRoom(RequestInfo info)
 {
 	JoinRoomRequest joinReq = JsonRequestPacketDeserializer::deserializeJoinRoomRequest(info.buffer);
 	RoomManager* roomManager = m_handlerFactory.getRoomManager();
-	RoomData roomData = roomManager->getRoom(joinReq.roomId).getMetadata();
 
-	RequestResult res;
-	return res;
+	JoinRoomResponse resp;
+	resp.roomData = roomManager->getRoom(joinReq.roomId).getMetadata();
+
+	if (!(roomManager->getRoom(joinReq.roomId).addUser(*(this->m_user))))
+	{
+		resp.status = FAILED;
+	}
+	else
+	{
+		resp.status = SUCCEEDED;
+	}
+	
+	return RequestResult{ JsonResponsePacketSerializer::serializeResponse(resp),
+		m_handlerFactory.createMenuRequestHandler(this->m_user->getUsername()) };
 }
 
 RequestResult MenuRequestHandler::createRoom(RequestInfo info)
@@ -141,6 +152,7 @@ RequestResult MenuRequestHandler::createRoom(RequestInfo info)
 	RoomManager* roomManager = m_handlerFactory.getRoomManager();
 
 	CreateRoomResponse resp;
+
 	try
 	{
 		roomManager->createRoom(*m_user, createReq.getRoomData());
