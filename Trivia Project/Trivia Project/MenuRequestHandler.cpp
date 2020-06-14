@@ -47,6 +47,7 @@ RequestResult MenuRequestHandler::handleRequest(RequestInfo info)
 		{
 			return this->logout(info);
 		}
+
 	}
 }
 
@@ -141,7 +142,7 @@ RequestResult MenuRequestHandler::joinRoom(RequestInfo info)
 	{
 		resp.status = SUCCEEDED;
 	}
-	
+
 	return RequestResult{ JsonResponsePacketSerializer::serializeResponse(resp),
 		m_handlerFactory.createMenuRequestHandler(this->m_user->getUsername()) };
 }

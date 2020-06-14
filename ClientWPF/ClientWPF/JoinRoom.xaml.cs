@@ -68,17 +68,7 @@ namespace ClientWPF
             this.clientStream = clientStream;
 
             // Getting the available rooms.
-            GetRoomsResponse resp = Communicator.ManageSendAndGetData<GetRoomsResponse>("", clientStream, Codes.GET_ROOM_CODE);
-            List<Tuple<string, int>> rooms = new List<Tuple<string, int>>();
-
-            foreach(string room in resp.Rooms)
-            {
-                var splitted = room.Split(',');
-                int id = Int32.Parse(splitted[1]);
-                string name = splitted[0];
-                rooms.Add(Tuple.Create(name, id));
-            }
-            availableRooms.ItemsSource = rooms;
+            availableRooms.ItemsSource = updateAvailableRooms();
         }
 
         private void availableRooms_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -87,7 +77,8 @@ namespace ClientWPF
                 return;
 
             var rooms = (ListBox)sender;
-            GetPlayersInRoomRequest req = new GetPlayersInRoomRequest { RoomId = ((RoomData)rooms.SelectedItem).Id };
+            int idIndex = rooms.SelectedItem.ToString().LastIndexOf(':');
+            GetPlayersInRoomRequest req = new GetPlayersInRoomRequest { RoomId = int.Parse(rooms.SelectedItem.ToString().Substring(idIndex+2)) };
             string json = JsonConvert.SerializeObject(req);
 
             // Getting the players in the room changed
@@ -124,19 +115,18 @@ namespace ClientWPF
             availableRooms.ItemsSource = updateAvailableRooms();
         }
 
-        public List<Tuple<string, int>> updateAvailableRooms()
+        public List<string> updateAvailableRooms()
         {
-            GetRoomsResponse resp = Communicator.ManageSendAndGetData<GetRoomsResponse>(
-                    JsonConvert.SerializeObject(""),
+            GetRoomsResponse resp = Communicator.ManageSendAndGetData<GetRoomsResponse>("",
                     clientStream,
-                    Codes.GET_PLAYERS_IN_ROOM_CODE);
-            List<Tuple<string, int>> rooms = new List<Tuple<string, int>>();
+                    Codes.GET_ROOM_CODE);
+            List<string> rooms = new List<string>();
             foreach (string room in resp.Rooms)
             {
                 var splitted = room.Split(',');
                 int id = Int32.Parse(splitted[1]);
                 string name = splitted[0];
-                rooms.Add(Tuple.Create(name, id));
+                rooms.Add("Name: "+name+", Id: "+id.ToString());
             }
             return rooms;
         }

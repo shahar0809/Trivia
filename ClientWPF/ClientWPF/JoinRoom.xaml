@@ -36,17 +36,13 @@
                    FontSize="50"
                    Margin="200, 0, 200, 10">
         </TextBlock>
-
+        
         <ScrollViewer Grid.Row="2" Grid.Column="2" 
                       Margin="150,10,150,20">
             <ListBox x:Name="availableRooms" 
                      MinHeight="170" 
+                     ItemsSource="{Binding rooms, Mode=OneWayToSource}"
                      SelectionChanged="availableRooms_SelectionChanged">
-                <ListBox.ItemTemplate>
-                    <DataTemplate>
-                        <TextBlock Text="{Binding name}"/>
-                    </DataTemplate>
-                </ListBox.ItemTemplate>
             </ListBox>
         </ScrollViewer>
 
@@ -71,12 +67,8 @@
                       Margin="250,10,250,10">
             <ListBox x:Name="playersInRoom" 
                      MinHeight="100" 
-                     SelectionChanged="availableRooms_SelectionChanged">
-                <ListBox.ItemTemplate>
-                    <DataTemplate>
-                        <TextBlock Text="{Binding Item1}"/>
-                    </DataTemplate>
-                </ListBox.ItemTemplate>
+                     ItemsSource="{Binding roomPlayers, Mode=OneWayToSource}"
+                     >
             </ListBox>
         </ScrollViewer>
 

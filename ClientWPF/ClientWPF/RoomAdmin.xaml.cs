@@ -52,6 +52,7 @@ namespace ClientWPF
             displayTimePerQuestion.Text = roomData.TimeForQuestion.ToString();
             displayRoomName.Text = roomData.Name;
             roomName.Text = roomData.Name;
+            playersInRoom.ItemsSource = updateRoomPlayers();
         }
 
         private void closeRoom_Click(object sender, RoutedEventArgs e)
