@@ -105,10 +105,13 @@ namespace ClientWPF
                 MessageBox.Show("Couldn't join room! Please try again");
                 return;
             }
-
-            var roomAdmin = new RoomAdmin(resp.RoomData, clientStream, false);
-            roomAdmin.Show();
-            this.Close();
+            else
+            {
+                var roomAdmin = new RoomAdmin(resp.RoomData, clientStream, false);
+                roomAdmin.Show();
+                this.Close();
+            }
+            
         }
         private void refreshGames_Click(object sender, RoutedEventArgs e)
         {

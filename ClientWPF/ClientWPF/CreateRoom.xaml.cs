@@ -54,7 +54,7 @@ namespace ClientWPF
                 return;
             }
 
-            CreateRoomRequest createRoom = new CreateRoomRequest 
+            CreateRoomRequest createRoom = new CreateRoomRequest
             {
                 RoomName = roomName.Text,
                 NumOfPlayers = int.Parse(numOfPlayers.Text),
@@ -68,8 +68,12 @@ namespace ClientWPF
             if (createRoomResponse.Status == ERROR_CODE)
             {
                 MessageBox.Show("Error! , can't create room");
+                var mainWindow = new MainWindow(clientStream);
+                mainWindow.Show();
             }
-            int roomId = createRoomResponse.RoomId;
+            else
+            { 
+                int roomId = createRoomResponse.RoomId;
 
             RoomData roomData = new RoomData
             {
@@ -85,6 +89,7 @@ namespace ClientWPF
             // Show the room details to the admin.
             var roomAdmin = new RoomAdmin(roomData, clientStream, true);
             roomAdmin.Show();
+            }
             Close();
         }
 
