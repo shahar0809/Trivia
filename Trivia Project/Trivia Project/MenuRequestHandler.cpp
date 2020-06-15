@@ -49,7 +49,7 @@ RequestResult MenuRequestHandler::handleRequest(RequestInfo info)
 		}
 		case LEAVE_ROOM_CODE:
 		{
-			return this->
+			return RequestResult{};
 		}
 	}
 }
@@ -179,5 +179,5 @@ RequestResult MenuRequestHandler::createRoom(RequestInfo info)
 
 RequestResult MenuRequestHandler::leaveRoom(RequestInfo info)
 {
-
+	return RequestResult{};
 }

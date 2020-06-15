@@ -129,6 +129,7 @@
                       HorizontalAlignment="Center"
         >
             <ListBox x:Name="playersInRoom" 
+                     FontSize="28"
                      MinHeight="100" 
                      ItemsSource="{Binding roomPlayers, Mode=OneWayToSource}"
                      />

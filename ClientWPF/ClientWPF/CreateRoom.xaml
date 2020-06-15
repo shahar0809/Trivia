@@ -96,7 +96,7 @@
 
         <Button x:Name="submitRoom"
             Grid.Column="2" Grid.Row="6" 
-                Margin="10, 60, 10, 60" 
+                Margin="10, 60, 10, 50" 
                 Grid.ColumnSpan="2"
                 Click="Submit_Button_Click"
                 Content="Submit"
@@ -111,7 +111,7 @@
 
         <Button Name="cancel"
             Grid.Column="1" Grid.Row="6" 
-                Margin="180, 60, 100, 60" 
+                Margin="180, 60, 100, 50" 
                 Click="cancel_Click"
                 Content="Cancel">
 

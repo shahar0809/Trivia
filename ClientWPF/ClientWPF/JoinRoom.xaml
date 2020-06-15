@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ClientWPF"
-        mc:Ignorable="d" FontSize="36" FontFamily="Forte"
+        mc:Ignorable="d" FontSize="28" FontFamily="Forte"
         Title="JoinRoom" Height="600" Width="800">
     <Grid>
         <Grid.Background>
@@ -54,7 +54,13 @@
                 Margin="0, 70"
                 Padding="5, 7"
                 HorizontalAlignment="Center"
-                Click="refreshGames_Click"/>
+                Click="refreshGames_Click">
+            <Button.Resources>
+                <Style TargetType="Border">
+                    <Setter Property="CornerRadius" Value="5"/>
+                </Style>
+            </Button.Resources>
+        </Button>
         
         <TextBlock x:Name="showRoomPlayers"
                    Grid.Column="2" Grid.Row="3"
@@ -75,10 +81,16 @@
         <Button x:Name="joinRoomButton" 
                 Grid.Column="2" Grid.Row="5"
                 Content="Join"
+                FontSize="36"
                 Margin="270, 35, 270, 0"
                 Click="joinRoomButton_Click"
                 IsEnabled="{Binding ElementName=availableRooms, 
-                        Path=SelectedItems.Count}"
-        />
+                        Path=SelectedItems.Count}">
+            <Button.Resources>
+                <Style TargetType="Border">
+                    <Setter Property="CornerRadius" Value="5"/>
+                </Style>
+            </Button.Resources>
+        </Button>
     </Grid>
 </Window>

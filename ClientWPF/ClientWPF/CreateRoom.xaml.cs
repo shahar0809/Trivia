@@ -93,14 +93,12 @@ namespace ClientWPF
             Close();
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
         private void cancel_Click(object sender, RoutedEventArgs e)
         {
-
+            // Closing the Log in window and returing to the menu.
+            var mainWindow = new MainWindow(this.clientStream);
+            mainWindow.Show();
+            this.Close();
         }
     }
 }

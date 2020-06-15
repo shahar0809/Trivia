@@ -127,7 +127,6 @@ namespace ClientWPF
                 roomAdmin.Show();
                 this.Close();
             }
-            
         }
         private void refreshGames_Click(object sender, RoutedEventArgs e)
         {
