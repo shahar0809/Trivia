@@ -38,5 +38,5 @@ public:
 
 private:
 	RoomData m_metadata;
-	std::vector<LoggedUser> m_users;
+	std::vector<LoggedUser>  m_users;
 };

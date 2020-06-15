@@ -24,10 +24,10 @@ namespace ClientWPF
 
     public struct RoomData
     {
-        public int Id { set; get; }
-        public string Name { set; get; }
-        public int MaxPlayers { set; get; }
-        public int NumOfQuesstions { set; get; }
+        public int RoomId { set; get; }
+        public string RoomName { set; get; }
+        public int NumOfplayers { set; get; }
+        public int NumOfQuestions { set; get; }
         public int TimeForQuestion { set; get; }
         public int IsActive { set; get; }
     };
@@ -47,7 +47,12 @@ namespace ClientWPF
     public struct JoinRoomResponse
     {
         public int Status;
-        public RoomData RoomData;
+        public int RoomId;
+        public string RoomName;
+        public int NumOfplayers;
+        public int NumOfQuestions;
+        public int TimeForQuestion;
+        public int IsActive;
     }
     public struct GetPlayersInRoomRequest
     {
@@ -93,8 +98,9 @@ namespace ClientWPF
             if (availableRooms.SelectedItem == null)
                 return;
 
-            var rooms = (ListBox)sender;
-            JoinRoomRequest req = new JoinRoomRequest{ RoomId = ((RoomData)rooms.SelectedItem).Id };
+            //var rooms = (ListBox)sender;
+            int idIndex = availableRooms.SelectedItem.ToString().LastIndexOf(':');
+            JoinRoomRequest req = new JoinRoomRequest{ RoomId = int.Parse(availableRooms.SelectedItem.ToString().Substring(idIndex+2)) };
             string json = JsonConvert.SerializeObject(req);
 
             // Requesting to join the selected items
@@ -107,7 +113,17 @@ namespace ClientWPF
             }
             else
             {
-                var roomAdmin = new RoomAdmin(resp.RoomData, clientStream, false);
+                RoomData roomData = new RoomData
+                {
+                    RoomId = resp.RoomId,
+                    RoomName = resp.RoomName,
+                    NumOfplayers = resp.NumOfplayers,
+                    NumOfQuestions = resp.NumOfQuestions,
+                    TimeForQuestion = resp.TimeForQuestion,
+                    IsActive = resp.IsActive
+                };
+
+                var roomAdmin = new RoomAdmin(roomData, clientStream, false);
                 roomAdmin.Show();
                 this.Close();
             }

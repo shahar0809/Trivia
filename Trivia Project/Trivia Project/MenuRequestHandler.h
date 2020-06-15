@@ -27,5 +27,6 @@ private:
 	RequestResult getStatistics(RequestInfo info);
 	RequestResult joinRoom(RequestInfo info);
 	RequestResult createRoom(RequestInfo info);
+	RequestResult leaveRoom(RequestInfo info);
 };
 

@@ -22,12 +22,12 @@ namespace ClientWPF
     public partial class HighScores : Window
     {
         private NetworkStream clientStream;
-        public HighScores(NetworkStream clientStream, List<HighScore> highScores)
+        public HighScores(NetworkStream clientStream, string highScores)
         {
             InitializeComponent();
             this.clientStream = clientStream;
 
-            /*string[] highScoresArr = new string[10];
+            string[] highScoresArr = new string[10];
             highScoresArr = highScores.Split(',');
             firstName.Text = highScoresArr[0];
             firstScore.Text = highScoresArr[1];
@@ -38,7 +38,7 @@ namespace ClientWPF
             fourthName.Text = highScoresArr[6];
             fourthScore.Text = highScoresArr[7];
             fifthName.Text = highScoresArr[8];
-            fifthScore.Text = highScoresArr[9];*/
+            fifthScore.Text = highScoresArr[9];
         }
         private void goBackButton_Click(object sender, RoutedEventArgs e)
         {

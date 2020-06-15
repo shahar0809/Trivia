@@ -36,16 +36,10 @@ namespace ClientWPF
         public int NumOfGames;
     }
 
-    public struct HighScore
-    {
-        public string name;
-        public int score;
-    }
-
     public struct Statistics
     {
-        public UserStats userStats;
-        public List<HighScore> highScore;
+        public string UserStatistics;
+        public string HighScores;
     }
 
     public partial class StatisticsWindow : Window
@@ -63,14 +57,22 @@ namespace ClientWPF
 
         private void myStatisticsButton_Click(object sender, RoutedEventArgs e)
         {
-            var MyStatistics = new MyStatistics(clientStream, stats.userStats);
+            string[] userStats = stats.UserStatistics.Split(',');
+            UserStats statistics = new UserStats
+            {
+                 AvgAnswerTime = float.Parse(userStats[0]),
+                 CorrectAnswers= int.Parse(userStats[1]),
+                 TotalAnswers=int.Parse(userStats[2]),
+                 NumOfGames=int.Parse(userStats[3])
+    };
+            var MyStatistics = new MyStatistics(clientStream, statistics);
             MyStatistics.Show();
             this.Close();
         }
 
         private void highScoresButton_Click(object sender, RoutedEventArgs e)
         {
-            var HighScores = new HighScores(clientStream, stats.highScore);
+            var HighScores = new HighScores(clientStream, stats.HighScores);
             HighScores.Show();
             this.Close();
         }

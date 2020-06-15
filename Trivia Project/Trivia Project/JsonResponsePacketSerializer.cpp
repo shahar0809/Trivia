@@ -71,6 +71,7 @@ std::string JsonResponsePacketSerializer::serializeResponse(JoinRoomResponse joi
 	j[jsonFields[MAX_USERS]] = joinRoom.roomData.maxPlayers;
 	j[jsonFields[QUESTIONS_COUNT]] = joinRoom.roomData.numOfQuestions;
 	j[jsonFields[ANS_TIMEOUT]] = joinRoom.roomData.timeForQuestion;
+	j[jsonFields[IS_ACTIVE]] = joinRoom.roomData.isActive;
 	return JsonResponsePacketSerializer::serializeResponse(j, JOIN_ROOM_CODE);
 }
 

@@ -15,7 +15,7 @@ public:
 	bool deleteRoom(int ID);
 	unsigned int getRoomState(int ID);
 	std::vector<RoomData> getRooms();
-	Room getRoom(int roomId);
+	Room* getRoom(int roomId);
 	int getLastId();
 
 private:

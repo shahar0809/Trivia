@@ -47,11 +47,11 @@ namespace ClientWPF
             }
 
             // Showing room data to the admin
-            displayMaxNumPlayers.Text = roomData.MaxPlayers.ToString();
-            displayNumOfQuestions.Text = roomData.NumOfQuesstions.ToString();
+            displayMaxNumPlayers.Text = roomData.NumOfplayers.ToString();
+            displayNumOfQuestions.Text = roomData.NumOfQuestions.ToString();
             displayTimePerQuestion.Text = roomData.TimeForQuestion.ToString();
-            displayRoomName.Text = roomData.Name;
-            roomName.Text = roomData.Name;
+            displayRoomName.Text = roomData.RoomName;
+            roomName.Text = roomData.RoomName;
             playersInRoom.ItemsSource = updateRoomPlayers();
         }
 
@@ -67,6 +67,7 @@ namespace ClientWPF
         private void leaveRoom_Click(object sender, RoutedEventArgs e)
         {
             stopUpdatingUsers = true;
+
             var mainWindow = new MainWindow(this.clientStream);
             mainWindow.Show();
             this.Close();
@@ -80,7 +81,7 @@ namespace ClientWPF
         public List<string> updateRoomPlayers()
         {
             // Getting the players connected to the room
-            GetPlayersInRoomRequest request = new GetPlayersInRoomRequest { RoomId = this.roomData.Id };
+            GetPlayersInRoomRequest request = new GetPlayersInRoomRequest { RoomId = this.roomData.RoomId };
 
             GetPlayersInRoomResponse resp = Communicator.ManageSendAndGetData<GetPlayersInRoomResponse>(
                     JsonConvert.SerializeObject(request),

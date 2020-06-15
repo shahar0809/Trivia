@@ -11,7 +11,7 @@ static const char* jsonFields[] = {
 	"Username", "Password", "Email",
 	"RoomId", 
 	"RoomName", "NumOfPlayers", "NumOfQuestions", "TimeForQuestion",
-	"Status", "PlayersInRoom", "Rooms", "UserStatistics", "HighScores"
+	"Status", "PlayersInRoom", "Rooms", "UserStatistics", "HighScores","IsActive"
 };
 
 enum JsonFieldsIndices 
@@ -19,7 +19,7 @@ enum JsonFieldsIndices
 	USERNAME = 0, PASSWORD, EMAIL, 
 	ROOM_ID,
 	ROOM_NAME, MAX_USERS, QUESTIONS_COUNT, ANS_TIMEOUT,
-	STATUS, PLAYERS_IN_ROOM, ROOMS, USER_STATS, HIGH_SCORES
+	STATUS, PLAYERS_IN_ROOM, ROOMS, USER_STATS, HIGH_SCORES,IS_ACTIVE
 };
 
 struct LoginRequest

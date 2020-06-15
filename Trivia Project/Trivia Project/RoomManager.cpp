@@ -42,9 +42,9 @@ std::vector<RoomData> RoomManager::getRooms()
 	return rooms;
 }
 
-Room RoomManager::getRoom(int roomId)
+Room* RoomManager::getRoom(int roomId)
 {
-	return this->m_rooms[roomId];
+	return &this->m_rooms[roomId];
 }
 
 int RoomManager::getLastId()

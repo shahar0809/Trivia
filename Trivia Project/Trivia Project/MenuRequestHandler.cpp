@@ -16,7 +16,7 @@ MenuRequestHandler::~MenuRequestHandler()
 
 bool MenuRequestHandler::isRequestRelevant(RequestInfo info)
 {
-	return info.requestId >= CREATE_ROOM_CODE && info.requestId <= LOGOUT_CODE;
+	return info.requestId >= CREATE_ROOM_CODE && info.requestId <= LEAVE_ROOM_CODE;
 }
 
 RequestResult MenuRequestHandler::handleRequest(RequestInfo info)
@@ -47,7 +47,10 @@ RequestResult MenuRequestHandler::handleRequest(RequestInfo info)
 		{
 			return this->logout(info);
 		}
-
+		case LEAVE_ROOM_CODE:
+		{
+			return this->
+		}
 	}
 }
 
@@ -78,7 +81,7 @@ RequestResult MenuRequestHandler::getPlayersInRoom(RequestInfo info)
 {
 	GetPlayersInRoomRequest req = JsonRequestPacketDeserializer::deserializeGetPlayersRequest(info.buffer);
 	RoomManager* roomManager = m_handlerFactory.getRoomManager();
-	std::vector<LoggedUser> loggedUsers = roomManager->getRoom(req.roomId).getAllUsers();
+	std::vector<LoggedUser> loggedUsers = roomManager->getRoom(req.roomId)->getAllUsers();
 	std::vector<std::string> roomPlayers;
 
 	for (auto user : loggedUsers)
@@ -132,9 +135,9 @@ RequestResult MenuRequestHandler::joinRoom(RequestInfo info)
 	RoomManager* roomManager = m_handlerFactory.getRoomManager();
 
 	JoinRoomResponse resp;
-	resp.roomData = roomManager->getRoom(joinReq.roomId).getMetadata();
+	resp.roomData = roomManager->getRoom(joinReq.roomId)->getMetadata();
 
-	if (!(roomManager->getRoom(joinReq.roomId).addUser(*(this->m_user))))
+	if (!(roomManager->getRoom(joinReq.roomId)->addUser(*(this->m_user))))
 	{
 		resp.status = FAILED;
 	}
@@ -171,4 +174,10 @@ RequestResult MenuRequestHandler::createRoom(RequestInfo info)
 		JsonResponsePacketSerializer::serializeResponse(resp),
 		m_handlerFactory.createMenuRequestHandler(this->m_user->getUsername())
 	};
+}
+
+
+RequestResult MenuRequestHandler::leaveRoom(RequestInfo info)
+{
+
 }

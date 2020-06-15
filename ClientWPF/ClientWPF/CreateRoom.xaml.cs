@@ -77,10 +77,10 @@ namespace ClientWPF
 
             RoomData roomData = new RoomData
             {
-                Id = roomId,
-                MaxPlayers = createRoom.NumOfPlayers,
-                NumOfQuesstions = createRoom.NumOfQuestions,
-                Name = createRoom.RoomName,
+                RoomId = roomId,
+                NumOfplayers = createRoom.NumOfPlayers,
+                NumOfQuestions = createRoom.NumOfQuestions,
+                RoomName = createRoom.RoomName,
                 TimeForQuestion = createRoom.TimeForQuestion,
                 IsActive = 1
             };
