@@ -4,7 +4,7 @@
 {
 }*/
 
-MenuRequestHandler::MenuRequestHandler(std::string username,RequestHandlerFactory* m_handlerFactory)
+MenuRequestHandler::MenuRequestHandler(std::string username, RequestHandlerFactory* m_handlerFactory)
 {
 	this->m_handlerFactory = *m_handlerFactory;
 	this->m_user = new LoggedUser(username);

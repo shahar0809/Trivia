@@ -18,7 +18,8 @@ enum Codes
 { 
 	ERROR_CODE = 0, LOGIN_CODE, SIGN_UP_CODE, CREATE_ROOM_CODE, 
 	GET_ROOMS_CODE, GET_PLAYERS_IN_ROOM_CODE,
-	JOIN_ROOM_CODE, GET_STATISTICS_CODE, LOGOUT_CODE, LEAVE_ROOM_CODE
+	JOIN_ROOM_CODE, GET_STATISTICS_CODE, 
+	LOGOUT_CODE, LEAVE_ROOM_CODE, CLOSE_ROOM_CODE, START_GAME_CODE, GET_ROOM_STATE_CODE
 };
 
 struct ErrorResponse
@@ -71,6 +72,30 @@ struct GetStatisticsResponse
 	std::vector<std::string> highScore;
 };
 
+struct CloseRoomResponse
+{
+	unsigned int status;
+};
+
+struct StartGameResponse
+{
+	unsigned int status;
+};
+
+struct GetRoomStateResponse
+{
+	unsigned int status;
+	bool hasGameBegun;
+	std::vector<std::string> players;
+	unsigned int questionsCount;
+	unsigned int answerTimeout;
+};
+
+struct LeaveRoomResponse
+{
+	unsigned int status;
+};
+
 class JsonResponsePacketSerializer
 {
 public:
@@ -78,11 +103,17 @@ public:
 	static std::string serializeResponse(LoginResponse login);
 	static std::string serializeResponse(SignupResponse signUp);
 	static std::string serializeResponse(LogoutResponse logout);
+
 	static std::string serializeResponse(GetRoomResponse getRoom);
 	static std::string serializeResponse(GetPlayersInRoomResponse getPlayersInRoom);
 	static std::string serializeResponse(JoinRoomResponse joinRoom);
 	static std::string serializeResponse(CreateRoomResponse createRoom);
 	static std::string serializeResponse(GetStatisticsResponse getStatistics);
+
+	static std::string serializeCloseRoomResponse(CloseRoomResponse closeRoom);
+	static std::string serializeStartGameResponse(StartGameResponse startGame);
+	static std::string serializeGetRoomStateResponse(GetRoomStateResponse getRoomState);
+	static std::string serializeLeaveRoomResponse(LeaveRoomResponse leaveRoom);
 
 private:
 	static std::string serializeResponse(json j, int code);

@@ -36,7 +36,12 @@ public:
 	std::vector<LoggedUser> getAllUsers();
 	RoomData getMetadata();
 
+	std::vector<std::string> getAllUsernames();
+	bool getHasGameBegun() { return hasGameBegun; };
+	void setHasGameBegun(bool hasGameBegun) { this->hasGameBegun = hasGameBegun; };
+
 private:
 	RoomData m_metadata;
 	std::vector<LoggedUser>  m_users;
+	bool hasGameBegun;
 };
