@@ -22,15 +22,14 @@ RequestResult RoomMemberRequestHandler::handleRequest(RequestInfo info)
 	switch (info.requestId)
 	{
 	case LEAVE_ROOM_CODE:
-		leaveRoom(info);
-		break;
-
+		return leaveRoom(info);
+		
 	case START_GAME_CODE:
-		startGame(info);
+		return startGame(info);
 		break;
 
 	case GET_ROOM_STATE_CODE:
-		getRoomState(info);
+		return getRoomState(info);
 		break;
 	}
 }

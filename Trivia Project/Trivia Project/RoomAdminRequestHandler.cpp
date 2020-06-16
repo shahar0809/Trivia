@@ -18,16 +18,14 @@ RequestResult RoomAdminRequestHandler::handleRequest(RequestInfo info)
 	switch (info.requestId)
 	{
 	case CLOSE_ROOM_CODE:
-		closeRoom(info);
-		break;
+		return closeRoom(info);
+		
 
 	case START_GAME_CODE:
-		startGame(info);
-		break;
+		return startGame(info);
 
 	case GET_ROOM_STATE_CODE:
-		getRoomState(info);
-		break;
+		return getRoomState(info);
 	}
 }
 

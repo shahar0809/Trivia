@@ -1,6 +1,8 @@
 #include "RequestHandlerFactory.h"
 #include "LoginRequestHandler.h"
 #include "MenuRequestHandler.h"
+#include "RoomMemberRequestHandler.h"
+#include "RoomAdminRequestHandler.h"
 
 RequestHandlerFactory::RequestHandlerFactory()
 { 
@@ -43,4 +45,12 @@ StatisticsManager& RequestHandlerFactory::getStatisticsManager()
 RoomManager* RequestHandlerFactory::getRoomManager()
 {
 	return this->m_roomManager;
+}
+RoomMemberRequestHandler* RequestHandlerFactory::createRoomMemberRequestHandler()
+{
+	return new RoomMemberRequestHandler();
+}
+RoomAdminRequestHandler* RequestHandlerFactory::createRoomAdminRequestHandler()
+{
+	return new RoomAdminRequestHandler();
 }

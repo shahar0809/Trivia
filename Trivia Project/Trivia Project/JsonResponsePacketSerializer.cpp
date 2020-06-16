@@ -104,3 +104,33 @@ std::string JsonResponsePacketSerializer::parseVector(std::vector<std::string> v
 	// Returning the parsed string without the last char (extra delimeter)
 	return parsedVec.substr(0, parsedVec.size() - 1);
 }
+
+std::string JsonResponsePacketSerializer::serializeCloseRoomResponse(CloseRoomResponse closeRoom)
+{
+	json j;
+	j[jsonFields[STATUS]] = closeRoom.status;
+	return JsonResponsePacketSerializer::serializeResponse(j, CLOSE_ROOM_CODE);
+}
+std::string JsonResponsePacketSerializer::serializeStartGameResponse(StartGameResponse startGame)
+{
+	json j;
+	j[jsonFields[STATUS]] = startGame.status;
+	return JsonResponsePacketSerializer::serializeResponse(j, START_GAME_CODE);
+}
+std::string JsonResponsePacketSerializer::serializeGetRoomStateResponse(GetRoomStateResponse getRoomState)
+{
+	json j;
+	j[jsonFields[STATUS]] = getRoomState.status;
+	j[jsonFields[ANS_TIMEOUT]] = getRoomState.answerTimeout;
+	j[jsonFields[PLAYERS_IN_ROOM]] = getRoomState.players;
+	j[jsonFields[QUESTIONS_COUNT]] = getRoomState.questionsCount;
+	j[jsonFields[IS_ACTIVE]] = getRoomState.hasGameBegun;
+	return JsonResponsePacketSerializer::serializeResponse(j, GET_ROOM_STATE_CODE);
+	
+}
+std::string JsonResponsePacketSerializer::serializeLeaveRoomResponse(LeaveRoomResponse leaveRoom)
+{
+	json j;
+	j[jsonFields[STATUS]] = leaveRoom.status;
+	return JsonResponsePacketSerializer::serializeResponse(j, LEAVE_ROOM_CODE);
+}
