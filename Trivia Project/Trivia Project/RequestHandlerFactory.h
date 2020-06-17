@@ -18,8 +18,8 @@ public:
 
 	LoginRequestHandler* createLoginRequestHandler();
 	MenuRequestHandler* createMenuRequestHandler(std::string username);
-	RoomMemberRequestHandler* createRoomMemberRequestHandler();
-	RoomAdminRequestHandler* createRoomAdminRequestHandler();
+	RoomMemberRequestHandler* createRoomMemberRequestHandler(Room& room, LoggedUser* user, RequestHandlerFactory* handlerFactory, RoomManager* roomManger);
+	RoomAdminRequestHandler* createRoomAdminRequestHandler(Room& room, LoggedUser* user, RequestHandlerFactory* handlerFactory, RoomManager* roomManger);
 	LoginManager& getLoginManger();
 	StatisticsManager& getStatisticsManager();
 	RoomManager* getRoomManager();

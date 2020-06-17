@@ -1,5 +1,6 @@
 #include "RoomAdminRequestHandler.h"
 
+
 RoomAdminRequestHandler::RoomAdminRequestHandler(Room& room, LoggedUser* user, RequestHandlerFactory* handlerFactory, RoomManager* roomManger)
 {
 	this->m_room = room;
@@ -10,7 +11,7 @@ RoomAdminRequestHandler::RoomAdminRequestHandler(Room& room, LoggedUser* user, R
 
 bool RoomAdminRequestHandler::isRequestRelevant(RequestInfo info)
 {
-	return info.requestId >= LEAVE_ROOM_CODE && info.requestId <= GET_ROOM_STATE_CODE;
+	return info.requestId >= LEAVE_ROOM_CODE && info.requestId <= GET_ROOM_STATE_CODE || info.requestId == GET_PLAYERS_IN_ROOM_CODE;
 }
 
 RequestResult RoomAdminRequestHandler::handleRequest(RequestInfo info)
@@ -26,6 +27,15 @@ RequestResult RoomAdminRequestHandler::handleRequest(RequestInfo info)
 
 	case GET_ROOM_STATE_CODE:
 		return getRoomState(info);
+
+	case GET_PLAYERS_IN_ROOM_CODE:
+	{
+		RequestResult res = this->m_handlerFactory.createMenuRequestHandler(this->m_user->getUsername())->getPlayersInRoom(info);;
+		res.newHandler = this->m_handlerFactory.createRoomAdminRequestHandler(this->m_room,
+			this->m_user, &this->m_handlerFactory, this->m_roomManager);
+		return res;
+	}
+		
 	}
 }
 
@@ -48,7 +58,7 @@ RequestResult RoomAdminRequestHandler::closeRoom(RequestInfo info)
 	return RequestResult
 	{
 		JsonResponsePacketSerializer::serializeCloseRoomResponse(resp),
-		this->m_handlerFactory.createRoomMemberRequestHandler()
+		this->m_handlerFactory.createMenuRequestHandler(this->m_user->getUsername())
 	};
 }
 
@@ -61,7 +71,8 @@ RequestResult RoomAdminRequestHandler::startGame(RequestInfo info)
 	return RequestResult
 	{
 		JsonResponsePacketSerializer::serializeStartGameResponse(resp),
-		this->m_handlerFactory.createRoomMemberRequestHandler()
+		this->m_handlerFactory.createRoomAdminRequestHandler(this->m_room,
+		this->m_user,&this->m_handlerFactory,this->m_roomManager)
 	};
 }
 
@@ -83,7 +94,8 @@ RequestResult RoomAdminRequestHandler::getRoomState(RequestInfo info)
 	return RequestResult
 	{
 		JsonResponsePacketSerializer::serializeGetRoomStateResponse(resp),
-		this->m_handlerFactory.createRoomMemberRequestHandler()
+		this->m_handlerFactory.createRoomAdminRequestHandler(this->m_room,
+		this->m_user,&this->m_handlerFactory,this->m_roomManager)
 	};
 }
 

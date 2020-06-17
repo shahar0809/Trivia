@@ -139,12 +139,19 @@ namespace ClientWPF
                     clientStream,
                     Codes.GET_ROOM_CODE);
             List<string> rooms = new List<string>();
-            foreach (string room in resp.Rooms)
+            try
             {
-                var splitted = room.Split(',');
-                int id = Int32.Parse(splitted[1]);
-                string name = splitted[0];
-                rooms.Add("Name: "+name+", Id: "+id.ToString());
+                foreach (string room in resp.Rooms)
+                {
+                    var splitted = room.Split(',');
+                    int id = Int32.Parse(splitted[1]);
+                    string name = splitted[0];
+                    rooms.Add("Name: " + name + ", Id: " + id.ToString());
+                }
+            }
+            catch(NullReferenceException e)
+            {
+                MessageBox.Show("Sorry there are no available rooms");
             }
             return rooms;
         }

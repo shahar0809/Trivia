@@ -5,17 +5,19 @@
 #include "JsonRequestPacketDeserializer.h"
 #include "RoomManager.h"
 #include "StatisticsManager.h"
+#include "RoomAdminRequestHandler.h"
+#include "RoomMemberRequestHandler.h"
 
 class RequestHandlerFactory;
 class MenuRequestHandler : public IRequestHandler
 {
 public:
-	//MenuRequestHandler();
 	MenuRequestHandler(std::string username, RequestHandlerFactory *m_handlerFactory);
 	~MenuRequestHandler();
 
 	bool isRequestRelevant(RequestInfo info);
 	RequestResult handleRequest(RequestInfo info);
+	RequestResult getPlayersInRoom(RequestInfo info);
 
 private:
 	LoggedUser * m_user;
@@ -23,10 +25,8 @@ private:
 
 	RequestResult logout(RequestInfo info);
 	RequestResult getRooms(RequestInfo info);
-	RequestResult getPlayersInRoom(RequestInfo info);
 	RequestResult getStatistics(RequestInfo info);
 	RequestResult joinRoom(RequestInfo info);
 	RequestResult createRoom(RequestInfo info);
-	RequestResult leaveRoom(RequestInfo info);
 };
 

@@ -1,8 +1,5 @@
 #include "MenuRequestHandler.h"
 
-/*MenuRequestHandler::MenuRequestHandler()
-{
-}*/
 
 MenuRequestHandler::MenuRequestHandler(std::string username, RequestHandlerFactory* m_handlerFactory)
 {
@@ -56,8 +53,20 @@ RequestResult MenuRequestHandler::handleRequest(RequestInfo info)
 
 RequestResult MenuRequestHandler::logout(RequestInfo info)
 {
-	RequestResult res;
-	return res;
+	LogoutResponse resp;
+	if (this->m_handlerFactory.getLoginManger().logout(this->m_user->getUsername()))
+	{
+		resp.status = SUCCEEDED;
+	}
+	else
+	{
+		resp.status = FAILED;
+	}
+
+	return RequestResult
+	{
+		JsonResponsePacketSerializer::serializeResponse(resp),nullptr
+	};
 }
 
 RequestResult MenuRequestHandler::getRooms(RequestInfo info)
@@ -69,7 +78,7 @@ RequestResult MenuRequestHandler::getRooms(RequestInfo info)
 	{
 		roomNames.push_back(room.name + "," + std::to_string(room.id));
 	}
-	GetRoomResponse resp{ 1, roomNames };
+	GetRoomResponse resp{ SUCCEEDED, roomNames };
 	return RequestResult
 	{
 		JsonResponsePacketSerializer::serializeResponse(resp),
@@ -147,7 +156,8 @@ RequestResult MenuRequestHandler::joinRoom(RequestInfo info)
 	}
 
 	return RequestResult{ JsonResponsePacketSerializer::serializeResponse(resp),
-		m_handlerFactory.createMenuRequestHandler(this->m_user->getUsername()) };
+		m_handlerFactory.createRoomMemberRequestHandler(*this->m_handlerFactory.getRoomManager()->getRoom(joinReq.roomId),
+			this->m_user,&this->m_handlerFactory,this->m_handlerFactory.getRoomManager())};
 }
 
 RequestResult MenuRequestHandler::createRoom(RequestInfo info)
@@ -164,7 +174,8 @@ RequestResult MenuRequestHandler::createRoom(RequestInfo info)
 	catch (const std::exception & e)
 	{
 		resp.status = FAILED;
-		return RequestResult{ JsonResponsePacketSerializer::serializeResponse(resp), nullptr };
+		return RequestResult{ JsonResponsePacketSerializer::serializeResponse(resp),
+			m_handlerFactory.createMenuRequestHandler(this->m_user->getUsername())};
 	}
 	
 	resp.status = SUCCEEDED;
@@ -172,12 +183,8 @@ RequestResult MenuRequestHandler::createRoom(RequestInfo info)
 	return RequestResult
 	{
 		JsonResponsePacketSerializer::serializeResponse(resp),
-		m_handlerFactory.createMenuRequestHandler(this->m_user->getUsername())
+		this->m_handlerFactory.createRoomAdminRequestHandler(*this->m_handlerFactory.getRoomManager()->getRoom(roomManager->getLastId()),
+			this->m_user,&this->m_handlerFactory,this->m_handlerFactory.getRoomManager())
 	};
 }
 
-
-RequestResult MenuRequestHandler::leaveRoom(RequestInfo info)
-{
-	return RequestResult{};
-}

@@ -46,11 +46,11 @@ RoomManager* RequestHandlerFactory::getRoomManager()
 {
 	return this->m_roomManager;
 }
-RoomMemberRequestHandler* RequestHandlerFactory::createRoomMemberRequestHandler()
+RoomMemberRequestHandler* RequestHandlerFactory::createRoomMemberRequestHandler(Room& room, LoggedUser* user, RequestHandlerFactory* handlerFactory, RoomManager* roomManger)
 {
-	return new RoomMemberRequestHandler();
+	return new RoomMemberRequestHandler(room,user,handlerFactory,roomManger);
 }
-RoomAdminRequestHandler* RequestHandlerFactory::createRoomAdminRequestHandler()
+RoomAdminRequestHandler* RequestHandlerFactory::createRoomAdminRequestHandler(Room& room, LoggedUser* user, RequestHandlerFactory* handlerFactory, RoomManager* roomManger)
 {
-	return new RoomAdminRequestHandler();
+	return new RoomAdminRequestHandler(room, user, handlerFactory, roomManger);
 }

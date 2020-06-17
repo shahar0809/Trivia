@@ -17,7 +17,6 @@ public:
 	std::vector<RoomData> getRooms();
 	Room* getRoom(int roomId);
 	int getLastId();
-
 private:
 	std::map<int,Room> m_rooms;
 	int roomId;  // Holds the id of the last room created.
