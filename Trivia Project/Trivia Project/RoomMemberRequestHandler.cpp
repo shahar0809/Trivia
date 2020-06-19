@@ -1,11 +1,6 @@
 #include "RoomMemberRequestHandler.h"
 
-
-/*
- *** SAME CODE AS RoomAdmin.
-  We can create a class that roomAdmin and roomMember inherit from, and implemnet the common methods there.
-*/
-RoomMemberRequestHandler::RoomMemberRequestHandler(Room& room, LoggedUser* user, RequestHandlerFactory* handlerFactory, RoomManager* roomManger)
+RoomMemberRequestHandler::RoomMemberRequestHandler(Room& room, LoggedUser* user, RequestHandlerFactory* handlerFactory, RoomManager* roomManger) 
 {
 	this->m_room = room;
 	m_user = user;
@@ -13,32 +8,25 @@ RoomMemberRequestHandler::RoomMemberRequestHandler(Room& room, LoggedUser* user,
 	m_roomManager = roomManger;
 }
 
+
 bool RoomMemberRequestHandler::isRequestRelevant(RequestInfo info)
 {
-	return info.requestId >= LEAVE_ROOM_CODE && info.requestId <= GET_ROOM_STATE_CODE || info.requestId == GET_PLAYERS_IN_ROOM_CODE;
+	return (info.requestId >= LEAVE_ROOM_CODE && info.requestId <= GET_ROOM_STATE_CODE && info.requestId == CLOSE_ROOM_CODE)
+		|| info.requestId == GET_PLAYERS_IN_ROOM_CODE;
 }
 
 RequestResult RoomMemberRequestHandler::handleRequest(RequestInfo info)
 {
 	switch (info.requestId)
 	{
-	case LEAVE_ROOM_CODE:
-		return leaveRoom(info);
+		case LEAVE_ROOM_CODE:
+			return leaveRoom(info);
 		
-	case START_GAME_CODE:
-		return startGame(info);
+		case START_GAME_CODE:
+			return startGame(info);
 
-	case GET_ROOM_STATE_CODE:
-		return getRoomState(info);
-
-	case GET_PLAYERS_IN_ROOM_CODE:
-	{
-		RequestResult res = this->m_handlerFactory.createMenuRequestHandler(this->m_user->getUsername())->getPlayersInRoom(info);;
-		res.newHandler = this->m_handlerFactory.createRoomMemberRequestHandler(this->m_room,
-			this->m_user, &this->m_handlerFactory, this->m_roomManager);
-		return res;
-	}
-		
+		case GET_ROOM_STATE_CODE:
+			return getRoomState(info);
 	}
 }
 
@@ -66,7 +54,6 @@ RequestResult RoomMemberRequestHandler::startGame(RequestInfo info)
 {
 	// Once GameManger is implemented -> we call it to actually start the game.
 	StartGameResponse resp{ SUCCEEDED };
-	m_room.setHasGameBegun(true);
 
 	return RequestResult
 	{ 
@@ -80,7 +67,7 @@ RequestResult RoomMemberRequestHandler::getRoomState(RequestInfo info)
 {
 	RoomData roomData = m_room.getMetadata();
 
-	// Also, I'm not sure when the status is FAILED
+	// I'm not sure when the status is FAILED
 
 	GetRoomStateResponse resp
 	{
@@ -94,7 +81,6 @@ RequestResult RoomMemberRequestHandler::getRoomState(RequestInfo info)
 	return RequestResult
 	{
 		JsonResponsePacketSerializer::serializeGetRoomStateResponse(resp),
-		this->m_handlerFactory.createRoomMemberRequestHandler(
-			this->m_room,this->m_user,&this->m_handlerFactory,this->m_roomManager)
+		this->m_handlerFactory.createRoomMemberRequestHandler(this->m_room,this->m_user,&this->m_handlerFactory,this->m_roomManager)
 	};
 }

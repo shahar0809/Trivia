@@ -5,6 +5,7 @@
 #include "MenuRequestHandler.h"
 
 class RequestHandlerFactory;
+
 class RoomMemberRequestHandler : public IRequestHandler
 {
 public:
@@ -17,7 +18,7 @@ public:
 	RequestResult startGame(RequestInfo info);
 	RequestResult getRoomState(RequestInfo info);
 
-private:
+protected:
 	Room m_room;
 	LoggedUser* m_user;
 	RoomManager* m_roomManager;

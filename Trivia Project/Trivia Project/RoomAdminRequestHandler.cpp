@@ -1,41 +1,37 @@
 #include "RoomAdminRequestHandler.h"
 
-
-RoomAdminRequestHandler::RoomAdminRequestHandler(Room& room, LoggedUser* user, RequestHandlerFactory* handlerFactory, RoomManager* roomManger)
+RoomAdminRequestHandler::RoomAdminRequestHandler(Room& room, LoggedUser* user, RequestHandlerFactory* handlerFactory, RoomManager* roomManger) :
+	RoomMemberRequestHandler(room, user, handlerFactory, roomManger)
 {
-	this->m_room = room;
-	m_user = user;
-	m_handlerFactory = *handlerFactory;
-	m_roomManager = roomManger;
 }
 
 bool RoomAdminRequestHandler::isRequestRelevant(RequestInfo info)
 {
-	return info.requestId >= LEAVE_ROOM_CODE && info.requestId <= GET_ROOM_STATE_CODE || info.requestId == GET_PLAYERS_IN_ROOM_CODE;
+	return (info.requestId >= CLOSE_ROOM_CODE && info.requestId <= GET_ROOM_STATE_CODE) || info.requestId == GET_PLAYERS_IN_ROOM_CODE;
 }
 
 RequestResult RoomAdminRequestHandler::handleRequest(RequestInfo info)
 {
 	switch (info.requestId)
 	{
-	case CLOSE_ROOM_CODE:
-		return closeRoom(info);
+		case CLOSE_ROOM_CODE:
+			return closeRoom(info);
+
+		case LEAVE_ROOM_CODE:
+			return leaveRoom(info);
 		
+		case START_GAME_CODE:
+			return startGame(info);
 
-	case START_GAME_CODE:
-		return startGame(info);
+		case GET_ROOM_STATE_CODE:
+			return getRoomState(info);
 
-	case GET_ROOM_STATE_CODE:
-		return getRoomState(info);
-
-	case GET_PLAYERS_IN_ROOM_CODE:
-	{
-		RequestResult res = this->m_handlerFactory.createMenuRequestHandler(this->m_user->getUsername())->getPlayersInRoom(info);;
-		res.newHandler = this->m_handlerFactory.createRoomAdminRequestHandler(this->m_room,
-			this->m_user, &this->m_handlerFactory, this->m_roomManager);
-		return res;
-	}
-		
+		default:
+			return RequestResult
+			{
+				"",
+				m_handlerFactory.createMenuRequestHandler(m_user->getUsername())
+			};
 	}
 }
 
@@ -62,6 +58,16 @@ RequestResult RoomAdminRequestHandler::closeRoom(RequestInfo info)
 	};
 }
 
+RequestResult RoomAdminRequestHandler::leaveRoom(RequestInfo info)
+{
+	LeaveRoomResponse resp{ ERROR_CODE };
+	return RequestResult
+	{
+		JsonResponsePacketSerializer::serializeLeaveRoomResponse(resp),
+		this->m_handlerFactory.createMenuRequestHandler(this->m_user->getUsername())
+	};
+}
+
 RequestResult RoomAdminRequestHandler::startGame(RequestInfo info)
 {
 	// Once GameManger is implemented -> we call it to actually start the game.
@@ -71,31 +77,6 @@ RequestResult RoomAdminRequestHandler::startGame(RequestInfo info)
 	return RequestResult
 	{
 		JsonResponsePacketSerializer::serializeStartGameResponse(resp),
-		this->m_handlerFactory.createRoomAdminRequestHandler(this->m_room,
-		this->m_user,&this->m_handlerFactory,this->m_roomManager)
+		this->m_handlerFactory.createMenuRequestHandler(m_user->getUsername())
 	};
 }
-
-RequestResult RoomAdminRequestHandler::getRoomState(RequestInfo info)
-{
-	RoomData roomData = m_room.getMetadata();
-
-	// Also, I'm not sure when the status is FAILED
-
-	GetRoomStateResponse resp
-	{
-		SUCCEEDED,
-		m_room.getHasGameBegun(),
-		m_room.getAllUsernames(),
-		roomData.numOfQuestions,
-		roomData.timeForQuestion
-	};
-
-	return RequestResult
-	{
-		JsonResponsePacketSerializer::serializeGetRoomStateResponse(resp),
-		this->m_handlerFactory.createRoomAdminRequestHandler(this->m_room,
-		this->m_user,&this->m_handlerFactory,this->m_roomManager)
-	};
-}
-

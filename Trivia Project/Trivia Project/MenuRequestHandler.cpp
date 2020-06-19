@@ -164,18 +164,22 @@ RequestResult MenuRequestHandler::createRoom(RequestInfo info)
 {
 	CreateRoomRequest createReq = JsonRequestPacketDeserializer::deserializeCreateRoomRequest(info.buffer);
 	RoomManager* roomManager = m_handlerFactory.getRoomManager();
-
 	CreateRoomResponse resp;
+	Room* room;
 
 	try
 	{
-		roomManager->createRoom(*m_user, createReq.getRoomData());
+		room = roomManager->createRoom(*m_user, createReq.getRoomData());
+
 	}
 	catch (const std::exception & e)
 	{
 		resp.status = FAILED;
-		return RequestResult{ JsonResponsePacketSerializer::serializeResponse(resp),
-			m_handlerFactory.createMenuRequestHandler(this->m_user->getUsername())};
+		return RequestResult
+		{ 
+			JsonResponsePacketSerializer::serializeResponse(resp),
+			m_handlerFactory.createRoomAdminRequestHandler(*room, m_user, &m_handlerFactory, m_handlerFactory.getRoomManager())
+		};
 	}
 	
 	resp.status = SUCCEEDED;
@@ -183,8 +187,7 @@ RequestResult MenuRequestHandler::createRoom(RequestInfo info)
 	return RequestResult
 	{
 		JsonResponsePacketSerializer::serializeResponse(resp),
-		this->m_handlerFactory.createRoomAdminRequestHandler(*this->m_handlerFactory.getRoomManager()->getRoom(roomManager->getLastId()),
-			this->m_user,&this->m_handlerFactory,this->m_handlerFactory.getRoomManager())
+		m_handlerFactory.createRoomAdminRequestHandler(*room, m_user, &m_handlerFactory, m_handlerFactory.getRoomManager())
 	};
 }
 

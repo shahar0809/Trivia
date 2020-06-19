@@ -1,5 +1,4 @@
 #pragma once
-
 #include "MenuRequestHandler.h"
 #include "IRequestHandler.h"
 #include "LoginManager.h"
@@ -11,7 +10,6 @@ class RequestHandlerFactory;
 class LoginRequestHandler : public IRequestHandler
 {
 public:
-	//LoginRequestHandler() {};
 	LoginRequestHandler(RequestHandlerFactory* handler);
 
 	bool isRequestRelevant(RequestInfo info);
