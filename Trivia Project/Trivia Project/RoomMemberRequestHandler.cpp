@@ -1,13 +1,9 @@
 #include "RoomMemberRequestHandler.h"
 
-RoomMemberRequestHandler::RoomMemberRequestHandler(Room& room, LoggedUser* user, RequestHandlerFactory* handlerFactory, RoomManager* roomManger) 
+RoomMemberRequestHandler::RoomMemberRequestHandler(Room& room, LoggedUser* user, RequestHandlerFactory* handlerFactory, RoomManager* roomManager) 
+	: RoomParticipantRequestHandler(room, user, handlerFactory, roomManager)
 {
-	this->m_room = room;
-	m_user = user;
-	m_handlerFactory = *handlerFactory;
-	m_roomManager = roomManger;
 }
-
 
 bool RoomMemberRequestHandler::isRequestRelevant(RequestInfo info)
 {
@@ -45,42 +41,6 @@ RequestResult RoomMemberRequestHandler::leaveRoom(RequestInfo info)
 	return RequestResult
 	{
 		JsonResponsePacketSerializer::serializeLeaveRoomResponse(resp),
-		this->m_handlerFactory.createRoomMemberRequestHandler(this->m_room,
-		this->m_user,&this->m_handlerFactory,this->m_roomManager)
-	};
-}
-
-RequestResult RoomMemberRequestHandler::startGame(RequestInfo info)
-{
-	// Once GameManger is implemented -> we call it to actually start the game.
-	StartGameResponse resp{ SUCCEEDED };
-
-	return RequestResult
-	{ 
-		JsonResponsePacketSerializer::serializeStartGameResponse(resp),
-		this->m_handlerFactory.createRoomMemberRequestHandler(this->m_room,
-		this->m_user,&this->m_handlerFactory,this->m_roomManager)
-	};
-}
-
-RequestResult RoomMemberRequestHandler::getRoomState(RequestInfo info)
-{
-	RoomData roomData = m_room.getMetadata();
-
-	// I'm not sure when the status is FAILED
-
-	GetRoomStateResponse resp
-	{
-		SUCCEEDED,
-		m_room.getHasGameBegun(),
-		m_room.getAllUsernames(),
-		roomData.numOfQuestions,
-		roomData.timeForQuestion
-	};
-
-	return RequestResult
-	{
-		JsonResponsePacketSerializer::serializeGetRoomStateResponse(resp),
-		this->m_handlerFactory.createRoomMemberRequestHandler(this->m_room,this->m_user,&this->m_handlerFactory,this->m_roomManager)
+		m_handlerFactory.createMenuRequestHandler(m_user->getUsername())
 	};
 }

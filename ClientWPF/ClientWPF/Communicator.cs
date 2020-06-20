@@ -1,7 +1,7 @@
 ﻿using System.Text;
 using System.Net.Sockets;
 using Newtonsoft.Json;
-
+using System.Windows;
 
 namespace ClientWPF
 {
@@ -46,6 +46,7 @@ namespace ClientWPF
 
             // Get response.
             string s = Helper.GetData(clientStream);
+            MessageBox.Show(s);
             string textStrData = s.Substring(DATA_START_INDEX);
             T response = JsonConvert.DeserializeObject<T>(textStrData);
             return response;

@@ -1,16 +1,14 @@
 #pragma once
-#include "RoomMemberRequestHandler.h"
+#include "RoomParticipantRequestHandler.h"
 
-class RoomAdminRequestHandler : public RoomMemberRequestHandler
+class RoomAdminRequestHandler : public RoomParticipantRequestHandler
 {
 public:
-	RoomAdminRequestHandler(Room& room, LoggedUser* user, RequestHandlerFactory* handlerFactory, RoomManager* roomManger);
+	RoomAdminRequestHandler(Room& room, LoggedUser* user, RequestHandlerFactory* handlerFactory, RoomManager* roomManager);
 
 	bool isRequestRelevant(RequestInfo info);
 	RequestResult handleRequest(RequestInfo info);
 
-	RequestResult leaveRoom(RequestInfo info);
-	RequestResult startGame(RequestInfo info);
 	RequestResult closeRoom(RequestInfo info);
 };
 

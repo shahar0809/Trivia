@@ -190,7 +190,7 @@
                 Margin="0, 70"
                 Padding="5, 7"
                 HorizontalAlignment="Center"
-                Click="refreshPlayers_Click"/>
-
+                Click="refreshPlayers_Click"
+        />
     </Grid>
 </Window>

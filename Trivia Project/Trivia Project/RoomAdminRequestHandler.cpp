@@ -1,7 +1,7 @@
 #include "RoomAdminRequestHandler.h"
 
-RoomAdminRequestHandler::RoomAdminRequestHandler(Room& room, LoggedUser* user, RequestHandlerFactory* handlerFactory, RoomManager* roomManger) :
-	RoomMemberRequestHandler(room, user, handlerFactory, roomManger)
+RoomAdminRequestHandler::RoomAdminRequestHandler(Room& room, LoggedUser* user, RequestHandlerFactory* handlerFactory, RoomManager* roomManager) :
+	RoomParticipantRequestHandler(room, user, handlerFactory, roomManager)
 {
 }
 
@@ -17,21 +17,11 @@ RequestResult RoomAdminRequestHandler::handleRequest(RequestInfo info)
 		case CLOSE_ROOM_CODE:
 			return closeRoom(info);
 
-		case LEAVE_ROOM_CODE:
-			return leaveRoom(info);
-		
 		case START_GAME_CODE:
 			return startGame(info);
 
 		case GET_ROOM_STATE_CODE:
 			return getRoomState(info);
-
-		default:
-			return RequestResult
-			{
-				"",
-				m_handlerFactory.createMenuRequestHandler(m_user->getUsername())
-			};
 	}
 }
 
@@ -55,28 +45,5 @@ RequestResult RoomAdminRequestHandler::closeRoom(RequestInfo info)
 	{
 		JsonResponsePacketSerializer::serializeCloseRoomResponse(resp),
 		this->m_handlerFactory.createMenuRequestHandler(this->m_user->getUsername())
-	};
-}
-
-RequestResult RoomAdminRequestHandler::leaveRoom(RequestInfo info)
-{
-	LeaveRoomResponse resp{ ERROR_CODE };
-	return RequestResult
-	{
-		JsonResponsePacketSerializer::serializeLeaveRoomResponse(resp),
-		this->m_handlerFactory.createMenuRequestHandler(this->m_user->getUsername())
-	};
-}
-
-RequestResult RoomAdminRequestHandler::startGame(RequestInfo info)
-{
-	// Once GameManger is implemented -> we call it to actually start the game.
-	StartGameResponse resp{ SUCCEEDED };
-	m_room.setHasGameBegun(true);
-
-	return RequestResult
-	{
-		JsonResponsePacketSerializer::serializeStartGameResponse(resp),
-		this->m_handlerFactory.createMenuRequestHandler(m_user->getUsername())
 	};
 }

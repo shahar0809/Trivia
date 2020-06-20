@@ -21,12 +21,13 @@ namespace ClientWPF
     /// <summary>
     /// Interaction logic for RoomAdmin.xaml
     /// </summary>
+    /// 
+
     public partial class RoomAdmin : Window
     {
         private RoomData roomData;
         private bool isAdmin;
         private NetworkStream clientStream;
-        private bool stopUpdatingUsers;
 
         public RoomAdmin(RoomData data, NetworkStream clientStream, bool isAdmin)
         {
@@ -34,7 +35,6 @@ namespace ClientWPF
             this.roomData= data;
             this.clientStream = clientStream;
             this.isAdmin = isAdmin;
-            this.stopUpdatingUsers = false;
 
             if (!isAdmin)
             {
@@ -52,30 +52,47 @@ namespace ClientWPF
             displayTimePerQuestion.Text = roomData.TimeForQuestion.ToString();
             displayRoomName.Text = roomData.RoomName;
             roomName.Text = roomData.RoomName;
+
             playersInRoom.ItemsSource = updateRoomPlayers();
         }
 
         private void closeRoom_Click(object sender, RoutedEventArgs e)
         {
-            //Should send close room request.
-            stopUpdatingUsers = true;
-            var mainWindow = new MainWindow(this.clientStream);
-            mainWindow.Show();
-            this.Close();
+            // Sends a Close Room request to the server.
+            Response resp = Communicator.ManageSendAndGetData<Response>("", this.clientStream, Codes.CLOSE_ROOM_CODE);
+
+            if (resp.status != (int)Codes.ERROR_CODE)
+            {
+                var mainWindow = new MainWindow(this.clientStream);
+                mainWindow.Show();
+                this.Close();
+            }
+            else
+            {
+                MessageBox.Show("Couldn't close the room!");
+            }
+            
         }
 
         private void leaveRoom_Click(object sender, RoutedEventArgs e)
         {
-            stopUpdatingUsers = true;
+            Response resp = Communicator.ManageSendAndGetData<Response>("", this.clientStream, Codes.LEAVE_ROOM_CODE);
 
-            var mainWindow = new MainWindow(this.clientStream);
-            mainWindow.Show();
-            this.Close();
+            if (resp.status != (int)Codes.ERROR_CODE)
+            {
+                var mainWindow = new MainWindow(this.clientStream);
+                mainWindow.Show();
+                this.Close();
+            }
+            else
+            {
+                MessageBox.Show("Couldn't leave the room!");
+            }
         }
 
         private void startGame_Click(object sender, RoutedEventArgs e)
         {
-            stopUpdatingUsers = true;
+            // About to be updated in the next version.
         }
 
         public List<string> updateRoomPlayers()
