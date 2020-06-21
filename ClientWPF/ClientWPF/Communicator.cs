@@ -49,7 +49,7 @@ namespace ClientWPF
 
             // Get response.
             string s = Helper.GetData(clientStream);
-            MessageBox.Show(s);
+            //MessageBox.Show(s);
             if(s[0] == SIGN_FOR_TWO_BYTES_CODE)
                 textStrData = s.Substring(DATA_START_INDEX+1);
             else
