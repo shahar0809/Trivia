@@ -27,7 +27,7 @@ RequestResult RoomParticipantRequestHandler::getRoomState(RequestInfo info)
 
 	return RequestResult
 	{
-		JsonResponsePacketSerializer::serializeGetRoomStateResponse(resp),nullptr
+		JsonResponsePacketSerializer::serializeGetRoomStateResponse(resp), nullptr
 	};
 }
 
