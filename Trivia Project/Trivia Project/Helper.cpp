@@ -40,6 +40,13 @@ std::string Helper::getAllTheSocket(SOCKET sc)
 	// Getting the code of the request
 	std::string	buffer = Helper::getPartFromSocket(sc, CODE_LEN_IN_BYTES * SIZE_OF_BYTE);
 
+	//Case code len bigger than 1
+	if (buffer == "9")
+	{
+		buffer+= Helper::getPartFromSocket(sc, CODE_LEN_IN_BYTES * SIZE_OF_BYTE);
+	}
+
+
 	// Getting the data length
 	std::string dataLength = Helper::getPartFromSocket(sc, DATA_LEN_IN_BYTES * SIZE_OF_BYTE);
 	buffer += dataLength;

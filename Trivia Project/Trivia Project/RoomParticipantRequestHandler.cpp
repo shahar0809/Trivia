@@ -10,21 +10,6 @@ RoomParticipantRequestHandler::RoomParticipantRequestHandler(Room& room, LoggedU
 	m_roomManager = roomManager;
 }
 
-RequestResult RoomParticipantRequestHandler::startGame(RequestInfo info)
-{
-	// Once GameManger is implemented -> we call it to actually start the game.
-	StartGameResponse resp{ SUCCEEDED };
-
-	return RequestResult
-	{
-		JsonResponsePacketSerializer::serializeStartGameResponse(resp),
-		this->m_handlerFactory.createRoomMemberRequestHandler(
-			this->m_room,
-			this->m_user, 
-			&this->m_handlerFactory,this->m_roomManager)
-	};
-}
-
 RequestResult RoomParticipantRequestHandler::getRoomState(RequestInfo info)
 {
 	RoomData roomData = m_room.getMetadata();
@@ -42,8 +27,7 @@ RequestResult RoomParticipantRequestHandler::getRoomState(RequestInfo info)
 
 	return RequestResult
 	{
-		JsonResponsePacketSerializer::serializeGetRoomStateResponse(resp),
-		this->m_handlerFactory.createRoomMemberRequestHandler(this->m_room,this->m_user,&this->m_handlerFactory,this->m_roomManager)
+		JsonResponsePacketSerializer::serializeGetRoomStateResponse(resp),nullptr
 	};
 }
 

@@ -16,6 +16,10 @@ struct RequestInfo
 	RequestInfo(std::string buff)
 	{
 		requestId = (int)(buff[0] - '0');
+		if (requestId == 9)
+		{
+			requestId = 9 + int(buff[1] - '0');
+		}
 		receivalTime = std::time(0);
 		buffer = std::vector<uint8_t>(buff.begin() + CODE_LEN_IN_BYTES + DATA_LEN_IN_BYTES, buff.end());
 	}

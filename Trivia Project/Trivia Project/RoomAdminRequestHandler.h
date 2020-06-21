@@ -9,6 +9,7 @@ public:
 	bool isRequestRelevant(RequestInfo info);
 	RequestResult handleRequest(RequestInfo info, SOCKET socket);
 
+	RequestResult startGame(RequestInfo info);
 	RequestResult closeRoom(RequestInfo info);
 };
 

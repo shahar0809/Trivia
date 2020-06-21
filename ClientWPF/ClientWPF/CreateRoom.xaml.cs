@@ -63,7 +63,8 @@ namespace ClientWPF
             };
 
             string json = JsonConvert.SerializeObject(createRoom, Formatting.Indented);
-            CreateRoomResponse createRoomResponse = Communicator.ManageSendAndGetData<CreateRoomResponse>(json, clientStream, Codes.CREATE_ROOM_CODE);
+            CreateRoomResponse createRoomResponse = Communicator.ManageSendAndGetData<CreateRoomResponse>(
+                json, clientStream, (int)Codes.CREATE_ROOM_CODE);
 
             if (createRoomResponse.Status == ERROR_CODE)
             {

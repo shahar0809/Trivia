@@ -12,6 +12,7 @@ namespace ClientWPF
     class Communicator
     {
         public const int SIZE_OF_DATA_LEN = 4;
+        public const char SIGN_FOR_TWO_BYTES_CODE = '9';
         public const int DATA_START_INDEX = 5;
         public const int DATA_END_INDEX = 14;
 
@@ -38,16 +39,22 @@ namespace ClientWPF
             clientStream.Flush();
         }
 
-        public static T ManageSendAndGetData<T>(string json, NetworkStream clientStream, Codes code)
+        public static T ManageSendAndGetData<T>(string json, NetworkStream clientStream, int code)
         {
+            string textStrData;
+
             // Edit and send request.
-            json = EditRequest((int)code, json);
+            json = EditRequest(code, json);
             SendRequest(json, clientStream);
 
             // Get response.
             string s = Helper.GetData(clientStream);
             MessageBox.Show(s);
-            string textStrData = s.Substring(DATA_START_INDEX);
+            if(s[0] == SIGN_FOR_TWO_BYTES_CODE)
+                textStrData = s.Substring(DATA_START_INDEX+1);
+            else
+                textStrData = s.Substring(DATA_START_INDEX);
+
             T response = JsonConvert.DeserializeObject<T>(textStrData);
             return response;
         }

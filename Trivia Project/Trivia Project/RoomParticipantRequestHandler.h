@@ -16,7 +16,6 @@ public:
 	virtual RequestResult handleRequest(RequestInfo info, SOCKET socket) = 0;
 	virtual bool isRequestRelevant(RequestInfo info) = 0;
 
-	RequestResult startGame(RequestInfo info);
 	RequestResult getRoomState(RequestInfo info);
 
 protected:

@@ -3,9 +3,6 @@
 #include "JsonRequestPacketDeserializer.h"
 #include "StatisticsManager.h"
 #include "RequestHandlerFactory.h"
-//#include "RoomParticipantRequestHandler.h"
-//#include "RoomMemberRequestHandler.h"
-//#include "RoomAdminRequestHandler.h"
 
 class RequestHandlerFactory;
 class RoomMemberRequestHandler;

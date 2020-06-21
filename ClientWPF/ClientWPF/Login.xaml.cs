@@ -51,7 +51,7 @@ namespace ClientWPF
 
             // Edit and send login request.
             string json = JsonConvert.SerializeObject(login, Formatting.Indented);
-            Response loginResponse = Communicator.ManageSendAndGetData<Response>(json, clientStream, Codes.LOGIN_CODE);
+            Response loginResponse = Communicator.ManageSendAndGetData<Response>(json, clientStream, (int)Codes.LOGIN_CODE);
 
             if (loginResponse.status == ERROR_CODE)
             {

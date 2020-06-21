@@ -52,7 +52,7 @@ namespace ClientWPF
             this.clientStream = clientStream;
 
             // Sending message.
-            stats = Communicator.ManageSendAndGetData<Statistics>("", clientStream, Codes.GET_STATISTICS_CODE);
+            stats = Communicator.ManageSendAndGetData<Statistics>("", clientStream, (int)Codes.GET_STATISTICS_CODE);
         }
 
         private void myStatisticsButton_Click(object sender, RoutedEventArgs e)

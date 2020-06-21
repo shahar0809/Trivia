@@ -24,6 +24,13 @@ RequestResult RoomAdminRequestHandler::handleRequest(RequestInfo info, SOCKET so
 
 		case GET_ROOM_STATE_CODE:
 			return getRoomState(info);
+
+		case GET_PLAYERS_IN_ROOM_CODE:
+		{
+			RequestResult res = this->m_handlerFactory.createMenuRequestHandler(m_user->getUsername())->getPlayersInRoom(info);
+			res.newHandler = this->m_handlerFactory.createRoomAdminRequestHandler(m_room, m_user, &m_handlerFactory, m_roomManager);
+			return res;
+		}
 	}
 }
 
@@ -55,5 +62,20 @@ RequestResult RoomAdminRequestHandler::closeRoom(RequestInfo info)
 	{
 		JsonResponsePacketSerializer::serializeCloseRoomResponse(resp),
 		this->m_handlerFactory.createMenuRequestHandler(this->m_user->getUsername())
+	};
+}
+
+RequestResult RoomAdminRequestHandler::startGame(RequestInfo info)
+{
+	// Once GameManger is implemented -> we call it to actually start the game.
+	StartGameResponse resp{ SUCCEEDED };
+
+	return RequestResult
+	{
+		JsonResponsePacketSerializer::serializeStartGameResponse(resp),
+		this->m_handlerFactory.createRoomAdminRequestHandler(
+			this->m_room,
+			this->m_user,
+			&this->m_handlerFactory,this->m_roomManager)
 	};
 }
