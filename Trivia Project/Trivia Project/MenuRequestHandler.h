@@ -3,12 +3,13 @@
 #include "JsonRequestPacketDeserializer.h"
 #include "StatisticsManager.h"
 #include "RequestHandlerFactory.h"
-#include "RoomParticipantRequestHandler.h"
-#include "RoomMemberRequestHandler.h"
-#include "RoomAdminRequestHandler.h"
+//#include "RoomParticipantRequestHandler.h"
+//#include "RoomMemberRequestHandler.h"
+//#include "RoomAdminRequestHandler.h"
 
 class RequestHandlerFactory;
-class RoomParticipantRequestHandler;
+class RoomMemberRequestHandler;
+class RoomAdminRequestHandler;
 
 class MenuRequestHandler : public IRequestHandler
 {

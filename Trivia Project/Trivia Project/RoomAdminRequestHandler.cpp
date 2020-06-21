@@ -1,5 +1,7 @@
 #include "RoomAdminRequestHandler.h"
 
+
+
 RoomAdminRequestHandler::RoomAdminRequestHandler(Room& room, LoggedUser* user, RequestHandlerFactory* handlerFactory, RoomManager* roomManager) :
 	RoomParticipantRequestHandler(room, user, handlerFactory, roomManager)
 {

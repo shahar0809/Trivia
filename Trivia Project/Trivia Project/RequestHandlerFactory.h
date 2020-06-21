@@ -8,8 +8,6 @@ class MenuRequestHandler;
 class RoomMemberRequestHandler;
 class RoomAdminRequestHandler;
 class LoginRequestHandler;
-class RoomMemberRequestHandler;
-class RoomAdminRequestHandler;
 
 class RequestHandlerFactory
 {

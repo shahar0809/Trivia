@@ -1,4 +1,6 @@
 #include "MenuRequestHandler.h"
+#include "RoomMemberRequestHandler.h"
+#include "RoomAdminRequestHandler.h"
 
 
 MenuRequestHandler::MenuRequestHandler(std::string username, RequestHandlerFactory* m_handlerFactory)
