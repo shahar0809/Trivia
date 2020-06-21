@@ -76,20 +76,20 @@ namespace ClientWPF
             { 
                 int roomId = createRoomResponse.RoomId;
 
-            RoomData roomData = new RoomData
-            {
-                RoomId = roomId,
-                NumOfplayers = createRoom.NumOfPlayers,
-                NumOfQuestions = createRoom.NumOfQuestions,
-                RoomName = createRoom.RoomName,
-                TimeForQuestion = createRoom.TimeForQuestion,
-                IsActive = 1
-            };
+                RoomData roomData = new RoomData
+                {
+                    RoomId = roomId,
+                    NumOfplayers = createRoom.NumOfPlayers,
+                    NumOfQuestions = createRoom.NumOfQuestions,
+                    RoomName = createRoom.RoomName,
+                    TimeForQuestion = createRoom.TimeForQuestion,
+                    IsActive = 1
+                };
 
-            MessageBox.Show("about to open room admin.");
-            // Show the room details to the admin.
-            var roomAdmin = new RoomAdmin(roomData, clientStream, true);
-            roomAdmin.Show();
+                MessageBox.Show("about to open room admin.");
+                // Show the room details to the admin.
+                var roomAdmin = new RoomAdmin(roomData, clientStream, true);
+                roomAdmin.Show();
             }
             Close();
         }

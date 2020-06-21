@@ -54,11 +54,14 @@ namespace ClientWPF
             roomName.Text = roomData.RoomName;
 
             isChange = false;
-            
-            
-           Thread t = new Thread(() => updateRoomPlayers());
-            t.Start();
-           
+
+            /*Thread t = new Thread(() => updateRoomPlayers());
+            t.IsBackground = true;
+            t.Start();*/
+
+            Action updateList = new Action(updateRoomPlayers);
+            Dispatcher.BeginInvoke(updateList);
+
         }
 
         private void closeRoom_Click(object sender, RoutedEventArgs e)
