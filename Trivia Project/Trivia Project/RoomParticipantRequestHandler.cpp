@@ -31,3 +31,10 @@ RequestResult RoomParticipantRequestHandler::getRoomState(RequestInfo info)
 	};
 }
 
+RequestResult RoomParticipantRequestHandler::getPlayersInRoom(RequestInfo info)
+{
+	RequestResult res = this->m_handlerFactory.createMenuRequestHandler(m_user)->getPlayersInRoom(info);
+	res.newHandler = this->m_handlerFactory.createRoomAdminRequestHandler(m_room, m_user, &m_handlerFactory, m_roomManager);
+	return res;
+}
+

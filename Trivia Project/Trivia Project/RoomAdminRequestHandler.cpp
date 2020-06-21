@@ -22,6 +22,9 @@ RequestResult RoomAdminRequestHandler::handleRequest(RequestInfo info, SOCKET so
 
 		case GET_ROOM_STATE_CODE:
 			return getRoomState(info);
+
+		case GET_PLAYERS_IN_ROOM_CODE:
+			return getPlayersInRoom(info);
 	}
 }
 

@@ -17,6 +17,7 @@ public:
 	virtual bool isRequestRelevant(RequestInfo info) = 0;
 
 	RequestResult getRoomState(RequestInfo info);
+	RequestResult getPlayersInRoom(RequestInfo info);
 
 protected:
 	Room m_room;
