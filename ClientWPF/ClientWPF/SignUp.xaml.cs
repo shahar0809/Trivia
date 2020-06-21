@@ -54,7 +54,8 @@ namespace ClientWPF
 
             // Edit and send signUp request.
             string json = JsonConvert.SerializeObject(signUp, Formatting.Indented);
-            Response signUpResponse = Communicator.ManageSendAndGetData<Response>(json, clientStream, Codes.SIGN_UP_CODE);
+            Response signUpResponse = Communicator.ManageSendAndGetData<Response>(
+                json, clientStream, (int)Codes.SIGN_UP_CODE);
 
             if (signUpResponse.status == ERROR_CODE)
             {

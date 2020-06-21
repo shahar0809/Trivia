@@ -87,7 +87,7 @@ namespace ClientWPF
             string json = JsonConvert.SerializeObject(req);
 
             // Getting the players in the room changed
-            GetPlayersInRoomResponse resp = Communicator.ManageSendAndGetData<GetPlayersInRoomResponse>(json, clientStream, Codes.GET_PLAYERS_IN_ROOM_CODE);
+            GetPlayersInRoomResponse resp = Communicator.ManageSendAndGetData<GetPlayersInRoomResponse>(json, clientStream, (int)Codes.GET_PLAYERS_IN_ROOM_CODE);
 
             // Displaying the room players in a listBox
             playersInRoom.ItemsSource = resp.PlayersInRoom;
@@ -104,7 +104,7 @@ namespace ClientWPF
             string json = JsonConvert.SerializeObject(req);
 
             // Requesting to join the selected items
-            JoinRoomResponse resp = Communicator.ManageSendAndGetData<JoinRoomResponse>(json, clientStream, Codes.JOIN_ROOM_CODE);
+            JoinRoomResponse resp = Communicator.ManageSendAndGetData<JoinRoomResponse>(json, clientStream, (int)Codes.JOIN_ROOM_CODE);
 
             if (resp.Status == 0)
             {
@@ -137,7 +137,7 @@ namespace ClientWPF
         {
             GetRoomsResponse resp = Communicator.ManageSendAndGetData<GetRoomsResponse>("",
                     clientStream,
-                    Codes.GET_ROOM_CODE);
+                    (int)Codes.GET_ROOMS_CODE);
             List<string> rooms = new List<string>();
             try
             {

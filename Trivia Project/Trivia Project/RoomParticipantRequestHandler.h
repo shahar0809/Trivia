@@ -15,7 +15,6 @@ public:
 
 	virtual bool isRequestRelevant(RequestInfo info) = 0;
 
-	RequestResult startGame(RequestInfo info);
 	RequestResult getRoomState(RequestInfo info);
 
 protected:

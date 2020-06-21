@@ -9,6 +9,7 @@ public:
 	bool isRequestRelevant(RequestInfo info);
 	RequestResult handleRequest(RequestInfo info);
 
+	RequestResult startGame(RequestInfo info);
 	RequestResult closeRoom(RequestInfo info);
 };
 

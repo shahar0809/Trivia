@@ -59,7 +59,7 @@ namespace ClientWPF
         private void closeRoom_Click(object sender, RoutedEventArgs e)
         {
             // Sends a Close Room request to the server.
-            Response resp = Communicator.ManageSendAndGetData<Response>("", this.clientStream, Codes.CLOSE_ROOM_CODE);
+            Response resp = Communicator.ManageSendAndGetData<Response>("", this.clientStream, (int)RoomCodes.CLOSE_ROOM_CODE);
 
             if (resp.status != (int)Codes.ERROR_CODE)
             {
@@ -75,7 +75,7 @@ namespace ClientWPF
 
         private void leaveRoom_Click(object sender, RoutedEventArgs e)
         {
-            Response resp = Communicator.ManageSendAndGetData<Response>("", this.clientStream, Codes.LEAVE_ROOM_CODE);
+            Response resp = Communicator.ManageSendAndGetData<Response>("", this.clientStream, (int)RoomCodes.LEAVE_ROOM_CODE);
 
             if (resp.status != (int)Codes.ERROR_CODE)
             {
@@ -102,7 +102,7 @@ namespace ClientWPF
             GetPlayersInRoomResponse resp = Communicator.ManageSendAndGetData<GetPlayersInRoomResponse>(
                     JsonConvert.SerializeObject(request),
                     clientStream,
-                    Codes.GET_PLAYERS_IN_ROOM_CODE);
+                    (int)Codes.GET_PLAYERS_IN_ROOM_CODE);
 
             return resp.PlayersInRoom;
         }
