@@ -6,9 +6,10 @@ std::string LoggedUser::getUsername()
 	return this->m_username;
 }
 
-LoggedUser::LoggedUser(std::string userName)
+LoggedUser::LoggedUser(std::string userName, SOCKET socket)
 {
 	this->m_username = userName;
+	this->m_socket = socket;
 }
 
 bool LoggedUser::operator == (LoggedUser other)

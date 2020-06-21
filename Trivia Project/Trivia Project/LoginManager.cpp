@@ -5,7 +5,7 @@ bool LoginManager::signup(std::string userName, std::string password, std::strin
 	return this->m_database->addNewUser(userName, password, email);
 }
 
-bool LoginManager::login(std::string userName, std::string password)
+bool LoginManager::login(std::string userName, std::string password, SOCKET socket)
 {
 	// Checking if the user is already connected to the server
 	for (auto loggedUser : m_loggedUsers)
@@ -19,7 +19,7 @@ bool LoginManager::login(std::string userName, std::string password)
 	// If not, the log in credintals need to be checked
 	if (this->m_database->doesUserExist(userName) && this->m_database->doesPasswordMatch(userName, password))
 	{
-		this->m_loggedUsers.push_back(LoggedUser(userName));
+		this->m_loggedUsers.push_back(LoggedUser(userName, socket));
 		return true;
 	}
 	std::cerr << "User doesn't exist." << std::endl;

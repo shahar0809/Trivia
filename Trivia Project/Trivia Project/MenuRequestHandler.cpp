@@ -18,7 +18,7 @@ bool MenuRequestHandler::isRequestRelevant(RequestInfo info)
 	return info.requestId >= CREATE_ROOM_CODE && info.requestId <= LEAVE_ROOM_CODE;
 }
 
-RequestResult MenuRequestHandler::handleRequest(RequestInfo info)
+RequestResult MenuRequestHandler::handleRequest(RequestInfo info, SOCKET socket)
 {
 	switch (info.requestId)
 	{

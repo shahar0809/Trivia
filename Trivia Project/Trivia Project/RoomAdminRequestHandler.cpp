@@ -12,7 +12,7 @@ bool RoomAdminRequestHandler::isRequestRelevant(RequestInfo info)
 	return (info.requestId >= CLOSE_ROOM_CODE && info.requestId <= GET_ROOM_STATE_CODE) || info.requestId == GET_PLAYERS_IN_ROOM_CODE;
 }
 
-RequestResult RoomAdminRequestHandler::handleRequest(RequestInfo info)
+RequestResult RoomAdminRequestHandler::handleRequest(RequestInfo info, SOCKET socket)
 {
 	switch (info.requestId)
 	{
@@ -38,6 +38,7 @@ RequestResult RoomAdminRequestHandler::closeRoom(RequestInfo info)
 		// Removing all the players from the room
 		for (auto user : m_room.getAllUsers())
 		{
+			
 			// Remove the current player from the room.
 		}
 

@@ -12,7 +12,7 @@ bool RoomMemberRequestHandler::isRequestRelevant(RequestInfo info)
 		|| info.requestId == GET_PLAYERS_IN_ROOM_CODE;
 }
 
-RequestResult RoomMemberRequestHandler::handleRequest(RequestInfo info)
+RequestResult RoomMemberRequestHandler::handleRequest(RequestInfo info, SOCKET socket)
 {
 	switch (info.requestId)
 	{

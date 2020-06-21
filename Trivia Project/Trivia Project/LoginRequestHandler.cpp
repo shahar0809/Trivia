@@ -11,9 +11,21 @@ bool LoginRequestHandler::isRequestRelevant(RequestInfo info)
 	return info.requestId == LOGIN_CODE || info.requestId == SIGN_UP_CODE;
 }
 
-RequestResult LoginRequestHandler::handleRequest(RequestInfo info)
+RequestResult LoginRequestHandler::handleRequest(RequestInfo info, SOCKET socket)
 {
 	
+	if (info.requestId == LOGIN_CODE)
+	{
+		return login(info);
+	}
+	else if (info.requestId == SIGN_UP_CODE)
+	{
+		return signup(info, socket);
+	}
+}
+
+RequestResult LoginRequestHandler::handleRequest(RequestInfo info, SOCKET socket)
+{
 	if (info.requestId == LOGIN_CODE)
 	{
 		return login(info);
@@ -24,13 +36,13 @@ RequestResult LoginRequestHandler::handleRequest(RequestInfo info)
 	}
 }
 
-RequestResult LoginRequestHandler::login(RequestInfo info)
+RequestResult LoginRequestHandler::login(RequestInfo info, SOCKET socket)
 {
 	LoginRequest loginReq = JsonRequestPacketDeserializer::deserializeLoginRequest(info.buffer);
 	LoginResponse response;
 	RequestResult result;
 
-	if (m_loginManager.login(loginReq.username, loginReq.password))
+	if (m_loginManager.login(loginReq.username, loginReq.password, socket))
 	{
 		response.status = SUCCEEDED;
 		result.newHandler = m_handlerFactory.createMenuRequestHandler(loginReq.username); // Setting next state to the menu handler.
