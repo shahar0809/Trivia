@@ -19,9 +19,9 @@ LoggedUser* LoginManager::login(std::string userName, std::string password, SOCK
 	// If not, the log in credintals need to be checked
 	if (this->m_database->doesUserExist(userName) && this->m_database->doesPasswordMatch(userName, password))
 	{
-		LoggedUser user = LoggedUser(userName, socket);
-		this->m_loggedUsers.push_back(user);
-		return &user;
+		LoggedUser* user = new LoggedUser(userName, socket);
+		this->m_loggedUsers.push_back(*user);
+		return user;
 	}
 	std::cerr << "User doesn't exist." << std::endl;
 	return nullptr;
