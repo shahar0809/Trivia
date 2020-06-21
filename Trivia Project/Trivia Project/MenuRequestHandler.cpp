@@ -3,10 +3,10 @@
 #include "RoomAdminRequestHandler.h"
 
 
-MenuRequestHandler::MenuRequestHandler(std::string username, RequestHandlerFactory* m_handlerFactory)
+MenuRequestHandler::MenuRequestHandler(LoggedUser* user, RequestHandlerFactory* m_handlerFactory)
 {
 	this->m_handlerFactory = *m_handlerFactory;
-	this->m_user = new LoggedUser(username);
+	this->m_user = user;
 }
 
 MenuRequestHandler::~MenuRequestHandler()
@@ -84,7 +84,7 @@ RequestResult MenuRequestHandler::getRooms(RequestInfo info)
 	return RequestResult
 	{
 		JsonResponsePacketSerializer::serializeResponse(resp),
-		m_handlerFactory.createMenuRequestHandler(this->m_user->getUsername())
+		m_handlerFactory.createMenuRequestHandler(this->m_user)
 	};
 }
 
@@ -103,7 +103,7 @@ RequestResult MenuRequestHandler::getPlayersInRoom(RequestInfo info)
 	return RequestResult
 	{
 		JsonResponsePacketSerializer::serializeResponse(GetPlayersInRoomResponse { roomPlayers }),
-		m_handlerFactory.createMenuRequestHandler(this->m_user->getUsername())
+		m_handlerFactory.createMenuRequestHandler(this->m_user)
 	};
 }
 
@@ -135,7 +135,7 @@ RequestResult MenuRequestHandler::getStatistics(RequestInfo info)
 	return RequestResult
 	{
 		JsonResponsePacketSerializer::serializeResponse(resp),
-		m_handlerFactory.createMenuRequestHandler(this->m_user->getUsername())
+		m_handlerFactory.createMenuRequestHandler(this->m_user)
 	};
 
 }

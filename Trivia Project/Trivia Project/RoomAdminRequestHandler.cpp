@@ -1,7 +1,5 @@
 #include "RoomAdminRequestHandler.h"
 
-
-
 RoomAdminRequestHandler::RoomAdminRequestHandler(Room& room, LoggedUser* user, RequestHandlerFactory* handlerFactory, RoomManager* roomManager) :
 	RoomParticipantRequestHandler(room, user, handlerFactory, roomManager)
 {
@@ -27,7 +25,7 @@ RequestResult RoomAdminRequestHandler::handleRequest(RequestInfo info, SOCKET so
 
 		case GET_PLAYERS_IN_ROOM_CODE:
 		{
-			RequestResult res = this->m_handlerFactory.createMenuRequestHandler(m_user->getUsername())->getPlayersInRoom(info);
+			RequestResult res = this->m_handlerFactory.createMenuRequestHandler(m_user)->getPlayersInRoom(info);
 			res.newHandler = this->m_handlerFactory.createRoomAdminRequestHandler(m_room, m_user, &m_handlerFactory, m_roomManager);
 			return res;
 		}
@@ -61,7 +59,7 @@ RequestResult RoomAdminRequestHandler::closeRoom(RequestInfo info)
 	return RequestResult
 	{
 		JsonResponsePacketSerializer::serializeCloseRoomResponse(resp),
-		this->m_handlerFactory.createMenuRequestHandler(this->m_user->getUsername())
+		this->m_handlerFactory.createMenuRequestHandler(this->m_user)
 	};
 }
 

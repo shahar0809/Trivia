@@ -30,8 +30,8 @@ struct RequestResult;
 class IRequestHandler
 {
 public:
-	virtual bool isRequestRelevant(RequestInfo info, SOCKET socket) = 0;
-	virtual RequestResult handleRequest(RequestInfo) = 0;
+	virtual bool isRequestRelevant(RequestInfo info) = 0;
+	virtual RequestResult handleRequest(RequestInfo, SOCKET socket) = 0;
 };
 
 class IRequestHandler;

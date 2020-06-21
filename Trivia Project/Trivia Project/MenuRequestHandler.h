@@ -11,7 +11,7 @@ class RoomAdminRequestHandler;
 class MenuRequestHandler : public IRequestHandler
 {
 public:
-	MenuRequestHandler(std::string username, RequestHandlerFactory *m_handlerFactory);
+	MenuRequestHandler(LoggedUser* user, RequestHandlerFactory *m_handlerFactory);
 	~MenuRequestHandler();
 
 	bool isRequestRelevant(RequestInfo info);
@@ -19,7 +19,7 @@ public:
 	RequestResult getPlayersInRoom(RequestInfo info);
 
 private:
-	LoggedUser * m_user;
+	LoggedUser* m_user;
 	RequestHandlerFactory  m_handlerFactory;
 
 	RequestResult logout(RequestInfo info);

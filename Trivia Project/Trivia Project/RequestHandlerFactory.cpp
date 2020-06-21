@@ -33,9 +33,9 @@ LoginManager& RequestHandlerFactory::getLoginManger()
 	return this->m_loginManager;
 }
 
-MenuRequestHandler* RequestHandlerFactory::createMenuRequestHandler(std::string username)
+MenuRequestHandler* RequestHandlerFactory::createMenuRequestHandler(LoggedUser* user)
 {
-	return new MenuRequestHandler(username, this);
+	return new MenuRequestHandler(user, this);
 }
 
 StatisticsManager& RequestHandlerFactory::getStatisticsManager()
