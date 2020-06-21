@@ -1,7 +1,7 @@
 #include "RoomMemberRequestHandler.h"
 
 
-RoomMemberRequestHandler::RoomMemberRequestHandler(Room& room, LoggedUser* user, RequestHandlerFactory* handlerFactory, RoomManager* roomManager) 
+RoomMemberRequestHandler::RoomMemberRequestHandler(Room* room, LoggedUser* user, RequestHandlerFactory* handlerFactory, RoomManager* roomManager) 
 	: RoomParticipantRequestHandler(room, user, handlerFactory, roomManager)
 {
 }
@@ -30,7 +30,7 @@ RequestResult RoomMemberRequestHandler::leaveRoom(RequestInfo info)
 {
 	LeaveRoomResponse resp;
 
-	if (this->m_room.removeUser(*(this->m_user)))
+	if (this->m_room->removeUser(*(this->m_user)))
 	{
 		resp.status = SUCCEEDED;
 	}
@@ -43,4 +43,11 @@ RequestResult RoomMemberRequestHandler::leaveRoom(RequestInfo info)
 		JsonResponsePacketSerializer::serializeLeaveRoomResponse(resp),
 		m_handlerFactory.createMenuRequestHandler(m_user)
 	};
+}
+
+RequestResult RoomMemberRequestHandler::getPlayersInRoom(RequestInfo info)
+{
+	RequestResult res = this->m_handlerFactory.createMenuRequestHandler(m_user)->getPlayersInRoom(info);
+	res.newHandler = this->m_handlerFactory.createRoomMemberRequestHandler(m_room, m_user, &m_handlerFactory, m_roomManager);
+	return res;
 }

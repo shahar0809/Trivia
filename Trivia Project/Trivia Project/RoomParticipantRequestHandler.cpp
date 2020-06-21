@@ -2,7 +2,7 @@
 #include "RoomAdminRequestHandler.h"
 #include "RoomMemberRequestHandler.h"
 
-RoomParticipantRequestHandler::RoomParticipantRequestHandler(Room& room, LoggedUser* user, RequestHandlerFactory* handlerFactory, RoomManager* roomManager)
+RoomParticipantRequestHandler::RoomParticipantRequestHandler(Room* room, LoggedUser* user, RequestHandlerFactory* handlerFactory, RoomManager* roomManager)
 {
 	this->m_room = room;
 	m_user = user;
@@ -12,15 +12,15 @@ RoomParticipantRequestHandler::RoomParticipantRequestHandler(Room& room, LoggedU
 
 RequestResult RoomParticipantRequestHandler::getRoomState(RequestInfo info)
 {
-	RoomData roomData = m_room.getMetadata();
+	RoomData roomData = m_room->getMetadata();
 
 	// I'm not sure when the status is FAILED
 
 	GetRoomStateResponse resp
 	{
 		SUCCEEDED,
-		m_room.getHasGameBegun(),
-		m_room.getAllUsernames(),
+		m_room->getHasGameBegun(),
+		m_room->getAllUsernames(),
 		roomData.numOfQuestions,
 		roomData.timeForQuestion
 	};
@@ -29,12 +29,5 @@ RequestResult RoomParticipantRequestHandler::getRoomState(RequestInfo info)
 	{
 		JsonResponsePacketSerializer::serializeGetRoomStateResponse(resp), nullptr
 	};
-}
-
-RequestResult RoomParticipantRequestHandler::getPlayersInRoom(RequestInfo info)
-{
-	RequestResult res = this->m_handlerFactory.createMenuRequestHandler(m_user)->getPlayersInRoom(info);
-	res.newHandler = this->m_handlerFactory.createRoomAdminRequestHandler(m_room, m_user, &m_handlerFactory, m_roomManager);
-	return res;
 }
 

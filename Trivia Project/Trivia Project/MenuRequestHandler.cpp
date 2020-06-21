@@ -157,9 +157,12 @@ RequestResult MenuRequestHandler::joinRoom(RequestInfo info)
 		resp.status = SUCCEEDED;
 	}
 
-	return RequestResult{ JsonResponsePacketSerializer::serializeResponse(resp),
-		m_handlerFactory.createRoomMemberRequestHandler(*this->m_handlerFactory.getRoomManager()->getRoom(joinReq.roomId),
-			this->m_user,&this->m_handlerFactory,this->m_handlerFactory.getRoomManager())};
+	return RequestResult
+	{ 
+		JsonResponsePacketSerializer::serializeResponse(resp),
+		m_handlerFactory.createRoomMemberRequestHandler(this->m_handlerFactory.getRoomManager()->getRoom(joinReq.roomId),
+			this->m_user,&this->m_handlerFactory,this->m_handlerFactory.getRoomManager())
+	};
 }
 
 RequestResult MenuRequestHandler::createRoom(RequestInfo info)
@@ -180,7 +183,7 @@ RequestResult MenuRequestHandler::createRoom(RequestInfo info)
 		return RequestResult
 		{ 
 			JsonResponsePacketSerializer::serializeResponse(resp),
-			m_handlerFactory.createRoomAdminRequestHandler(*room, m_user, &m_handlerFactory, m_handlerFactory.getRoomManager())
+			m_handlerFactory.createRoomAdminRequestHandler(room, m_user, &m_handlerFactory, m_handlerFactory.getRoomManager())
 		};
 	}
 	
@@ -189,7 +192,7 @@ RequestResult MenuRequestHandler::createRoom(RequestInfo info)
 	return RequestResult
 	{
 		JsonResponsePacketSerializer::serializeResponse(resp),
-		m_handlerFactory.createRoomAdminRequestHandler(*room, m_user, &m_handlerFactory, m_handlerFactory.getRoomManager())
+		m_handlerFactory.createRoomAdminRequestHandler(room, m_user, &m_handlerFactory, m_handlerFactory.getRoomManager())
 	};
 }
 

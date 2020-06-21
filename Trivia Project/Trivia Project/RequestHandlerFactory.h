@@ -18,8 +18,8 @@ public:
 
 	LoginRequestHandler* createLoginRequestHandler();
 	MenuRequestHandler* createMenuRequestHandler(LoggedUser* user);
-	RoomMemberRequestHandler* createRoomMemberRequestHandler(Room& room, LoggedUser* user, RequestHandlerFactory* handlerFactory, RoomManager* roomManger);
-	RoomAdminRequestHandler* createRoomAdminRequestHandler(Room& room, LoggedUser* user, RequestHandlerFactory* handlerFactory, RoomManager* roomManger);
+	RoomMemberRequestHandler* createRoomMemberRequestHandler(Room* room, LoggedUser* user, RequestHandlerFactory* handlerFactory, RoomManager* roomManger);
+	RoomAdminRequestHandler* createRoomAdminRequestHandler(Room* room, LoggedUser* user, RequestHandlerFactory* handlerFactory, RoomManager* roomManger);
 	LoginManager& getLoginManger();
 	StatisticsManager& getStatisticsManager();
 	RoomManager* getRoomManager();

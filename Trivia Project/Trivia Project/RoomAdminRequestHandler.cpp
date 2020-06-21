@@ -1,6 +1,6 @@
 #include "RoomAdminRequestHandler.h"
 
-RoomAdminRequestHandler::RoomAdminRequestHandler(Room& room, LoggedUser* user, RequestHandlerFactory* handlerFactory, RoomManager* roomManager) :
+RoomAdminRequestHandler::RoomAdminRequestHandler(Room* room, LoggedUser* user, RequestHandlerFactory* handlerFactory, RoomManager* roomManager) :
 	RoomParticipantRequestHandler(room, user, handlerFactory, roomManager)
 {
 }
@@ -34,17 +34,17 @@ RequestResult RoomAdminRequestHandler::closeRoom(RequestInfo info)
 	CloseRoomResponse resp;
 
 	// Removing last player from the room
-	if (this->m_room.removeUser(*(this->m_user)))
+	if (this->m_room->removeUser(*(this->m_user)))
 	{
 		LeaveRoomResponse leaveRoom{ SUCCEEDED };
 		// Removing all the players from the room
-		for (auto user : m_room.getAllUsers())
+		for (auto user : m_room->getAllUsers())
 		{
 			// Remove the current player from the room.
 			Helper::sendData(user.m_socket, JsonResponsePacketSerializer::serializeLeaveRoomResponse(leaveRoom));
 		}
 
-		m_roomManager->deleteRoom(m_room.getMetadata().id); // Deleting the room
+		m_roomManager->deleteRoom(m_room->getMetadata().id); // Deleting the room
 
 		resp.status = SUCCEEDED;
 	}
@@ -73,4 +73,11 @@ RequestResult RoomAdminRequestHandler::startGame(RequestInfo info)
 			this->m_user,
 			&this->m_handlerFactory,this->m_roomManager)
 	};
+}
+
+RequestResult RoomAdminRequestHandler::getPlayersInRoom(RequestInfo info)
+{
+	RequestResult res = this->m_handlerFactory.createMenuRequestHandler(m_user)->getPlayersInRoom(info);
+	res.newHandler = this->m_handlerFactory.createRoomAdminRequestHandler(m_room, m_user, &m_handlerFactory, m_roomManager);
+	return res;
 }
