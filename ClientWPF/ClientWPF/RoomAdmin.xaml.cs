@@ -28,7 +28,7 @@ namespace ClientWPF
         private RoomData roomData;
         private bool isAdmin;
         private NetworkStream clientStream;
-
+        private bool isChange;
         public RoomAdmin(RoomData data, NetworkStream clientStream, bool isAdmin)
         {
             InitializeComponent();
@@ -53,11 +53,17 @@ namespace ClientWPF
             displayRoomName.Text = roomData.RoomName;
             roomName.Text = roomData.RoomName;
 
-            playersInRoom.ItemsSource = updateRoomPlayers();
+            isChange = false;
+            
+            
+           Thread t = new Thread(() => updateRoomPlayers());
+            t.Start();
+           
         }
 
         private void closeRoom_Click(object sender, RoutedEventArgs e)
         {
+            isChange = true;
             // Sends a Close Room request to the server.
             Response resp = Communicator.ManageSendAndGetData<Response>("", this.clientStream, (int)RoomCodes.CLOSE_ROOM_CODE);
 
@@ -75,6 +81,7 @@ namespace ClientWPF
 
         private void leaveRoom_Click(object sender, RoutedEventArgs e)
         {
+            isChange = true;
             Response resp = Communicator.ManageSendAndGetData<Response>("", this.clientStream, (int)RoomCodes.LEAVE_ROOM_CODE);
 
             if (resp.status != (int)Codes.ERROR_CODE)
@@ -91,25 +98,27 @@ namespace ClientWPF
 
         private void startGame_Click(object sender, RoutedEventArgs e)
         {
+            isChange = true;
             // About to be updated in the next version.
         }
 
-        public List<string> updateRoomPlayers()
+        public void updateRoomPlayers()
         {
             // Getting the players connected to the room
             GetPlayersInRoomRequest request = new GetPlayersInRoomRequest { RoomId = this.roomData.RoomId };
 
-            GetPlayersInRoomResponse resp = Communicator.ManageSendAndGetData<GetPlayersInRoomResponse>(
+            while(!isChange)
+            {
+                GetPlayersInRoomResponse resp = Communicator.ManageSendAndGetData<GetPlayersInRoomResponse>(
                     JsonConvert.SerializeObject(request),
                     clientStream,
                     (int)Codes.GET_PLAYERS_IN_ROOM_CODE);
 
-            return resp.PlayersInRoom;
+                playersInRoom.ItemsSource = resp.PlayersInRoom;
+               
+                Thread.Sleep(300);
+            }
         }
 
-        private void refreshPlayers_Click(object sender, RoutedEventArgs e)
-        {
-            playersInRoom.ItemsSource = updateRoomPlayers();
-        }
     }
 }
