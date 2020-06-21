@@ -33,7 +33,14 @@ RequestResult RoomAdminRequestHandler::closeRoom(RequestInfo info)
 	// Removing last player from the room
 	if (this->m_room.removeUser(*(this->m_user)))
 	{
+		// Removing all the players from the room
+		for (auto user : m_room.getAllUsers())
+		{
+			// Remove the current player from the room.
+		}
+
 		m_roomManager->deleteRoom(m_room.getMetadata().id); // Deleting the room
+
 		resp.status = SUCCEEDED;
 	}
 	else

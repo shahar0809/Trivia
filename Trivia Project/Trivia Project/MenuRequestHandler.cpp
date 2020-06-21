@@ -165,7 +165,7 @@ RequestResult MenuRequestHandler::createRoom(RequestInfo info)
 	CreateRoomRequest createReq = JsonRequestPacketDeserializer::deserializeCreateRoomRequest(info.buffer);
 	RoomManager* roomManager = m_handlerFactory.getRoomManager();
 	CreateRoomResponse resp;
-	Room* room;
+	Room* room = nullptr;
 
 	try
 	{

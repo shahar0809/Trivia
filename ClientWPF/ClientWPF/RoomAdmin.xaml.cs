@@ -71,7 +71,6 @@ namespace ClientWPF
             {
                 MessageBox.Show("Couldn't close the room!");
             }
-            
         }
 
         private void leaveRoom_Click(object sender, RoutedEventArgs e)
