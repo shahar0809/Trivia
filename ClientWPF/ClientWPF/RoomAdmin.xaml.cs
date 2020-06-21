@@ -57,7 +57,7 @@ namespace ClientWPF
             
             
            Thread t = new Thread(() => updateRoomPlayers());
-            t.Start();
+            //t.Start();
            
         }
 
