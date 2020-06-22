@@ -1,4 +1,9 @@
 #pragma once
+<<<<<<< HEAD
+=======
+
+#include "MenuRequestHandler.h"
+>>>>>>> origin/develop
 #include "IRequestHandler.h"
 #include "JsonRequestPacketDeserializer.h"
 

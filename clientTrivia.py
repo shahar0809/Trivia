@@ -113,12 +113,21 @@ def login_without_signup():
         return True
 
 
+<<<<<<< HEAD
 def signup_with_same_username():
     send_sign_up_request("randomUser", "randomPassword", "randomEmail")
     receive_response()
 
     send_sign_up_request("randomUser", "randomPassword2", "randomEmail2")
     if receive_response() == SUCCESS_CODE:
+=======
+def signup_with_same_username(sock):
+    send_sign_up_request(sock, "randomUser1", "randomPassword1", "randomEmail1")
+    receive_response(sock)
+
+    send_sign_up_request(sock, "randomUser1", "randomPassword2", "randomEmail2")
+    if receive_response(sock) == SUCCESS_CODE:
+>>>>>>> origin/develop
         print("Test 2 failed. Succeeded to sign up with the same username.\n")
         return False
 
@@ -127,12 +136,21 @@ def signup_with_same_username():
         return True
 
 
+<<<<<<< HEAD
 def login_when_already_connected():
     send_login_request("randomUser", "randomPassword")
     receive_response()
 
     send_login_request("randomUser", "randomPassword")
     if receive_response() == SUCCESS_CODE:
+=======
+def login_when_already_connected(sock):
+    send_login_request(sock, "randomUser1", "randomPassword1")
+    receive_response(sock)
+
+    send_login_request(sock, "randomUser1", "randomPassword1")
+    if receive_response(sock) == SUCCESS_CODE:
+>>>>>>> origin/develop
         print("Test 3 failed. Succeeded to log in when the user is already connected.\n")
         return False
 
