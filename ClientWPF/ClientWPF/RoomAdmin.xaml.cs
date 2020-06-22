@@ -29,6 +29,7 @@ namespace ClientWPF
         private bool isAdmin;
         private NetworkStream clientStream;
         private BackgroundWorker worker = new BackgroundWorker();
+        private bool stopUpdating;
 
         public struct workerParameter
         {
@@ -41,6 +42,7 @@ namespace ClientWPF
             this.roomData= data;
             this.clientStream = clientStream;
             this.isAdmin = isAdmin;
+            stopUpdating = false;
 
             if (!isAdmin)
             {
@@ -74,9 +76,7 @@ namespace ClientWPF
 
             if (resp.status != (int)Codes.ERROR_CODE)
             {
-                var mainWindow = new MainWindow(this.clientStream);
-                mainWindow.Show();
-                this.Close();
+                stopUpdating = true;
             }
             else
             {
@@ -90,9 +90,7 @@ namespace ClientWPF
 
             if (resp.status != (int)Codes.ERROR_CODE)
             {
-                var mainWindow = new MainWindow(this.clientStream);
-                mainWindow.Show();
-                this.Close();
+                stopUpdating = true;
             }
             else
             {
@@ -110,7 +108,7 @@ namespace ClientWPF
             // Getting the players connected to the room
             GetPlayersInRoomRequest request = new GetPlayersInRoomRequest { RoomId = this.roomData.RoomId };
 
-            while(true)
+            while(!stopUpdating)
             {
                 // Requesting the players in the room
                 GetPlayersInRoomResponse resp = Communicator.ManageSendAndGetData<GetPlayersInRoomResponse>(
