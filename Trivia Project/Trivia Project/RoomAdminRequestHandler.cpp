@@ -30,28 +30,16 @@ RequestResult RoomAdminRequestHandler::handleRequest(RequestInfo info, SOCKET so
 
 RequestResult RoomAdminRequestHandler::closeRoom(RequestInfo info)
 {
-	// Assuming that in the client side, the admin already calls leaveRoom for every member, so that the only player in the room is the admin.
 	CloseRoomResponse resp;
 
-	// Removing last player from the room
-	if (this->m_room->removeUser(*(this->m_user)))
+	// Removing all players from the room
+	for (auto user : m_room->getAllUsers())
 	{
-		LeaveRoomResponse leaveRoom{ SUCCEEDED };
-		// Removing all the players from the room
-		for (auto user : m_room->getAllUsers())
-		{
-			// Remove the current player from the room.
-			Helper::sendData(user.m_socket, JsonResponsePacketSerializer::serializeLeaveRoomResponse(leaveRoom));
-		}
-
-		m_roomManager->deleteRoom(m_room->getMetadata().id); // Deleting the room
-
-		resp.status = SUCCEEDED;
+		this->m_room->removeUser(user);
 	}
-	else
-	{
-		resp.status = FAILED;
-	}
+
+	m_roomManager->deleteRoom(m_room->getMetadata().id); // Deleting the room
+	resp.status = SUCCEEDED;
 	
 	return RequestResult
 	{
