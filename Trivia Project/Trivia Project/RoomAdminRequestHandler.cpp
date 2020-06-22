@@ -32,14 +32,10 @@ RequestResult RoomAdminRequestHandler::closeRoom(RequestInfo info)
 {
 	CloseRoomResponse resp;
 
-	// Removing all players from the room
+	// Removing all the players from the room
 	for (auto user : m_room->getAllUsers())
 	{
-		// Removing all the players from the room
-		for (auto user : m_room->getAllUsers())
-		{
-			m_room->removeUser(user);
-		}
+		m_room->removeUser(user);
 	}
 
 	m_roomManager->deleteRoom(m_room->getMetadata().id); // Deleting the room
