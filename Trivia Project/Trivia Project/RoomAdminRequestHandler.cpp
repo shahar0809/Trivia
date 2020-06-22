@@ -32,24 +32,18 @@ RequestResult RoomAdminRequestHandler::closeRoom(RequestInfo info)
 {
 	CloseRoomResponse resp;
 
-	// Removing last player from the room
-	if (this->m_room->removeUser(*(this->m_user)))
+	// Removing all players from the room
+	for (auto user : m_room->getAllUsers())
 	{
-		LeaveRoomResponse leaveRoom{ SUCCEEDED };
 		// Removing all the players from the room
 		for (auto user : m_room->getAllUsers())
 		{
 			m_room->removeUser(user);
 		}
-
-		m_roomManager->deleteRoom(m_room->getMetadata().id); // Deleting the room
-
-		resp.status = SUCCEEDED;
 	}
-	else
-	{
-		resp.status = FAILED;
-	}
+
+	m_roomManager->deleteRoom(m_room->getMetadata().id); // Deleting the room
+	resp.status = SUCCEEDED;
 	
 	return RequestResult
 	{
