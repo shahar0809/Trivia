@@ -2,6 +2,7 @@
 #include <iomanip>
 #include <sstream>
 #include "JsonResponsePacketSerializer.h"
+#define SIGN_FOR_TWO_BITS_CODES 81
 
 std::string JsonResponsePacketSerializer::serializeResponse(ErrorResponse error)
 {
@@ -31,11 +32,14 @@ std::string JsonResponsePacketSerializer::serializeResponse(json j, int code)
 {
 	std::string binJson = j.dump(); // Getting the json as a string
 	std::vector<unsigned char> binData(binJson.begin(), binJson.end()); 
-	std::ostringstream stream;
+	std::ostringstream streamCode;
+	std::ostringstream streamDataLen;
 
-	stream << std::setw(DATA_LEN_IN_BYTES) << std::setfill('0') << binData.size();
+	streamCode << std::setw(CODE_LEN_IN_BYTES) << std::setfill('0') << std::to_string(code);
 
-	return std::to_string(code) + stream.str() + j.dump();
+	streamDataLen << std::setw(DATA_LEN_IN_BYTES) << std::setfill('0') << binData.size();
+
+	return streamCode.str() + streamDataLen.str() + j.dump();
 }
 
 std::string JsonResponsePacketSerializer::serializeResponse(LogoutResponse logout)
@@ -103,4 +107,34 @@ std::string JsonResponsePacketSerializer::parseVector(std::vector<std::string> v
 
 	// Returning the parsed string without the last char (extra delimeter)
 	return parsedVec.substr(0, parsedVec.size() - 1);
+}
+
+std::string JsonResponsePacketSerializer::serializeCloseRoomResponse(CloseRoomResponse closeRoom)
+{
+	json j;
+	j[jsonFields[STATUS]] = closeRoom.status;
+	return JsonResponsePacketSerializer::serializeResponse(j, CLOSE_ROOM_CODE+ SIGN_FOR_TWO_BITS_CODES);
+}
+std::string JsonResponsePacketSerializer::serializeStartGameResponse(StartGameResponse startGame)
+{
+	json j;
+	j[jsonFields[STATUS]] = startGame.status;
+	return JsonResponsePacketSerializer::serializeResponse(j, START_GAME_CODE+ SIGN_FOR_TWO_BITS_CODES);
+}
+std::string JsonResponsePacketSerializer::serializeGetRoomStateResponse(GetRoomStateResponse getRoomState)
+{
+	json j;
+	j[jsonFields[STATUS]] = getRoomState.status;
+	j[jsonFields[ANS_TIMEOUT]] = getRoomState.answerTimeout;
+	j[jsonFields[PLAYERS_IN_ROOM]] = getRoomState.players;
+	j[jsonFields[QUESTIONS_COUNT]] = getRoomState.questionsCount;
+	j[jsonFields[IS_ACTIVE]] = getRoomState.hasGameBegun;
+	return JsonResponsePacketSerializer::serializeResponse(j, GET_ROOM_STATE_CODE+ SIGN_FOR_TWO_BITS_CODES);
+	
+}
+std::string JsonResponsePacketSerializer::serializeLeaveRoomResponse(LeaveRoomResponse leaveRoom)
+{
+	json j;
+	j[jsonFields[STATUS]] = leaveRoom.status;
+	return JsonResponsePacketSerializer::serializeResponse(j, LEAVE_ROOM_CODE+ SIGN_FOR_TWO_BITS_CODES);
 }

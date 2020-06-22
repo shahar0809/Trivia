@@ -11,7 +11,7 @@ static const char* jsonFields[] = {
 	"Username", "Password", "Email",
 	"RoomId", 
 	"RoomName", "NumOfPlayers", "NumOfQuestions", "TimeForQuestion",
-	"Status", "PlayersInRoom", "Rooms", "UserStatistics", "HighScores","IsActive"
+	"Status", "PlayersInRoom", "Rooms", "UserStatistics", "HighScores", "IsActive"
 };
 
 enum JsonFieldsIndices 
@@ -65,6 +65,8 @@ struct CreateRoomRequest
 		};
 	}
 };
+
+
 
 class JsonRequestPacketDeserializer
 {

@@ -82,7 +82,7 @@
                 Grid.Column="2" Grid.Row="5"
                 Content="Join"
                 FontSize="36"
-                Margin="270, 35, 270, 0"
+                Margin="320, 35, 270, 0"
                 Click="joinRoomButton_Click"
                 IsEnabled="{Binding ElementName=availableRooms, 
                         Path=SelectedItems.Count}">
@@ -92,5 +92,12 @@
                 </Style>
             </Button.Resources>
         </Button>
+        <Button x:Name="CancelButton" 
+            Grid.Column="1" Grid.Row="5"
+            Content="Cancel"
+            FontSize="36"
+            Margin="200, 35, 480, 0"
+            Click="CancelButton_Click"
+            Grid.ColumnSpan="2"/>
     </Grid>
 </Window>

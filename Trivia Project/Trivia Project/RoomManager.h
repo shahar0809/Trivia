@@ -2,6 +2,7 @@
 #include <map>
 #include "Room.h"
 #include <sstream>
+#include <iostream>
 
 #define NOT_EXIST -1
 
@@ -11,8 +12,9 @@ public:
 	RoomManager() { roomId = 0; };
 
 	// Managing rooms
-	void createRoom(LoggedUser user, RoomData data);
+	Room* createRoom(LoggedUser user, RoomData data);
 	bool deleteRoom(int ID);
+
 	unsigned int getRoomState(int ID);
 	std::vector<RoomData> getRooms();
 	Room* getRoom(int roomId);

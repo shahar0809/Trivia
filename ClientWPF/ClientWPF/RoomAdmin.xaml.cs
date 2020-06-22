@@ -21,12 +21,20 @@ namespace ClientWPF
     /// <summary>
     /// Interaction logic for RoomAdmin.xaml
     /// </summary>
+    /// 
+
     public partial class RoomAdmin : Window
     {
         private RoomData roomData;
         private bool isAdmin;
         private NetworkStream clientStream;
-        private bool stopUpdatingUsers;
+        private BackgroundWorker worker = new BackgroundWorker();
+        private bool stopUpdating;
+
+        public struct workerParameter
+        {
+            public List<string> roomPlayers;
+        }
 
         public RoomAdmin(RoomData data, NetworkStream clientStream, bool isAdmin)
         {
@@ -34,7 +42,7 @@ namespace ClientWPF
             this.roomData= data;
             this.clientStream = clientStream;
             this.isAdmin = isAdmin;
-            this.stopUpdatingUsers = false;
+            stopUpdating = false;
 
             if (!isAdmin)
             {
@@ -52,48 +60,92 @@ namespace ClientWPF
             displayTimePerQuestion.Text = roomData.TimeForQuestion.ToString();
             displayRoomName.Text = roomData.RoomName;
             roomName.Text = roomData.RoomName;
-            playersInRoom.ItemsSource = updateRoomPlayers();
+
+            // Creating a background worker that constantly updates the players in the room.
+            worker.WorkerReportsProgress = true;
+            worker.DoWork += updateRoomPlayers;
+            worker.ProgressChanged += playersChanged;
+            worker.RunWorkerCompleted += leaveWindow;
+            worker.RunWorkerAsync();
         }
 
         private void closeRoom_Click(object sender, RoutedEventArgs e)
         {
-            //Should send close room request.
-            stopUpdatingUsers = true;
-            var mainWindow = new MainWindow(this.clientStream);
-            mainWindow.Show();
-            this.Close();
+            // Sends a Close Room request to the server.
+            Response resp = Communicator.ManageSendAndGetData<Response>("", this.clientStream, (int)Codes.CLOSE_ROOM_CODE);
+
+            if (resp.status != (int)Codes.ERROR_CODE)
+            {
+                stopUpdating = true;
+                //var mainWindow = new MainWindow(this.clientStream);
+                //mainWindow.Show();
+                //this.Close();
+            }
+            else
+            {
+                MessageBox.Show("Couldn't close the room!");
+            }
         }
 
         private void leaveRoom_Click(object sender, RoutedEventArgs e)
         {
-            stopUpdatingUsers = true;
+            Response resp = Communicator.ManageSendAndGetData<Response>("", this.clientStream, (int)Codes.LEAVE_ROOM_CODE);
 
+            if (resp.status != (int)Codes.ERROR_CODE)
+            {
+                stopUpdating = true;
+            }
+            else
+            {
+                MessageBox.Show("Couldn't leave the room!");
+            }
+        }
+
+        private void startGame_Click(object sender, RoutedEventArgs e)
+        {
+            // About to be updated in the next version.
+        }
+
+        public void updateRoomPlayers(object sender, DoWorkEventArgs e)
+        {
+            // Getting the players connected to the room
+            GetPlayersInRoomRequest request = new GetPlayersInRoomRequest { RoomId = this.roomData.RoomId };
+
+            while(!stopUpdating)
+            {
+                // Requesting the players in the room
+                GetPlayersInRoomResponse resp = Communicator.ManageSendAndGetData<GetPlayersInRoomResponse>(
+                    JsonConvert.SerializeObject(request),
+                    clientStream,
+                    (int)Codes.GET_PLAYERS_IN_ROOM_CODE);
+
+                // Room was closed
+                if (resp.PlayersInRoom == null || resp.PlayersInRoom.Count == 0)
+                {
+                    Response response = Communicator.ManageSendAndGetData<Response>("", this.clientStream, (int)Codes.LEAVE_ROOM_CODE);
+                    return;
+                }
+
+                workerParameter param = new workerParameter{ roomPlayers = resp.PlayersInRoom };
+                worker.ReportProgress(0, param);
+               
+                Thread.Sleep(600);
+            }
+        }
+
+        void leaveWindow(object sender, RunWorkerCompletedEventArgs e)
+        {
+            // Closing the Log in window and returing to the menu.
             var mainWindow = new MainWindow(this.clientStream);
             mainWindow.Show();
             this.Close();
         }
 
-        private void startGame_Click(object sender, RoutedEventArgs e)
+        void playersChanged(object sender, ProgressChangedEventArgs e)
         {
-            stopUpdatingUsers = true;
-        }
-
-        public List<string> updateRoomPlayers()
-        {
-            // Getting the players connected to the room
-            GetPlayersInRoomRequest request = new GetPlayersInRoomRequest { RoomId = this.roomData.RoomId };
-
-            GetPlayersInRoomResponse resp = Communicator.ManageSendAndGetData<GetPlayersInRoomResponse>(
-                    JsonConvert.SerializeObject(request),
-                    clientStream,
-                    Codes.GET_PLAYERS_IN_ROOM_CODE);
-
-            return resp.PlayersInRoom;
-        }
-
-        private void refreshPlayers_Click(object sender, RoutedEventArgs e)
-        {
-            playersInRoom.ItemsSource = updateRoomPlayers();
+            workerParameter param = (workerParameter)e.UserState;
+            List<string> roomPlayers = param.roomPlayers;
+            playersInRoom.ItemsSource = roomPlayers;
         }
     }
 }

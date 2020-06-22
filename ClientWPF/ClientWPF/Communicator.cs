@@ -1,7 +1,7 @@
 ﻿using System.Text;
 using System.Net.Sockets;
 using Newtonsoft.Json;
-
+using System.Windows;
 
 namespace ClientWPF
 {
@@ -12,7 +12,9 @@ namespace ClientWPF
     class Communicator
     {
         public const int SIZE_OF_DATA_LEN = 4;
-        public const int DATA_START_INDEX = 5;
+        public const int SIZE_OF_CODE = 2;
+        public const char SIGN_FOR_TWO_BYTES_CODE = '9';
+        public const int DATA_START_INDEX = 6;
         public const int DATA_END_INDEX = 14;
 
         private NetworkStream clientStream;
@@ -26,7 +28,7 @@ namespace ClientWPF
         {
             //Create the request acording to the protocol.
             return
-                Helper.ToBinary(code.ToString()) +
+                Helper.ToBinary(code.ToString().PadLeft(SIZE_OF_CODE, '0')) +
                 Helper.ToBinary((request.Length).ToString().PadLeft(SIZE_OF_DATA_LEN, '0')) +
                 Helper.ToBinary(request);
         }
@@ -38,15 +40,18 @@ namespace ClientWPF
             clientStream.Flush();
         }
 
-        public static T ManageSendAndGetData<T>(string json, NetworkStream clientStream, Codes code)
+        public static T ManageSendAndGetData<T>(string json, NetworkStream clientStream, int code)
         {
+            
+
             // Edit and send request.
-            json = EditRequest((int)code, json);
+            json = EditRequest(code, json);
             SendRequest(json, clientStream);
 
             // Get response.
             string s = Helper.GetData(clientStream);
             string textStrData = s.Substring(DATA_START_INDEX);
+
             T response = JsonConvert.DeserializeObject<T>(textStrData);
             return response;
         }

@@ -83,11 +83,11 @@ namespace ClientWPF
 
             var rooms = (ListBox)sender;
             int idIndex = rooms.SelectedItem.ToString().LastIndexOf(':');
-            GetPlayersInRoomRequest req = new GetPlayersInRoomRequest { RoomId = int.Parse(rooms.SelectedItem.ToString().Substring(idIndex+2)) };
+            GetPlayersInRoomRequest req = new GetPlayersInRoomRequest { RoomId = int.Parse(rooms.SelectedItem.ToString().Substring(idIndex + 2)) };
             string json = JsonConvert.SerializeObject(req);
 
             // Getting the players in the room changed
-            GetPlayersInRoomResponse resp = Communicator.ManageSendAndGetData<GetPlayersInRoomResponse>(json, clientStream, Codes.GET_PLAYERS_IN_ROOM_CODE);
+            GetPlayersInRoomResponse resp = Communicator.ManageSendAndGetData<GetPlayersInRoomResponse>(json, clientStream, (int)Codes.GET_PLAYERS_IN_ROOM_CODE);
 
             // Displaying the room players in a listBox
             playersInRoom.ItemsSource = resp.PlayersInRoom;
@@ -100,11 +100,11 @@ namespace ClientWPF
 
             //var rooms = (ListBox)sender;
             int idIndex = availableRooms.SelectedItem.ToString().LastIndexOf(':');
-            JoinRoomRequest req = new JoinRoomRequest{ RoomId = int.Parse(availableRooms.SelectedItem.ToString().Substring(idIndex+2)) };
+            JoinRoomRequest req = new JoinRoomRequest { RoomId = int.Parse(availableRooms.SelectedItem.ToString().Substring(idIndex + 2)) };
             string json = JsonConvert.SerializeObject(req);
 
             // Requesting to join the selected items
-            JoinRoomResponse resp = Communicator.ManageSendAndGetData<JoinRoomResponse>(json, clientStream, Codes.JOIN_ROOM_CODE);
+            JoinRoomResponse resp = Communicator.ManageSendAndGetData<JoinRoomResponse>(json, clientStream, (int)Codes.JOIN_ROOM_CODE);
 
             if (resp.Status == 0)
             {
@@ -137,16 +137,33 @@ namespace ClientWPF
         {
             GetRoomsResponse resp = Communicator.ManageSendAndGetData<GetRoomsResponse>("",
                     clientStream,
-                    Codes.GET_ROOM_CODE);
+                    (int)Codes.GET_ROOMS_CODE);
             List<string> rooms = new List<string>();
-            foreach (string room in resp.Rooms)
+            try
             {
-                var splitted = room.Split(',');
-                int id = Int32.Parse(splitted[1]);
-                string name = splitted[0];
-                rooms.Add("Name: "+name+", Id: "+id.ToString());
+                foreach (string room in resp.Rooms)
+                {
+                    var splitted = room.Split(',');
+                    string name = splitted[0];
+                    if (name != "") //Is not a room that was erased.
+                    {
+                        int id = Int32.Parse(splitted[1]);
+                        rooms.Add("Name: " + name + ", Id: " + id.ToString());
+                    }
+                }
+            }
+            catch (NullReferenceException e)
+            {
+                MessageBox.Show("Sorry there are no available rooms");
             }
             return rooms;
         }
+        private void CancelButton_Click(object sender, RoutedEventArgs e)
+        {
+            var mainWindow = new MainWindow(this.clientStream);
+            mainWindow.Show();
+            this.Close();
+        }
+        
     }
 }

@@ -15,6 +15,6 @@ public:
 	LoginManager(IDatabase* db) { m_database = db; };
 
 	bool signup(std::string userName, std::string password, std::string email);
-	bool login(std::string userName, std::string password);
+	LoggedUser* login(std::string userName, std::string password, SOCKET socket);
 	bool logout(std::string userName);
 };
