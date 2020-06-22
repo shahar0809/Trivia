@@ -119,6 +119,7 @@ namespace ClientWPF
                 // Room was closed
                 if (resp.PlayersInRoom == null || resp.PlayersInRoom.Count == 0)
                 {
+                    Response response = Communicator.ManageSendAndGetData<Response>("", this.clientStream, (int)RoomCodes.LEAVE_ROOM_CODE);
                     return;
                 }
 
