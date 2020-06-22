@@ -15,7 +15,7 @@ MenuRequestHandler::~MenuRequestHandler()
 
 bool MenuRequestHandler::isRequestRelevant(RequestInfo info)
 {
-	return info.requestId >= CREATE_ROOM_CODE && info.requestId <= LEAVE_ROOM_CODE;
+	return info.requestId >= CREATE_ROOM_CODE && info.requestId <= LOGOUT_CODE;
 }
 
 RequestResult MenuRequestHandler::handleRequest(RequestInfo info, SOCKET socket)
@@ -45,10 +45,6 @@ RequestResult MenuRequestHandler::handleRequest(RequestInfo info, SOCKET socket)
 		case LOGOUT_CODE:
 		{
 			return this->logout(info);
-		}
-		case LEAVE_ROOM_CODE:
-		{
-			return RequestResult{};
 		}
 	}
 }

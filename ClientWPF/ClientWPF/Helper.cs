@@ -12,12 +12,8 @@ namespace ClientWPF
         ERROR_CODE = 0, LOGIN_CODE, SIGN_UP_CODE, CREATE_ROOM_CODE,
         GET_ROOMS_CODE, GET_PLAYERS_IN_ROOM_CODE,
         JOIN_ROOM_CODE, GET_STATISTICS_CODE,
-        LOGOUT_CODE
+        LOGOUT_CODE ,LEAVE_ROOM_CODE , CLOSE_ROOM_CODE, START_GAME_CODE, GET_ROOM_STATE_CODE
     };
-    public enum RoomCodes
-    {
-        LEAVE_ROOM_CODE = 90, CLOSE_ROOM_CODE, START_GAME_CODE, GET_ROOM_STATE_CODE
-    }
     class Helper
     {
         public const int BIN_BASE = 2;

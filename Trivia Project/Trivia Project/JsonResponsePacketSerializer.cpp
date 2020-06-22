@@ -32,11 +32,14 @@ std::string JsonResponsePacketSerializer::serializeResponse(json j, int code)
 {
 	std::string binJson = j.dump(); // Getting the json as a string
 	std::vector<unsigned char> binData(binJson.begin(), binJson.end()); 
-	std::ostringstream stream;
+	std::ostringstream streamCode;
+	std::ostringstream streamDataLen;
 
-	stream << std::setw(DATA_LEN_IN_BYTES) << std::setfill('0') << binData.size();
+	streamCode << std::setw(CODE_LEN_IN_BYTES) << std::setfill('0') << std::to_string(code);
 
-	return std::to_string(code) + stream.str() + j.dump();
+	streamDataLen << std::setw(DATA_LEN_IN_BYTES) << std::setfill('0') << binData.size();
+
+	return streamCode.str() + streamDataLen.str() + j.dump();
 }
 
 std::string JsonResponsePacketSerializer::serializeResponse(LogoutResponse logout)

@@ -8,7 +8,7 @@
 #define NO_FLAGS 0
 #define SIZE_OF_BYTE 8
 
-enum ByteSizes{ CODE_LEN_IN_BYTES = 1, DATA_LEN_IN_BYTES = 4};
+enum ByteSizes{ CODE_LEN_IN_BYTES = 2, DATA_LEN_IN_BYTES = 4};
 
 class Helper
 {
