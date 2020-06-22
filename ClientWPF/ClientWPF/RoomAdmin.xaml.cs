@@ -77,6 +77,9 @@ namespace ClientWPF
             if (resp.status != (int)Codes.ERROR_CODE)
             {
                 stopUpdating = true;
+                var mainWindow = new MainWindow(this.clientStream);
+                mainWindow.Show();
+                this.Close();
             }
             else
             {
