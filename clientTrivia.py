@@ -27,7 +27,7 @@ def make_socket():
     return sock
 
 
-def send_information(msg):
+def send_information(msg, sock):
     """
     Sends data to the client.
     :param msg: the message to send
@@ -36,7 +36,7 @@ def send_information(msg):
     sock.sendall(msg.encode())
 
 
-def receive_response():
+def receive_response(sock):
     """
     Receives the response from the server, and prints it.
     :return: None.
@@ -52,7 +52,7 @@ def receive_response():
 
 
 """ ****** SERVER COMMUNICATION ****** """
-def send_sign_up_request(username, password, email):
+def send_sign_up_request(username, password, email, sock):
     """
     Inputs the parameters for the sign-up request, and sends the request to the server.
     :param username: The username in the request
@@ -68,7 +68,7 @@ def send_sign_up_request(username, password, email):
     edit_request(sock, sign_up_req, Codes["SIGN_UP_CODE"])
 
 
-def send_login_request(username, password):
+def send_login_request(username, password, sock):
     """
     Inputs the parameters for the login request, and sends the request to the server.
     :param username: The username in the request
@@ -83,7 +83,7 @@ def send_login_request(username, password):
     edit_request(sock, login_req, Codes["LOGIN_CODE"])
 
 
-def edit_request(json_request, code):
+def edit_request(json_request, code, sock):
     json_request = json.dumps(json_request)  # Getting the json as a string
     json_length = str(len(json_request))
     json_length = json_length.zfill(DATA_LEN_IN_BYTES)
@@ -96,15 +96,15 @@ def edit_request(json_request, code):
 
 
 """ ******* TESTS ******* """
-def login_without_signup():
+def login_without_signup(sock):
     """
     Checking if the user can log in without signing up first.
     :return: True / False according to the result.
     """
     # Trying to log in without signing up.
-    send_login_request("randomUser", "randomPassword")
+    send_login_request("randomUser", "randomPassword", sock)
 
-    if receive_response() == SUCCESS_CODE:
+    if receive_response(sock) == SUCCESS_CODE:
         print("Test 1 failed. Succeeded to log in without signing up first.\n")
         return False
 
@@ -113,21 +113,12 @@ def login_without_signup():
         return True
 
 
-<<<<<<< HEAD
-def signup_with_same_username():
-    send_sign_up_request("randomUser", "randomPassword", "randomEmail")
-    receive_response()
-
-    send_sign_up_request("randomUser", "randomPassword2", "randomEmail2")
-    if receive_response() == SUCCESS_CODE:
-=======
 def signup_with_same_username(sock):
     send_sign_up_request(sock, "randomUser1", "randomPassword1", "randomEmail1")
     receive_response(sock)
 
     send_sign_up_request(sock, "randomUser1", "randomPassword2", "randomEmail2")
     if receive_response(sock) == SUCCESS_CODE:
->>>>>>> origin/develop
         print("Test 2 failed. Succeeded to sign up with the same username.\n")
         return False
 
@@ -136,21 +127,12 @@ def signup_with_same_username(sock):
         return True
 
 
-<<<<<<< HEAD
-def login_when_already_connected():
-    send_login_request("randomUser", "randomPassword")
-    receive_response()
-
-    send_login_request("randomUser", "randomPassword")
-    if receive_response() == SUCCESS_CODE:
-=======
 def login_when_already_connected(sock):
     send_login_request(sock, "randomUser1", "randomPassword1")
     receive_response(sock)
 
     send_login_request(sock, "randomUser1", "randomPassword1")
     if receive_response(sock) == SUCCESS_CODE:
->>>>>>> origin/develop
         print("Test 3 failed. Succeeded to log in when the user is already connected.\n")
         return False
 
@@ -160,9 +142,10 @@ def login_when_already_connected(sock):
 
 
 def main():
-    login_without_signup()
-    signup_with_same_username()
-    login_when_already_connected()
+    sock = make_socket()
+    login_without_signup(sock)
+    signup_with_same_username(sock)
+    login_when_already_connected(sock)
 
     sock.close()
 
@@ -170,4 +153,4 @@ def main():
 if __name__ == "__main__":
     main()
 
-sock = make_socket()
+
