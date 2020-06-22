@@ -2,6 +2,7 @@
 #include <map>
 #include "Room.h"
 #include <sstream>
+#include <iostream>
 
 #define NOT_EXIST -1
 

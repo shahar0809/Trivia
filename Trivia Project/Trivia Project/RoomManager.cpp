@@ -1,5 +1,6 @@
 #include "RoomManager.h"
 
+
 Room* RoomManager::createRoom(LoggedUser user, RoomData data)
 {
 	m_rooms[roomId] = *new Room(this->roomId, data, user);
@@ -14,7 +15,7 @@ bool RoomManager::deleteRoom(int ID)
 
 	if (it != this->m_rooms.end())
 	{
-		this->m_rooms.erase(it);
+		this->m_rooms.erase(ID);
 		return true;
 	}
 	return false;

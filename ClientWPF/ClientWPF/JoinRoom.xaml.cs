@@ -83,7 +83,7 @@ namespace ClientWPF
 
             var rooms = (ListBox)sender;
             int idIndex = rooms.SelectedItem.ToString().LastIndexOf(':');
-            GetPlayersInRoomRequest req = new GetPlayersInRoomRequest { RoomId = int.Parse(rooms.SelectedItem.ToString().Substring(idIndex+2)) };
+            GetPlayersInRoomRequest req = new GetPlayersInRoomRequest { RoomId = int.Parse(rooms.SelectedItem.ToString().Substring(idIndex + 2)) };
             string json = JsonConvert.SerializeObject(req);
 
             // Getting the players in the room changed
@@ -100,7 +100,7 @@ namespace ClientWPF
 
             //var rooms = (ListBox)sender;
             int idIndex = availableRooms.SelectedItem.ToString().LastIndexOf(':');
-            JoinRoomRequest req = new JoinRoomRequest{ RoomId = int.Parse(availableRooms.SelectedItem.ToString().Substring(idIndex+2)) };
+            JoinRoomRequest req = new JoinRoomRequest { RoomId = int.Parse(availableRooms.SelectedItem.ToString().Substring(idIndex + 2)) };
             string json = JsonConvert.SerializeObject(req);
 
             // Requesting to join the selected items
@@ -144,16 +144,26 @@ namespace ClientWPF
                 foreach (string room in resp.Rooms)
                 {
                     var splitted = room.Split(',');
-                    int id = Int32.Parse(splitted[1]);
                     string name = splitted[0];
-                    rooms.Add("Name: " + name + ", Id: " + id.ToString());
+                    if (name != "") //Is not a room that was erased.
+                    {
+                        int id = Int32.Parse(splitted[1]);
+                        rooms.Add("Name: " + name + ", Id: " + id.ToString());
+                    }
                 }
             }
-            catch(NullReferenceException e)
+            catch (NullReferenceException e)
             {
                 MessageBox.Show("Sorry there are no available rooms");
             }
             return rooms;
         }
+        private void CancelButton_Click(object sender, RoutedEventArgs e)
+        {
+            var mainWindow = new MainWindow(this.clientStream);
+            mainWindow.Show();
+            this.Close();
+        }
+        
     }
 }
