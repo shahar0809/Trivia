@@ -112,15 +112,16 @@ def login_without_signup(sock):
         print("Test 1 passed.")
         return True
 
-
 def signup_with_same_username(sock):
     send_sign_up_request(sock, "randomUser1", "randomPassword1", "randomEmail1")
     receive_response(sock)
 
-    send_sign_up_request(sock, "randomUser1", "randomPassword2", "randomEmail2")
+    send_sign_up_request(sock, "randomUser1", "randomPassword3", "randomEmail13")
+    receive_response(sock)
+
     if receive_response(sock) == SUCCESS_CODE:
-        print("Test 2 failed. Succeeded to sign up with the same username.\n")
-        return False
+       print("Test 2 failed. Succeeded to log in without signing up first.\n")
+       return False
 
     else:
         print("Test 2 passed.")
