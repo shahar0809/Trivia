@@ -19,6 +19,14 @@ struct Score
 {
 	std::string username;
 	unsigned int score;
+
+	std::string toString()
+	{
+		return
+			username +
+			","+
+			std::to_string(score);
+	}
 };
 
 class IDatabase

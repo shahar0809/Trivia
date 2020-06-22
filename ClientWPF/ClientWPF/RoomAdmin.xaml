@@ -1,0 +1,185 @@
+﻿<Window x:Class="ClientWPF.RoomAdmin"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ClientWPF"
+        mc:Ignorable="d" FontFamily="Forte"
+        Title="RoomAdmin" Height="600" Width="800">
+    <Grid>
+        <Grid.Background>
+            <ImageBrush ImageSource="Images/genBackground.png" Stretch="UniformToFill"/>
+        </Grid.Background>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="20"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="20"/>
+        </Grid.ColumnDefinitions>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="20"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="20"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock x:Name="displayRoomName"
+                   Grid.Column="1"
+                   Grid.Row="1"
+                   Grid.ColumnSpan="4"
+                   HorizontalAlignment="Center"
+                   Margin="0, 0, 0, 15"
+                   Text="Room Name"
+                   FontFamily="Forte" FontSize="48"
+        />
+
+        <WrapPanel Name="displayRoom"
+                   Grid.Row="2"
+                   Grid.Column="1"
+                   Grid.ColumnSpan="5"
+                   Margin="0, 0, 0, 20"
+                   VerticalAlignment="Center"
+                   HorizontalAlignment="Center"
+        >
+            <TextBlock 
+                    Text="You are connected to room:  "
+                    FontFamily="Arial"
+                    FontSize="18"
+            />
+
+            <TextBlock x:Name="roomName"
+                       FontWeight="Bold"
+                       FontSize="18"
+                       FontFamily="Arial"
+                       HorizontalAlignment="Center"
+                       Text="{Binding}"
+            />
+        </WrapPanel>
+
+        <WrapPanel Name="maxPlayers"
+                   Grid.Row="3"
+                   Grid.Column="1"
+                   VerticalAlignment="Center"
+                   HorizontalAlignment="Center">
+
+            <TextBlock 
+                FontSize="22"
+                Text="Max players: "/>
+
+            <TextBlock 
+                FontSize="22"
+                x:Name="displayMaxNumPlayers"
+                Text="{Binding}"/>
+        </WrapPanel>
+
+        <WrapPanel Name="numOfQuestions"
+                   Grid.Row="3"
+                   Grid.Column="2"
+                   VerticalAlignment="Center"
+                   HorizontalAlignment="Center">
+
+            <TextBlock 
+                FontSize="22"
+                Text="Num of questions: "/>
+
+            <TextBlock 
+                FontSize="22"
+                x:Name="displayNumOfQuestions"
+                Text="{Binding}"/>
+        </WrapPanel>
+
+        <WrapPanel Name="timePerQuestion"
+                   Grid.Row="3"
+                   Grid.Column="3"
+                   VerticalAlignment="Center"
+                   HorizontalAlignment="Center">
+
+            <TextBlock 
+                FontSize="22"
+                Text="Time per questions: "/>
+
+            <TextBlock 
+                FontSize="22"
+                x:Name="displayTimePerQuestion"
+                Text="{Binding}"/>
+        </WrapPanel>
+
+        <TextBlock Text="Current Players:"
+                   Grid.Column="1"
+                   Grid.Row="4"
+                   Margin="0, 40, 0, 5"
+                   HorizontalAlignment="Center"
+                   Grid.ColumnSpan="4"
+                   FontSize="28"
+        />
+
+        <ScrollViewer Grid.Row="5"
+                      Grid.Column="1"
+                      Margin="0, 10, 0, 10"
+                      MinHeight="150"
+                      MinWidth="350"
+                      Grid.ColumnSpan="4"
+                      HorizontalAlignment="Center"
+        >
+            <ListBox x:Name="playersInRoom" 
+                     FontSize="28"
+                     MinHeight="100" 
+                     ItemsSource="{Binding roomPlayers, Mode=OneWayToSource}"
+                     />
+        </ScrollViewer>
+
+        <Button x:Name="closeRoom"
+                Grid.Column="3"
+                Grid.Row="6"
+                Content="Close Room"
+                FontSize="28"
+                Margin="30, 5"
+                Click="closeRoom_Click"
+                Visibility="{Binding isAdmin}"
+                >
+            <Button.Resources>
+                <Style TargetType="Border">
+                    <Setter Property="CornerRadius" Value="5"/>
+                </Style>
+            </Button.Resources>
+        </Button>
+
+        <Button x:Name="leaveRoom"
+                Grid.Column="2"
+                Grid.Row="7"
+                Content="Leave Room"
+                FontSize="28"
+                Margin="30, 5"
+                Click="leaveRoom_Click"
+                Visibility="{Binding isAdmin}"
+                >
+            <Button.Resources>
+                <Style TargetType="Border">
+                    <Setter Property="CornerRadius" Value="5"/>
+                </Style>
+            </Button.Resources>
+        </Button>
+
+        <Button x:Name="startGame"
+                FontSize="28"
+                Grid.Column="3"
+                Grid.Row="7"
+                Content="Start Game"
+                Visibility="{Binding isAdmin}"
+                Click="startGame_Click"
+                Margin="30, 5">
+            <Button.Resources>
+                <Style TargetType="Border">
+                    <Setter Property="CornerRadius" Value="5"/>
+                </Style>
+            </Button.Resources>
+        </Button>
+    </Grid>
+</Window>

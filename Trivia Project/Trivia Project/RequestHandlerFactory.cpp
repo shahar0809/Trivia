@@ -1,18 +1,21 @@
 #include "RequestHandlerFactory.h"
 #include "LoginRequestHandler.h"
 #include "MenuRequestHandler.h"
+#include "RoomMemberRequestHandler.h"
+#include "RoomAdminRequestHandler.h"
 
 RequestHandlerFactory::RequestHandlerFactory()
 { 
 	this->m_database = NULL; 
 	this->m_StatisticsManager = NULL; 
-	this->m_roomManager = RoomManager();
+	//this->m_roomManager;
 }
 RequestHandlerFactory::RequestHandlerFactory(IDatabase* db)
 {
 	this->m_database = db;
 	this->m_StatisticsManager = StatisticsManager(db);
-	this->m_roomManager = RoomManager();
+	this->m_roomManager = new RoomManager();
+	this->m_loginManager = *new LoginManager(db);
 }
 
 RequestHandlerFactory::~RequestHandlerFactory()
@@ -21,7 +24,7 @@ RequestHandlerFactory::~RequestHandlerFactory()
 
 LoginRequestHandler* RequestHandlerFactory::createLoginRequestHandler()
 {
-	return new LoginRequestHandler(m_database);
+	return new LoginRequestHandler(this);
 }
 
 // LoginManager getter
@@ -30,16 +33,24 @@ LoginManager& RequestHandlerFactory::getLoginManger()
 	return this->m_loginManager;
 }
 
-MenuRequestHandler* RequestHandlerFactory::createMenuRequestHandler(std::string username)
+MenuRequestHandler* RequestHandlerFactory::createMenuRequestHandler(LoggedUser* user)
 {
-	return new MenuRequestHandler(username);
+	return new MenuRequestHandler(user, this);
 }
 
 StatisticsManager& RequestHandlerFactory::getStatisticsManager()
 {
 	return this->m_StatisticsManager;
 }
-RoomManager& RequestHandlerFactory::getRoomManager()
+RoomManager* RequestHandlerFactory::getRoomManager()
 {
 	return this->m_roomManager;
+}
+RoomMemberRequestHandler* RequestHandlerFactory::createRoomMemberRequestHandler(Room* room, LoggedUser* user, RequestHandlerFactory* handlerFactory, RoomManager* roomManger)
+{
+	return new RoomMemberRequestHandler(room,user,handlerFactory,roomManger);
+}
+RoomAdminRequestHandler* RequestHandlerFactory::createRoomAdminRequestHandler(Room* room, LoggedUser* user, RequestHandlerFactory* handlerFactory, RoomManager* roomManger)
+{
+	return new RoomAdminRequestHandler(room, user, handlerFactory, roomManger);
 }

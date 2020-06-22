@@ -5,7 +5,7 @@ std::mutex isEnded;
 
 Communicator::Communicator(IDatabase* db) : m_isEnded(false)
 {
-	m_handlerFactory = RequestHandlerFactory(db);
+	this->m_handlerFactory = *new RequestHandlerFactory(db);
 }
 
 /**
@@ -49,10 +49,11 @@ void Communicator::bindAndListen()
 */
 void Communicator::handleNewClient(std::pair<SOCKET, IRequestHandler*> client)
 {
+	//IRequestHandler* currHandler = client.second;
+
 	/* Getting requests from the client */
 	while (!this->m_isEnded)
 	{
-		IRequestHandler* currHandler = client.second, *temp = currHandler;
 		/* Getting the packet from the socket. */
 		std::string packet;
 		try
@@ -67,20 +68,19 @@ void Communicator::handleNewClient(std::pair<SOCKET, IRequestHandler*> client)
 		}
 		
 		RequestInfo info(packet);  // Analyzing the packet
-		
-		if (!currHandler->isRequestRelevant(info))
+		std::cout << "C L I E N T\n" << packet << std::endl;
+		if (!client.second->isRequestRelevant(info))
 		{
 			ErrorResponse errResponse{ "Request is not relevant." };
 			Helper::sendData(client.first, JsonResponsePacketSerializer::serializeResponse(errResponse));
 		}
 		else
 		{
-			RequestResult result = client.second->handleRequest(info);  // Passing the request to the handler.
+			RequestResult result = client.second->handleRequest(info, client.first);  // Passing the request to the handler.
 			std::cout << "S E R V E R:" << std::endl << result.requestBuffer << std::endl << std::endl;
 			Helper::sendData(client.first, result.requestBuffer);       // Sending response to the client
 
-			currHandler = result.newHandler;						    // Moving to the next state (updating handler).
-			delete temp;											    // Freeing allocated memory of the previous handle.
+			client.second = result.newHandler; // Moving to the next state (updating handler).
 		}
 	} 
 	closesocket(client.first);
