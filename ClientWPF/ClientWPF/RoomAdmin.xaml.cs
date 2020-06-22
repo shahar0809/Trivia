@@ -28,8 +28,6 @@ namespace ClientWPF
         private RoomData roomData;
         private bool isAdmin;
         private NetworkStream clientStream;
-        private bool isChange;
-        private List<string> players;
         private BackgroundWorker worker = new BackgroundWorker();
 
         public struct workerParameter
@@ -61,18 +59,16 @@ namespace ClientWPF
             displayRoomName.Text = roomData.RoomName;
             roomName.Text = roomData.RoomName;
 
-            isChange = false;
-
+            // Creating a background worker that constantly updates the players in the room.
             worker.WorkerReportsProgress = true;
             worker.DoWork += updateRoomPlayers;
             worker.ProgressChanged += playersChanged;
+            worker.RunWorkerCompleted += leaveWindow;
             worker.RunWorkerAsync();
-
         }
 
         private void closeRoom_Click(object sender, RoutedEventArgs e)
         {
-            isChange = true;
             // Sends a Close Room request to the server.
             Response resp = Communicator.ManageSendAndGetData<Response>("", this.clientStream, (int)RoomCodes.CLOSE_ROOM_CODE);
 
@@ -90,7 +86,6 @@ namespace ClientWPF
 
         private void leaveRoom_Click(object sender, RoutedEventArgs e)
         {
-            isChange = true;
             Response resp = Communicator.ManageSendAndGetData<Response>("", this.clientStream, (int)RoomCodes.LEAVE_ROOM_CODE);
 
             if (resp.status != (int)Codes.ERROR_CODE)
@@ -107,7 +102,6 @@ namespace ClientWPF
 
         private void startGame_Click(object sender, RoutedEventArgs e)
         {
-            isChange = true;
             // About to be updated in the next version.
         }
 
@@ -116,19 +110,33 @@ namespace ClientWPF
             // Getting the players connected to the room
             GetPlayersInRoomRequest request = new GetPlayersInRoomRequest { RoomId = this.roomData.RoomId };
 
-            while(!isChange)
+            while(true)
             {
+                // Requesting the players in the room
                 GetPlayersInRoomResponse resp = Communicator.ManageSendAndGetData<GetPlayersInRoomResponse>(
                     JsonConvert.SerializeObject(request),
                     clientStream,
                     (int)Codes.GET_PLAYERS_IN_ROOM_CODE);
 
-                players = resp.PlayersInRoom;
+                // Room was closed
+                if (resp.PlayersInRoom == null || resp.PlayersInRoom.Count == 0)
+                {
+                    return;
+                }
+
                 workerParameter param = new workerParameter{ roomPlayers = resp.PlayersInRoom };
                 worker.ReportProgress(0, param);
                
                 Thread.Sleep(600);
             }
+        }
+
+        void leaveWindow(object sender, RunWorkerCompletedEventArgs e)
+        {
+            // Closing the Log in window and returing to the menu.
+            var mainWindow = new MainWindow(this.clientStream);
+            mainWindow.Show();
+            this.Close();
         }
 
         void playersChanged(object sender, ProgressChangedEventArgs e)
