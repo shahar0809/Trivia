@@ -29,6 +29,14 @@ namespace ClientWPF
         private bool isAdmin;
         private NetworkStream clientStream;
         private bool isChange;
+        private List<string> players;
+        private BackgroundWorker worker = new BackgroundWorker();
+
+        public struct workerParameter
+        {
+            public List<string> roomPlayers;
+        }
+
         public RoomAdmin(RoomData data, NetworkStream clientStream, bool isAdmin)
         {
             InitializeComponent();
@@ -62,12 +70,10 @@ namespace ClientWPF
            
 =======
 
-            /*Thread t = new Thread(() => updateRoomPlayers());
-            t.IsBackground = true;
-            t.Start();*/
-
-            Action updateList = new Action(updateRoomPlayers);
-            Dispatcher.BeginInvoke(updateList);
+            worker.WorkerReportsProgress = true;
+            worker.DoWork += updateRoomPlayers;
+            worker.ProgressChanged += playersChanged;
+            worker.RunWorkerAsync();
 
 >>>>>>> 4d03f501befbb4c3c811f85a1429ee03ca4efc55
         }
@@ -113,7 +119,7 @@ namespace ClientWPF
             // About to be updated in the next version.
         }
 
-        public void updateRoomPlayers()
+        public void updateRoomPlayers(object sender, DoWorkEventArgs e)
         {
             // Getting the players connected to the room
             GetPlayersInRoomRequest request = new GetPlayersInRoomRequest { RoomId = this.roomData.RoomId };
@@ -125,11 +131,19 @@ namespace ClientWPF
                     clientStream,
                     (int)Codes.GET_PLAYERS_IN_ROOM_CODE);
 
-                playersInRoom.ItemsSource = resp.PlayersInRoom;
+                players = resp.PlayersInRoom;
+                workerParameter param = new workerParameter{ roomPlayers = resp.PlayersInRoom };
+                worker.ReportProgress(0, param);
                
-                Thread.Sleep(300);
+                Thread.Sleep(600);
             }
         }
 
+        void playersChanged(object sender, ProgressChangedEventArgs e)
+        {
+            workerParameter param = (workerParameter)e.UserState;
+            List<string> roomPlayers = param.roomPlayers;
+            playersInRoom.ItemsSource = roomPlayers;
+        }
     }
 }
