@@ -25,6 +25,7 @@ RequestResult RoomParticipantRequestHandler::getRoomState(RequestInfo info)
 		roomData.timeForQuestion
 	};
 
+	//Should understand when this rrequest is used and what is the next handler.
 	return RequestResult
 	{
 		JsonResponsePacketSerializer::serializeGetRoomStateResponse(resp), nullptr

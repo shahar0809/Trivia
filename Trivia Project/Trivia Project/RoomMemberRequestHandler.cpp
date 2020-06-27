@@ -11,7 +11,7 @@ bool RoomMemberRequestHandler::isRequestRelevant(RequestInfo info)
 	return (info.requestId >= LEAVE_ROOM_CODE && info.requestId <= GET_ROOM_STATE_CODE) || info.requestId == GET_PLAYERS_IN_ROOM_CODE;
 }
 
-RequestResult RoomMemberRequestHandler::handleRequest(RequestInfo info, SOCKET socket)
+RequestResult RoomMemberRequestHandler::handleRequest(RequestInfo info)
 {
 	switch (info.requestId)
 	{

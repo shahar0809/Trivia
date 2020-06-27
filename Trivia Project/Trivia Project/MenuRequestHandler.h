@@ -15,7 +15,7 @@ public:
 	~MenuRequestHandler();
 
 	bool isRequestRelevant(RequestInfo info);
-	RequestResult handleRequest(RequestInfo info, SOCKET socket);
+	RequestResult handleRequest(RequestInfo info);
 	RequestResult getPlayersInRoom(RequestInfo info);
 
 private:

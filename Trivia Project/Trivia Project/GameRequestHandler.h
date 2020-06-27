@@ -2,6 +2,7 @@
 #include "Game.h"
 #include "JsonRequestPacketDeserializer.h"
 #include "RequestHandlerFactory.h"
+#include "MenuRequestHandler.h"
 
 class RequestHandlerFactory;
 
@@ -20,9 +21,9 @@ private:
 	RequestResult leaveGame(RequestInfo info);
 
 	// Class members
-	Game m_game;
+	Game* m_game;
 	LoggedUser* m_user;
-	GameManager& m_gameManager;
-	RequestHandlerFactory& m_handlerFactory;
+	GameManager* m_gameManager;
+	RequestHandlerFactory* m_handlerFactory;
 };
 

@@ -2,9 +2,10 @@
 
 GameRequestHandler::GameRequestHandler(LoggedUser* user, GameManager* gameManager, RequestHandlerFactory* handlerFactory)
 {
-	this->m_gameManager = *gameManager;
-	this->m_handlerFactory = *handlerFactory;
+	this->m_gameManager = gameManager;
+	this->m_handlerFactory = handlerFactory;
 	this->m_user = user;
+	this->m_game = this->m_gameManager->getGame(*user);
 }
 
 bool GameRequestHandler::isRequestRelevant(RequestInfo info)
@@ -33,20 +34,37 @@ RequestResult GameRequestHandler::handleRequest(RequestInfo info)
 
 RequestResult GameRequestHandler::leaveGame(RequestInfo info)
 {
+	LeaveGameResponse resp;
+	if (m_handlerFactory->getGameManager()->deleteGame(*this->m_user))
+	{
+		resp.status = SUCCEEDED;
+	}
+	else
+	{
+		resp.status = FAILED;
+	}
 
+	return RequestResult
+	{
+		JsonResponsePacketSerializer::serializeLeaveGameResponse(resp),
+		this->m_handlerFactory->createMenuRequestHandler(this->m_user)
+	};
 }
 
 RequestResult GameRequestHandler::getGameResults(RequestInfo info)
 {
-
+	RequestResult f;
+	return f;
 }
 
 RequestResult GameRequestHandler::getQuestion(RequestInfo info)
 {
-
+	RequestResult f;
+	return f;
 }
 
 RequestResult GameRequestHandler::submitAnswer(RequestInfo info)
 {
-
+	RequestResult f;
+	return f;
 }

@@ -18,7 +18,7 @@ bool MenuRequestHandler::isRequestRelevant(RequestInfo info)
 	return info.requestId >= CREATE_ROOM_CODE && info.requestId <= LOGOUT_CODE;
 }
 
-RequestResult MenuRequestHandler::handleRequest(RequestInfo info, SOCKET socket)
+RequestResult MenuRequestHandler::handleRequest(RequestInfo info)
 {
 	switch (info.requestId)
 	{
@@ -116,7 +116,7 @@ RequestResult MenuRequestHandler::getStatistics(RequestInfo info)
 	catch (const std::exception& e)
 	{
 		resp.status = FAILED;
-		return RequestResult{ JsonResponsePacketSerializer::serializeResponse(resp), nullptr };
+		return RequestResult{ JsonResponsePacketSerializer::serializeResponse(resp), m_handlerFactory.createMenuRequestHandler(this->m_user)};
 	}
 
 	std::vector<std::string> highScore;
@@ -179,7 +179,7 @@ RequestResult MenuRequestHandler::createRoom(RequestInfo info)
 		return RequestResult
 		{ 
 			JsonResponsePacketSerializer::serializeResponse(resp),
-			m_handlerFactory.createRoomAdminRequestHandler(room, m_user, &m_handlerFactory, m_handlerFactory.getRoomManager())
+			m_handlerFactory.createMenuRequestHandler(m_user)
 		};
 	}
 	

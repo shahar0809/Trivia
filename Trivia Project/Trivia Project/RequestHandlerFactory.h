@@ -3,7 +3,8 @@
 #include "IDatabase.h"
 #include "RoomManager.h"
 #include "StatisticsManager.h"
-#include "GameRequestHandler.h"
+#include "GameManager.h"
+
 
 class MenuRequestHandler;
 class RoomMemberRequestHandler;
@@ -27,6 +28,7 @@ public:
 	LoginManager& getLoginManger();
 	StatisticsManager& getStatisticsManager();
 	RoomManager* getRoomManager();
+	GameManager* getGameManager();
 
 private:
 	LoginManager m_loginManager;

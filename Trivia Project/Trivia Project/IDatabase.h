@@ -13,6 +13,18 @@ struct Question
 	std::string answer2;
 	std::string answer3;
 	std::string answer4;
+	std::string getQuestion()
+	{
+		return question;
+	}
+	std::string getPossibleAnswers()
+	{
+		return answer2 + "'" + answer3 + "'" + answer4;
+	}
+	std::string getCorrectAnswer()
+	{
+		return correctAnswer;
+	}
 };
 
 struct Score

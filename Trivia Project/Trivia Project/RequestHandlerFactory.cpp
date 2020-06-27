@@ -3,6 +3,7 @@
 #include "MenuRequestHandler.h"
 #include "RoomMemberRequestHandler.h"
 #include "RoomAdminRequestHandler.h"
+#include "GameRequestHandler.h"
 
 RequestHandlerFactory::RequestHandlerFactory()
 { 
@@ -58,4 +59,9 @@ RoomAdminRequestHandler* RequestHandlerFactory::createRoomAdminRequestHandler(Ro
 GameRequestHandler* RequestHandlerFactory::createGameRequestHandler(LoggedUser* user, RequestHandlerFactory* handlerFactory, GameManager& gameManager)
 {
 	return new GameRequestHandler(user, m_gameManager, handlerFactory);
+}
+
+GameManager* RequestHandlerFactory::getGameManager()
+{
+	return this->m_gameManager;
 }
