@@ -15,7 +15,7 @@ struct RequestInfo
 
 	RequestInfo(std::string buff)
 	{
-		requestId = (int)(buff[0] - '0');
+		requestId = (int)(buff[0] - '0')*10+ (int)(buff[1] - '0');
 		receivalTime = std::time(0);
 		buffer = std::vector<uint8_t>(buff.begin() + CODE_LEN_IN_BYTES + DATA_LEN_IN_BYTES, buff.end());
 	}
@@ -26,8 +26,8 @@ struct RequestResult;
 class IRequestHandler
 {
 public:
-	virtual bool isRequestRelevant(RequestInfo) = 0;
-	virtual RequestResult handleRequest(RequestInfo) = 0;
+	virtual bool isRequestRelevant(RequestInfo info) = 0;
+	virtual RequestResult handleRequest(RequestInfo, SOCKET socket) = 0;
 };
 
 class IRequestHandler;

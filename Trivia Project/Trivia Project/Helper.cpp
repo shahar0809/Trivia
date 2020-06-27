@@ -48,6 +48,7 @@ std::string Helper::getAllTheSocket(SOCKET sc)
 	// Getting the data from the packet
 	buffer += Helper::getPartFromSocket(sc, SIZE_OF_BYTE * std::stoi(dataLength));
 	std::cout << convertToAscii(buffer) << std::endl;
+	//convertToAscii(buffer);
 	return convertToAscii(buffer);
 }
 

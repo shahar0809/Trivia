@@ -1,9 +1,9 @@
 #include "LoginRequestHandler.h"
 
-LoginRequestHandler::LoginRequestHandler(IDatabase* db) 
+LoginRequestHandler::LoginRequestHandler(RequestHandlerFactory* handler) 
 {
-	m_handlerFactory = RequestHandlerFactory(db);
-	m_loginManager = LoginManager(db);
+	this->m_handlerFactory = *handler;
+	m_loginManager = m_handlerFactory.getLoginManger();
 }
 
 bool LoginRequestHandler::isRequestRelevant(RequestInfo info)
@@ -11,12 +11,12 @@ bool LoginRequestHandler::isRequestRelevant(RequestInfo info)
 	return info.requestId == LOGIN_CODE || info.requestId == SIGN_UP_CODE;
 }
 
-RequestResult LoginRequestHandler::handleRequest(RequestInfo info)
+RequestResult LoginRequestHandler::handleRequest(RequestInfo info, SOCKET socket)
 {
 	
 	if (info.requestId == LOGIN_CODE)
 	{
-		return login(info);
+		return login(info, socket);
 	}
 	else if (info.requestId == SIGN_UP_CODE)
 	{
@@ -24,16 +24,16 @@ RequestResult LoginRequestHandler::handleRequest(RequestInfo info)
 	}
 }
 
-RequestResult LoginRequestHandler::login(RequestInfo info)
+RequestResult LoginRequestHandler::login(RequestInfo info, SOCKET socket)
 {
 	LoginRequest loginReq = JsonRequestPacketDeserializer::deserializeLoginRequest(info.buffer);
 	LoginResponse response;
 	RequestResult result;
-
-	if (m_loginManager.login(loginReq.username, loginReq.password))
+	LoggedUser* user = m_loginManager.login(loginReq.username, loginReq.password, socket);
+	if (user != nullptr)
 	{
 		response.status = SUCCEEDED;
-		result.newHandler = m_handlerFactory.createMenuRequestHandler(loginReq.username); // Setting next state to the menu handler.
+		result.newHandler = m_handlerFactory.createMenuRequestHandler(user); // Setting next state to the menu handler.
 	}
 	else
 	{
@@ -53,7 +53,7 @@ RequestResult LoginRequestHandler::signup(RequestInfo info)
 	if (m_loginManager.signup(signupReq.username, signupReq.password, signupReq.email))
 	{
 		response.status = 1;
-		result.newHandler = m_handlerFactory.createMenuRequestHandler(signupReq.username); // Setting next state to the menu handler.
+		result.newHandler = m_handlerFactory.createLoginRequestHandler(); // Setting next state to the menu handler.
 	}
 	else
 	{
