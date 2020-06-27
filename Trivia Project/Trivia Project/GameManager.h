@@ -13,6 +13,7 @@ public:
 	Game* createGame(Room r);
 	bool deleteGame(LoggedUser user);
 	Game* getGame(LoggedUser);
+	std::vector<PlayerResults> getGameResults(LoggedUser);
 private:
 	IDatabase* database;		
 	std::vector<Game> m_games;

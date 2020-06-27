@@ -35,3 +35,19 @@ Game* GameManager::getGame(LoggedUser user)
 	}
 	return nullptr;
 }
+
+std::vector<PlayerResults> GameManager::getGameResults(LoggedUser user)
+{
+	std::map<LoggedUser, GameData> playersData = this->getGame(user)->getPlayersGameData();
+	std::map<LoggedUser, GameData>::iterator it;
+	std::vector<PlayerResults> results;
+	for (it = playersData.begin(); it != playersData.end(); it++)
+	{
+		LoggedUser user = it->first;
+		PlayerResults playerDetails{ user.getUsername(),
+			it->second.correctAnswerCount,
+			it->second.wrongAnswerCount,
+			it->second.averangeAnswerTime };
+		results.push_back(playerDetails);
+	}
+}

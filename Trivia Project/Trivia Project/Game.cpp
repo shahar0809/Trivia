@@ -47,3 +47,13 @@ bool Game::operator == (Game other)
 {
 	return id == other.id;
 }
+
+int Game::getId()
+{
+	return this->id;
+}
+
+std::map<LoggedUser, GameData> Game::getPlayersGameData()
+{
+	return this->m_players;
+}

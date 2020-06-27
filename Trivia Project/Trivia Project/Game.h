@@ -25,6 +25,8 @@ public:
 	bool removePlayer(LoggedUser user);
 	bool checkUserIsInGame(LoggedUser user);
 	bool operator == (Game other);
+	int getId();
+	std::map<LoggedUser, GameData> getPlayersGameData();
 private:
 	std::vector<Question> m_questions;
 	std::map<LoggedUser, GameData> m_players;

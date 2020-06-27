@@ -53,8 +53,26 @@ RequestResult GameRequestHandler::leaveGame(RequestInfo info)
 
 RequestResult GameRequestHandler::getGameResults(RequestInfo info)
 {
-	RequestResult f;
-	return f;
+	GetGameResultsResponse resp;
+	try
+	{
+		resp.results = m_handlerFactory->getGameManager()->getGameResults(*this->m_user);
+	}
+	catch (const std::exception & e)
+	{
+		resp.status = FAILED;
+		return RequestResult
+		{
+			JsonResponsePacketSerializer::serializeGetGameResultsResponse(resp),
+			this->m_handlerFactory->createMenuRequestHandler(this->m_user)
+		};
+	}
+	resp.status = SUCCEEDED;
+	return RequestResult
+	{
+		JsonResponsePacketSerializer::serializeGetGameResultsResponse(resp),
+		this->m_handlerFactory->createGameRequestHandler(this->m_user,this->m_handlerFactory,*this->m_gameManager)
+	};
 }
 
 RequestResult GameRequestHandler::getQuestion(RequestInfo info)
