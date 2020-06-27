@@ -1,0 +1,103 @@
+﻿<Window x:Class="ClientWPF.JoinRoom"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ClientWPF"
+        mc:Ignorable="d" FontSize="28" FontFamily="Forte"
+        Title="JoinRoom" Height="600" Width="800">
+    <Grid>
+        <Grid.Background>
+            <ImageBrush ImageSource="Images/genBackground.png" Stretch="UniformToFill"/>
+        </Grid.Background>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="20"/>
+            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="20"/>
+        </Grid.ColumnDefinitions>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="20"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="20"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Grid.Row="1" Grid.Column="2"
+                   Text="Join Room"
+                   FontFamily="Ravie"
+                   FontSize="50"
+                   Margin="200, 0, 200, 10">
+        </TextBlock>
+        
+        <ScrollViewer Grid.Row="2" Grid.Column="2" 
+                      Margin="150,10,150,20">
+            <ListBox x:Name="availableRooms" 
+                     MinHeight="170" 
+                     ItemsSource="{Binding rooms, Mode=OneWayToSource}"
+                     SelectionChanged="availableRooms_SelectionChanged">
+            </ListBox>
+        </ScrollViewer>
+
+        <Button x:Name="refreshGames"
+                Content="Refresh"
+                FontSize="24"
+                Grid.Column="1"
+                Grid.Row="2"
+                Margin="0, 70"
+                Padding="5, 7"
+                HorizontalAlignment="Center"
+                Click="refreshGames_Click">
+            <Button.Resources>
+                <Style TargetType="Border">
+                    <Setter Property="CornerRadius" Value="5"/>
+                </Style>
+            </Button.Resources>
+        </Button>
+        
+        <TextBlock x:Name="showRoomPlayers"
+                   Grid.Column="2" Grid.Row="3"
+                   Text="Room Players:" FontSize="28"
+                   Margin="50, 5, 150, 5">
+
+        </TextBlock>
+
+        <ScrollViewer Grid.Row="4" Grid.Column="2"
+                      Margin="250,10,250,10">
+            <ListBox x:Name="playersInRoom" 
+                     MinHeight="100" 
+                     ItemsSource="{Binding roomPlayers, Mode=OneWayToSource}"
+                     >
+            </ListBox>
+        </ScrollViewer>
+
+        <Button x:Name="joinRoomButton" 
+                Grid.Column="2" Grid.Row="5"
+                Content="Join"
+                FontSize="36"
+                Margin="320, 35, 270, 0"
+                Click="joinRoomButton_Click"
+                IsEnabled="{Binding ElementName=availableRooms, 
+                        Path=SelectedItems.Count}">
+            <Button.Resources>
+                <Style TargetType="Border">
+                    <Setter Property="CornerRadius" Value="5"/>
+                </Style>
+            </Button.Resources>
+        </Button>
+        <Button x:Name="CancelButton" 
+            Grid.Column="1" Grid.Row="5"
+            Content="Cancel"
+            FontSize="36"
+            Margin="200, 35, 480, 0"
+            Click="CancelButton_Click"
+            Grid.ColumnSpan="2"/>
+    </Grid>
+</Window>

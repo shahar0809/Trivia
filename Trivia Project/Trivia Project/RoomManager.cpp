@@ -1,10 +1,11 @@
 #include "RoomManager.h"
 
-void RoomManager::createRoom(LoggedUser user, RoomData data)
+
+Room* RoomManager::createRoom(LoggedUser user, RoomData data)
 {
-	std::string roomData("ROOM" + std::to_string(this->m_rooms.size()));
-	m_rooms[roomId] = *new Room(this->roomId, roomData, user);
+	m_rooms[roomId] = *new Room(this->roomId, data, user);
 	this->roomId++;
+	return &(m_rooms[roomId - 1]);
 }
 
 bool RoomManager::deleteRoom(int ID)
@@ -14,7 +15,7 @@ bool RoomManager::deleteRoom(int ID)
 
 	if (it != this->m_rooms.end())
 	{
-		this->m_rooms.erase(it);
+		this->m_rooms.erase(ID);
 		return true;
 	}
 	return false;
@@ -41,4 +42,14 @@ std::vector<RoomData> RoomManager::getRooms()
 		rooms.push_back(it->second.getMetadata());
 	}
 	return rooms;
+}
+
+Room* RoomManager::getRoom(int roomId)
+{
+	return &this->m_rooms[roomId];
+}
+
+int RoomManager::getLastId()
+{
+	return this->roomId-1;
 }
