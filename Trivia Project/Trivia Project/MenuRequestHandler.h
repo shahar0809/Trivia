@@ -20,7 +20,7 @@ public:
 
 private:
 	LoggedUser* m_user;
-	RequestHandlerFactory  m_handlerFactory;
+	RequestHandlerFactory m_handlerFactory;
 
 	RequestResult logout(RequestInfo info);
 	RequestResult getRooms(RequestInfo info);

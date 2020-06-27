@@ -6,6 +6,7 @@
 #include "Helper.h"
 #include "Room.h"
 #include "JsonRequestPacketDeserializer.h"
+#include "GameManager.h"
 
 #include "include/nlohmann/json.hpp"
 using json = nlohmann::json;
@@ -19,7 +20,8 @@ enum Codes
 	ERROR_CODE = 0, LOGIN_CODE, SIGN_UP_CODE, CREATE_ROOM_CODE, 
 	GET_ROOMS_CODE, GET_PLAYERS_IN_ROOM_CODE,
 	JOIN_ROOM_CODE, GET_STATISTICS_CODE, 
-	LOGOUT_CODE, LEAVE_ROOM_CODE, CLOSE_ROOM_CODE, START_GAME_CODE, GET_ROOM_STATE_CODE
+	LOGOUT_CODE, LEAVE_ROOM_CODE, CLOSE_ROOM_CODE, START_GAME_CODE, GET_ROOM_STATE_CODE,
+	LEAVE_GAME_CODE, GET_GAME_RESULTS_CODE, GET_QUESTION_CODE, SUBMIT_ANS_CODE
 };
 
 struct ErrorResponse
@@ -96,6 +98,30 @@ struct LeaveRoomResponse
 	unsigned int status;
 };
 
+struct LeaveGameResponse
+{
+	unsigned int status;
+};
+
+struct GetQuestionResponse
+{
+	unsigned int status;
+	std::string question;
+	std::map<unsigned int, std::string> answers;
+};
+
+struct SubmitAnswerResponse
+{
+	unsigned int status;
+	unsigned int correctAnswerId;
+};
+
+struct GetGameResultsResponse
+{
+	unsigned int status;
+	std::vector<PlayerResults> results;
+};
+
 class JsonResponsePacketSerializer
 {
 public:
@@ -115,6 +141,10 @@ public:
 	static std::string serializeGetRoomStateResponse(GetRoomStateResponse getRoomState);
 	static std::string serializeLeaveRoomResponse(LeaveRoomResponse leaveRoom);
 
+	static std::string serializeGetGameResultsResponse(GetGameResultsResponse getGameResults);
+	static std::string serializeSubmitAnswerResponse(SubmitAnswerResponse submitAnswer);
+	static std::string serializeGetQuestionResponse(GetQuestionResponse getQuestion);
+	static std::string serializeLeaveGameResponse(LeaveGameResponse leaveGame);
 private:
 	static std::string serializeResponse(json j, int code);
 

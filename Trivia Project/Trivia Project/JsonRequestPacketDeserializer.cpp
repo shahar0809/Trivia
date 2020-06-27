@@ -83,3 +83,15 @@ CreateRoomRequest JsonRequestPacketDeserializer::deserializeCreateRoomRequest(st
 		j[jsonFields[ANS_TIMEOUT]]
 	};
 }
+
+SubmitAnswerRequest JsonRequestPacketDeserializer::deserializerSubmitAnswerRequest(std::vector<uint8_t> buffer)
+{
+	json j = json::parse(buffer);
+
+	// Printing json fields (to make sure that the data transformation is valid).
+	std::cout <<
+		"Submit Answer Request:" << std::endl <<
+		"Correct Answer ID: " << j[jsonFields[CORRECT_ANS_ID]] << std::endl << std::endl;
+
+	return SubmitAnswerRequest{ j[jsonFields[CORRECT_ANS_ID]] };
+}

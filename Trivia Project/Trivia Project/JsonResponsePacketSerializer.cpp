@@ -119,7 +119,7 @@ std::string JsonResponsePacketSerializer::serializeStartGameResponse(StartGameRe
 {
 	json j;
 	j[jsonFields[STATUS]] = startGame.status;
-	return JsonResponsePacketSerializer::serializeResponse(j, START_GAME_CODE+ SIGN_FOR_TWO_BITS_CODES);
+	return JsonResponsePacketSerializer::serializeResponse(j, START_GAME_CODE + SIGN_FOR_TWO_BITS_CODES);
 }
 std::string JsonResponsePacketSerializer::serializeGetRoomStateResponse(GetRoomStateResponse getRoomState)
 {
@@ -132,9 +132,48 @@ std::string JsonResponsePacketSerializer::serializeGetRoomStateResponse(GetRoomS
 	return JsonResponsePacketSerializer::serializeResponse(j, GET_ROOM_STATE_CODE+ SIGN_FOR_TWO_BITS_CODES);
 	
 }
+
 std::string JsonResponsePacketSerializer::serializeLeaveRoomResponse(LeaveRoomResponse leaveRoom)
 {
 	json j;
 	j[jsonFields[STATUS]] = leaveRoom.status;
 	return JsonResponsePacketSerializer::serializeResponse(j, LEAVE_ROOM_CODE+ SIGN_FOR_TWO_BITS_CODES);
+}
+
+std::string JsonResponsePacketSerializer::serializeGetGameResultsResponse(GetGameResultsResponse getGameResults)
+{
+	json j;
+	j[jsonFields[STATUS]] = getGameResults.status;
+	std::vector<std::string> results;
+
+	for (auto user : getGameResults.results)
+	{
+		results.push_back(user.toString());
+	}
+	j[jsonFields[RESULTS]] = json(results);
+	return JsonResponsePacketSerializer::serializeResponse(j, GET_GAME_RESULTS_CODE + SIGN_FOR_TWO_BITS_CODES);
+}
+
+std::string JsonResponsePacketSerializer::serializeSubmitAnswerResponse(SubmitAnswerResponse submitAnswer)
+{
+	json j;
+	j[jsonFields[STATUS]] = submitAnswer.status;
+	j[jsonFields[CORRECT_ANS_ID]] = submitAnswer.correctAnswerId;
+	return JsonResponsePacketSerializer::serializeResponse(j, SUBMIT_ANS_CODE + SIGN_FOR_TWO_BITS_CODES);
+}
+
+std::string JsonResponsePacketSerializer::serializeGetQuestionResponse(GetQuestionResponse getQuestion)
+{
+	json j;
+	j[jsonFields[STATUS]] = getQuestion.status;
+	j[jsonFields[QUESTION]] = getQuestion.question;
+	j[jsonFields[ANSWERS]] = json(getQuestion.answers);
+	return JsonResponsePacketSerializer::serializeResponse(j, GET_QUESTION_CODE + SIGN_FOR_TWO_BITS_CODES);
+}
+
+std::string JsonResponsePacketSerializer::serializeLeaveGameResponse(LeaveGameResponse leaveGame)
+{
+	json j;
+	j[jsonFields[STATUS]] = leaveGame.status;
+	return JsonResponsePacketSerializer::serializeResponse(j, LEAVE_GAME_CODE + SIGN_FOR_TWO_BITS_CODES);
 }

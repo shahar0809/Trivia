@@ -11,7 +11,8 @@ static const char* jsonFields[] = {
 	"Username", "Password", "Email",
 	"RoomId", 
 	"RoomName", "NumOfPlayers", "NumOfQuestions", "TimeForQuestion",
-	"Status", "PlayersInRoom", "Rooms", "UserStatistics", "HighScores", "IsActive"
+	"Status", "PlayersInRoom", "Rooms", "UserStatistics", "HighScores", "IsActive",
+	"Question", "Answers", "CorrectAnswerId", "Results"
 };
 
 enum JsonFieldsIndices 
@@ -19,7 +20,8 @@ enum JsonFieldsIndices
 	USERNAME = 0, PASSWORD, EMAIL, 
 	ROOM_ID,
 	ROOM_NAME, MAX_USERS, QUESTIONS_COUNT, ANS_TIMEOUT,
-	STATUS, PLAYERS_IN_ROOM, ROOMS, USER_STATS, HIGH_SCORES,IS_ACTIVE
+	STATUS, PLAYERS_IN_ROOM, ROOMS, USER_STATS, HIGH_SCORES, IS_ACTIVE,
+	QUESTION, ANSWERS, CORRECT_ANS_ID, RESULTS
 };
 
 struct LoginRequest
@@ -66,7 +68,10 @@ struct CreateRoomRequest
 	}
 };
 
-
+struct SubmitAnswerRequest
+{
+	unsigned int answerId;
+};
 
 class JsonRequestPacketDeserializer
 {
@@ -76,5 +81,6 @@ public:
 	static GetPlayersInRoomRequest deserializeGetPlayersRequest(std::vector<uint8_t> buffer);
 	static JoinRoomRequest deserializeJoinRoomRequest(std::vector<uint8_t> buffer);
 	static CreateRoomRequest deserializeCreateRoomRequest(std::vector<uint8_t> buffer);
+	static SubmitAnswerRequest deserializerSubmitAnswerRequest(std::vector<uint8_t> buffer);
 };
 
