@@ -77,12 +77,52 @@ RequestResult GameRequestHandler::getGameResults(RequestInfo info)
 
 RequestResult GameRequestHandler::getQuestion(RequestInfo info)
 {
-	RequestResult f;
-	return f;
+	GetQuestionResponse resp;
+	try
+	{
+		Question q = m_handlerFactory->getGameManager()->getQuestion(*this->m_user);
+		resp.answers = q.answers;
+		resp.question = q.question;
+	}
+	catch (const std::exception & e)
+	{
+		resp.status = FAILED;
+		return RequestResult
+		{
+			JsonResponsePacketSerializer::serializeGetQuestionResponse(resp),
+			this->m_handlerFactory->createMenuRequestHandler(this->m_user)
+		};
+	}
+	resp.status = SUCCEEDED;
+	return RequestResult
+	{
+		JsonResponsePacketSerializer::serializeGetQuestionResponse(resp),
+		this->m_handlerFactory->createGameRequestHandler(this->m_user,this->m_handlerFactory,*this->m_gameManager)
+	};
 }
+
 
 RequestResult GameRequestHandler::submitAnswer(RequestInfo info)
 {
-	RequestResult f;
-	return f;
+	SubmitAnswerRequest t = JsonRequestPacketDeserializer::deserializerSubmitAnswerRequest(info.buffer);
+	SubmitAnswerResponse resp;
+	resp.correctAnswerId = m_handlerFactory->getGameManager()->getGame(*m_user)->submitAnswer(*m_user, t.answerId);
+	if (resp.correctAnswerId != -1)
+	{
+		resp.status = SUCCEEDED;
+		return RequestResult
+		{
+			JsonResponsePacketSerializer::serializeSubmitAnswerResponse(resp),
+			this->m_handlerFactory->createGameRequestHandler(this->m_user,this->m_handlerFactory,*this->m_gameManager)
+		};
+	}
+	else
+	{
+		resp.status = FAILED;
+		return RequestResult
+		{
+			JsonResponsePacketSerializer::serializeSubmitAnswerResponse(resp),
+			this->m_handlerFactory->createMenuRequestHandler(this->m_user)
+		};
+	}
 }

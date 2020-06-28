@@ -4,6 +4,7 @@
 #include "RequestHandlerFactory.h"
 #include "MenuRequestHandler.h"
 
+
 class RequestHandlerFactory;
 
 class GameRequestHandler : public IRequestHandler

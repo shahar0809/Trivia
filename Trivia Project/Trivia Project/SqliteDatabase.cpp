@@ -58,21 +58,25 @@ int SqliteDatabase::questionsCallback(void* data, int argc, char** argv, char** 
 		if (std::string(azColName[i]) == "QUESTION")
 			question.question = argv[i];
 
-		else if (std::string(azColName[i]) == "CORRECT_ANSWER")
-			question.correctAnswer = argv[i];
-
-		else if (std::string(azColName[i]) == "ANSWER2")
-			question.answer2 = argv[i];
-
-		else if (std::string(azColName[i]) == "ANSWER3")
-			question.answer3 = argv[i];
-
-		else if (std::string(azColName[i]) == "ANSWER4")
-			question.answer4 = argv[i];
+		//There is no matter what answer it is...
+		//Correct answer will be alwayes the first because of the order in the DB
+		else
+			pushAnswerInRandomIndex(&question.answers, argv[i]);
 	}
 
 	questionsList->push_back(question);
 	return 0;
+}
+
+void SqliteDatabase::pushAnswerInRandomIndex(std::map<unsigned int, std::string>* answers, std::string ans)
+{
+	srand(time(NULL));
+	int randomNum;
+	do
+	{
+		randomNum = rand() % 4 + 1;
+	} while (answers->find(randomNum) != answers->end());
+	answers->insert(std::pair<unsigned int, std::string>(randomNum, ans));
 }
 
 int SqliteDatabase::scoresCallback(void* data, int argc, char** argv, char** azColName)

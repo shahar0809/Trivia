@@ -3,6 +3,7 @@
 //#include "GameManager.h"
 #include "IDatabase.h"
 #include "LoggedUser.h"
+#include <iostream>
 
 
 struct GameData
@@ -21,7 +22,7 @@ class Game
 public:
 	Game(std::vector<LoggedUser> users, int id);
 	Question getQuestionForUser(LoggedUser user);
-	bool submitAnswer();
+	int submitAnswer(LoggedUser user, int answerId);
 	bool removePlayer(LoggedUser user);
 	bool checkUserIsInGame(LoggedUser user);
 	bool operator == (Game other);

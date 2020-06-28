@@ -1,5 +1,6 @@
 #pragma once
-
+#include <stdlib.h>
+#include <time.h>
 #include <vector>
 #include <iostream>
 #include "IDataBase.h"
@@ -46,4 +47,6 @@ private:
 
 	void createStatisticsTable();
 	void createScoreTable();
+
+	static void pushAnswerInRandomIndex(std::map<unsigned int, std::string>* answers, std::string ans);
 };

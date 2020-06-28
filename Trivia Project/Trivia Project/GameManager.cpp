@@ -50,4 +50,12 @@ std::vector<PlayerResults> GameManager::getGameResults(LoggedUser user)
 			it->second.averangeAnswerTime };
 		results.push_back(playerDetails);
 	}
+	return results;
+}
+
+Question GameManager::getQuestion(LoggedUser user)
+{
+	Game* g = getGame(user);
+	std::map<LoggedUser, GameData> players = g->getPlayersGameData();
+	return players[user].currentQuestion;
 }
