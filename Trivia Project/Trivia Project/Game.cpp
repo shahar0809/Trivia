@@ -81,6 +81,11 @@ bool Game::operator==(const Game& other) const
 	return this->m_Id == other.m_Id;
 }
 
+bool Game::operator<(const Game& other) const
+{
+	return this->m_Id < other.m_Id;
+}
+
 int Game::getId()
 {
 	return this->m_Id;

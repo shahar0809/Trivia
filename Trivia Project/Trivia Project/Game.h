@@ -27,6 +27,7 @@ public:
 	bool checkUserIsInGame(LoggedUser user);
 
 	bool operator==(const Game& other) const;
+	bool operator<(const Game& other) const;
 	int getId();
 	std::map<LoggedUser, GameData> getPlayersGameData();
 
