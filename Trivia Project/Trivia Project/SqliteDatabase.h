@@ -1,6 +1,5 @@
 #pragma once
-#include <stdlib.h>
-#include <time.h>
+
 #include <vector>
 #include <iostream>
 #include "IDataBase.h"

@@ -18,9 +18,23 @@ std::map<unsigned int, std::string> Question::getPossibleAnswers()
 
 	for (int i = 0; i < NUM_OF_POSSIBLE_ANSWERS; i++)
 	{
-		answers.insert[i + 1] = m_possibleAnswers[i];
+		//answers.insert[i + 1] = m_possibleAnswers[i];
+		pushAnswerWithRandomIndex(&answers, m_possibleAnswers[i]);
 	}
 	return answers;
+}
+
+void Question::pushAnswerWithRandomIndex(std::map<unsigned int, std::string>* answers, std::string ans)
+{
+	srand(time(NULL));
+	int randomNum;
+	do
+	{
+		randomNum = rand() % 4 + 1;
+	}
+	while (answers->find(randomNum) != answers->end());
+
+	answers->insert(std::pair<unsigned int, std::string>(randomNum, ans));
 }
 
 std::string Question::getCorrectAnswer()

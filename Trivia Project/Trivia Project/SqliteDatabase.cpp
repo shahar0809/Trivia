@@ -68,17 +68,6 @@ int SqliteDatabase::questionsCallback(void* data, int argc, char** argv, char** 
 	return 0;
 }
 
-void SqliteDatabase::pushAnswerInRandomIndex(std::map<unsigned int, std::string>* answers, std::string ans)
-{
-	srand(time(NULL));
-	int randomNum;
-	do
-	{
-		randomNum = rand() % 4 + 1;
-	} while (answers->find(randomNum) != answers->end());
-	answers->insert(std::pair<unsigned int, std::string>(randomNum, ans));
-}
-
 int SqliteDatabase::scoresCallback(void* data, int argc, char** argv, char** azColName)
 {
 	std::vector<Score>* scoresList = (std::vector<Score>*)data;

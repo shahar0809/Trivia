@@ -2,6 +2,8 @@
 #include <iostream>
 #include <vector>
 #include <map>
+#include <stdlib.h>
+#include <time.h>
 
 #define NUM_OF_POSSIBLE_ANSWERS 4
 
@@ -15,6 +17,7 @@ public:
 	std::string getCorrectAnswer();
 	unsigned int getCorrectAnswerId();
 	void addPossibleAnswer(std::string answer) { m_possibleAnswers.push_back(answer); };
+	void pushAnswerWithRandomIndex(std::map<unsigned int, std::string>* answers, std::string ans);
 
 private:
 	std::string m_question;
