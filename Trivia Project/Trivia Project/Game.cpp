@@ -4,8 +4,7 @@
 Game::Game(std::vector<LoggedUser> users, int id)
 {
 	this->m_Id = id;
-	Question q{	};
-	GameData beginGameData{ q, 0, 0, 0, 0 };
+	GameData beginGameData{ nullptr, 0, 0, 0, 0 };
 
 	// Initializing game data of all users
 	for (auto user : users)
@@ -47,7 +46,7 @@ int Game::submitAnswer(LoggedUser user,int answerId)
 	try
 	{
 		data = &(m_players.find(user)->second);
-		correctAnswerId = data->currentQuestion.getCorrectAnswerId();
+		correctAnswerId = data->currentQuestion->getCorrectAnswerId();
 	}
 	catch (const std::exception & e)
 	{

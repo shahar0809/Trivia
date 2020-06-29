@@ -61,5 +61,5 @@ Question GameManager::getQuestion(LoggedUser user)
 {
 	Game* g = getGame(user);
 	std::map<LoggedUser, GameData> players = g->getPlayersGameData();
-	return players[user].currentQuestion;
+	return *players[user].currentQuestion;
 }
