@@ -1,6 +1,5 @@
 #include "GameManager.h"
 
-
 Game* GameManager::createGame(Room room)
 {
 	Game * game = new Game(room.getAllUsers(),room.getMetadata().id);
@@ -8,7 +7,7 @@ Game* GameManager::createGame(Room room)
 	return game;
 }
 
-//This function removes the game that the given logged user attends.
+// This function removes the game that the given logged user attends.
 bool GameManager::deleteGame(LoggedUser user)
 {
 	std::vector<Game>::iterator it;
@@ -39,15 +38,20 @@ Game* GameManager::getGame(LoggedUser user)
 std::vector<PlayerResults> GameManager::getGameResults(LoggedUser user)
 {
 	std::map<LoggedUser, GameData> playersData = this->getGame(user)->getPlayersGameData();
-	std::map<LoggedUser, GameData>::iterator it;
 	std::vector<PlayerResults> results;
-	for (it = playersData.begin(); it != playersData.end(); it++)
+
+	for (auto playerData : playersData)
 	{
-		LoggedUser user = it->first;
-		PlayerResults playerDetails{ user.getUsername(),
-			it->second.correctAnswerCount,
-			it->second.wrongAnswerCount,
-			it->second.averangeAnswerTime };
+		LoggedUser user = playerData.first;
+		GameData gameData = playerData.second;
+
+		PlayerResults playerDetails
+		{ 
+			user.getUsername(),
+			gameData.correctAnswerCount,
+			gameData.wrongAnswerCount,
+			gameData.averangeAnswerTime 
+		};
 		results.push_back(playerDetails);
 	}
 	return results;

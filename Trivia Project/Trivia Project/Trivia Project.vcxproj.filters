@@ -23,6 +23,7 @@
     <ClCompile Include="GameManager.cpp" />
     <ClCompile Include="GameRequestHandler.cpp" />
     <ClCompile Include="Game.cpp" />
+    <ClCompile Include="Question.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Communicator.h" />
@@ -50,5 +51,6 @@
     <ClInclude Include="GameManager.h" />
     <ClInclude Include="GameRequestHandler.h" />
     <ClInclude Include="Game.h" />
+    <ClInclude Include="Question.h" />
   </ItemGroup>
 </Project>

@@ -4,30 +4,9 @@
 #include <string>
 #include <vector>
 #include <map>
+#include "Question.h"
 
 #define HIGHSCORE_LIMIT 5
-
-struct Question
-{
-	std::string question;
-	std::map<unsigned int, std::string> answers;
-	std::string getQuestion()
-	{
-		return question;
-	}
-	std::string getPossibleAnswers()
-	{
-		std::string result;
-		std::map<unsigned int, std::string>::iterator it;
-		for (it = answers.begin(); it != answers.end(); it++)
-			result += it->second +"'";
-		return result.substr(0, result.size() - 1);//Romve last ,
-	}
-	std::string getCorrectAnswer()
-	{
-		return answers.begin()->second;
-	}
-};
 
 struct Score
 {

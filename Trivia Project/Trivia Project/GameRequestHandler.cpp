@@ -47,7 +47,7 @@ RequestResult GameRequestHandler::leaveGame(RequestInfo info)
 	return RequestResult
 	{
 		JsonResponsePacketSerializer::serializeLeaveGameResponse(resp),
-		this->m_handlerFactory->createMenuRequestHandler(this->m_user)
+		this->m_handlerFactory->createGameRequestHandler(m_user, m_handlerFactory, *m_gameManager)
 	};
 }
 
@@ -64,25 +64,26 @@ RequestResult GameRequestHandler::getGameResults(RequestInfo info)
 		return RequestResult
 		{
 			JsonResponsePacketSerializer::serializeGetGameResultsResponse(resp),
-			this->m_handlerFactory->createMenuRequestHandler(this->m_user)
+			this->m_handlerFactory->createGameRequestHandler(m_user, m_handlerFactory, *m_gameManager)
 		};
 	}
 	resp.status = SUCCEEDED;
 	return RequestResult
 	{
 		JsonResponsePacketSerializer::serializeGetGameResultsResponse(resp),
-		this->m_handlerFactory->createGameRequestHandler(this->m_user,this->m_handlerFactory,*this->m_gameManager)
+		this->m_handlerFactory->createGameRequestHandler(m_user, m_handlerFactory, *m_gameManager)
 	};
 }
 
 RequestResult GameRequestHandler::getQuestion(RequestInfo info)
 {
 	GetQuestionResponse resp;
+
 	try
 	{
 		Question q = m_handlerFactory->getGameManager()->getQuestion(*this->m_user);
-		resp.answers = q.answers;
-		resp.question = q.question;
+		resp.answers = q.getPossibleAnswers();
+		resp.question = q.getQuestion();
 	}
 	catch (const std::exception & e)
 	{
@@ -93,6 +94,7 @@ RequestResult GameRequestHandler::getQuestion(RequestInfo info)
 			this->m_handlerFactory->createMenuRequestHandler(this->m_user)
 		};
 	}
+
 	resp.status = SUCCEEDED;
 	return RequestResult
 	{
@@ -101,13 +103,13 @@ RequestResult GameRequestHandler::getQuestion(RequestInfo info)
 	};
 }
 
-
 RequestResult GameRequestHandler::submitAnswer(RequestInfo info)
 {
-	SubmitAnswerRequest t = JsonRequestPacketDeserializer::deserializerSubmitAnswerRequest(info.buffer);
+	SubmitAnswerRequest req = JsonRequestPacketDeserializer::deserializerSubmitAnswerRequest(info.buffer);
 	SubmitAnswerResponse resp;
-	resp.correctAnswerId = m_handlerFactory->getGameManager()->getGame(*m_user)->submitAnswer(*m_user, t.answerId);
-	if (resp.correctAnswerId != -1)
+
+	resp.correctAnswerId = m_handlerFactory->getGameManager()->getGame(*m_user)->submitAnswer(*m_user, req.answerId);
+	if (resp.correctAnswerId != ERROR)
 	{
 		resp.status = SUCCEEDED;
 		return RequestResult

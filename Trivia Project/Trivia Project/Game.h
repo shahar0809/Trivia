@@ -5,7 +5,6 @@
 #include "LoggedUser.h"
 #include <iostream>
 
-
 struct GameData
 {
 	Question currentQuestion;
@@ -15,23 +14,26 @@ struct GameData
 	unsigned int averangeAnswerTime;
 };
 
-
 class GameManager;
+
 class Game
 {
 public:
 	Game(std::vector<LoggedUser> users, int id);
+
 	Question getQuestionForUser(LoggedUser user);
 	int submitAnswer(LoggedUser user, int answerId);
 	bool removePlayer(LoggedUser user);
 	bool checkUserIsInGame(LoggedUser user);
-	bool operator == (Game other);
+
+	bool operator==(const Game& other) const;
 	int getId();
 	std::map<LoggedUser, GameData> getPlayersGameData();
+
 private:
 	std::vector<Question> m_questions;
 	std::map<LoggedUser, GameData> m_players;
-	int id;
+	int m_Id;
 };
 
 

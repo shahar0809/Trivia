@@ -145,8 +145,8 @@ public:
 	static std::string serializeSubmitAnswerResponse(SubmitAnswerResponse submitAnswer);
 	static std::string serializeGetQuestionResponse(GetQuestionResponse getQuestion);
 	static std::string serializeLeaveGameResponse(LeaveGameResponse leaveGame);
+
 private:
 	static std::string serializeResponse(json j, int code);
-
 	static std::string parseVector(std::vector<std::string> vec, std::string delimeter);
 };

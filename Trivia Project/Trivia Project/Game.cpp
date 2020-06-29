@@ -3,20 +3,27 @@
 
 Game::Game(std::vector<LoggedUser> users, int id)
 {
-	this->id = id;
-	Question q{};
-	GameData beginGameData{ q,0,0,0,0 };
+	this->m_Id = id;
+	Question q{	};
+	GameData beginGameData{ q, 0, 0, 0, 0 };
+
+	// Initializing game data of all users
+	for (auto user : users)
+	{
+		this->m_players.insert(std::pair <LoggedUser, GameData>(user, beginGameData));
+	}
+
+	/*
 	std::vector<LoggedUser>::iterator it;
 	for (it = users.begin(); it != users.end(); it++)
 	{
 		this->m_players.insert(std::pair <LoggedUser, GameData>(*it, beginGameData));
-	}
+	}*/
 }
 
 
 Question Game::getQuestionForUser(LoggedUser user)
 {
-
 	int currentQuestion = m_players[user].currentQuestionIndex;
 	std::vector<Question>::iterator it = this->m_questions.begin();
 	m_players[user].currentQuestionIndex++;
@@ -30,29 +37,35 @@ Question Game::getQuestionForUser(LoggedUser user)
 	}
 	return *it;
 }
+
 int Game::submitAnswer(LoggedUser user,int answerId)
 {
-	//Should calc here the time of player answer?
 	std::map<LoggedUser, GameData>::iterator it;
+	GameData* data = nullptr;
+	unsigned int correctAnswerId = 0;
+
 	try
 	{
-		GameData d = m_players.find(user)->second;
-		if (d.currentQuestion.answers.begin()->first == answerId)
-		{
-			d.correctAnswerCount++;
-			return d.currentQuestion.answers.begin()->first;
-		}
-		else
-		{
-			d.wrongAnswerCount++;
-			return d.currentQuestion.answers.begin()->first;
-		}
+		data = &(m_players.find(user)->second);
+		correctAnswerId = data->currentQuestion.getCorrectAnswerId();
 	}
 	catch (const std::exception & e)
 	{
-		return -1;
+		return ERROR;
+	}
+
+	if (correctAnswerId == answerId)
+	{
+		data->correctAnswerCount++;
+		return correctAnswerId;
+	}
+	else
+	{
+		data->wrongAnswerCount++;
+		return correctAnswerId;
 	}
 }
+
 bool Game::removePlayer(LoggedUser user)
 {
 	this->m_players.erase(user);
@@ -63,14 +76,14 @@ bool Game::checkUserIsInGame(LoggedUser user)
 	return this->m_players.find(user) != this->m_players.end();
 }
 
-bool Game::operator == (Game other)
+bool Game::operator==(const Game& other) const
 {
-	return id == other.id;
+	return this->m_Id == other.m_Id;
 }
 
 int Game::getId()
 {
-	return this->id;
+	return this->m_Id;
 }
 
 std::map<LoggedUser, GameData> Game::getPlayersGameData()
