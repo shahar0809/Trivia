@@ -67,7 +67,15 @@ int Game::submitAnswer(LoggedUser user,int answerId)
 
 bool Game::removePlayer(LoggedUser user)
 {
-	this->m_players.erase(user);
+	try
+	{
+		this->m_players.erase(user);
+	}
+	catch (const std::exception & e)
+	{
+		return false;
+	}
+	return true;
 }
 
 bool Game::checkUserIsInGame(LoggedUser user)
