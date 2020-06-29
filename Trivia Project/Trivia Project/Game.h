@@ -7,7 +7,7 @@
 
 struct GameData
 {
-	Question currentQuestion;
+	Question* currentQuestion;
 	unsigned int currentQuestionIndex = 0;
 	unsigned int correctAnswerCount;
 	unsigned int wrongAnswerCount;
