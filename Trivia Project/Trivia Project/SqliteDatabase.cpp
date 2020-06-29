@@ -51,20 +51,20 @@ int SqliteDatabase::statisticsCallback(void* data, int argc, char** argv, char**
 int SqliteDatabase::questionsCallback(void* data, int argc, char** argv, char** azColName)
 {
 	std::list<Question>* questionsList = (std::list<Question>*)data;
-	Question question;
+	Question* question = nullptr;
 
 	for (int i = 0; i < argc; i++)
 	{
 		if (std::string(azColName[i]) == "QUESTION")
-			question.question = argv[i];
+			question->setQuestion(argv[i]);
 
 		//There is no matter what answer it is...
 		//Correct answer will be alwayes the first because of the order in the DB
 		else
-			pushAnswerInRandomIndex(&question.answers, argv[i]);
+			question->addPossibleAnswer(argv[i]);
 	}
 
-	questionsList->push_back(question);
+	questionsList->push_back(*question);
 	return 0;
 }
 
@@ -96,7 +96,6 @@ int SqliteDatabase::scoresCallback(void* data, int argc, char** argv, char** azC
 	scoresList->push_back(score);
 	return 0;
 }
-
 
 /**
 * Adds a new user to the database.

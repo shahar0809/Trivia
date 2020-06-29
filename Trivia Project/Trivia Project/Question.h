@@ -10,9 +10,11 @@ class Question
 public:
 	Question(std::string question, std::vector<std::string> possibleAnswers, int correctAnsId);
 	std::string getQuestion();
+	void setQuestion(std::string question) { m_question = question; };
 	std::map<unsigned int, std::string> getPossibleAnswers();
 	std::string getCorrectAnswer();
 	unsigned int getCorrectAnswerId();
+	void addPossibleAnswer(std::string answer) { m_possibleAnswers.push_back(answer); };
 
 private:
 	std::string m_question;
