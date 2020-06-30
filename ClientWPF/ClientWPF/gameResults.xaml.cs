@@ -39,8 +39,11 @@ namespace ClientWPF
         private NetworkStream clientStream;
         public GameResults(NetworkStream clientStream)
         {
+            this.clientStream = clientStream;
             InitializeComponent();
-            /* GetGameResultsResponse resp = Communicator.ManageSendAndGetData<GetGameResultsResponse>("", clientStream, (int)Codes.GET_GAME_RESULTS_CODE);
+
+            // Requesting game results from the server
+            GetGameResultsResponse resp = Communicator.ManageSendAndGetData<GetGameResultsResponse>("", clientStream, (int)Codes.GET_GAME_RESULTS_CODE);
 
              if (resp.status == (int)Codes.ERROR_CODE)
              {
@@ -55,30 +58,8 @@ namespace ClientWPF
                  winnerUsername.Text = resp.playerResults[0].username;
 
                  // Displaying all the results in the data grid
-                 displayPlayersResults.ItemsSource = resp.playerResults;
-             }*/
-            PlayerResults r1 = new PlayerResults { username = "a", averageAnswerTime = 7, correctAnswersCount = 50, wrongAnswersCount = 6 };
-            PlayerResults r2 = new PlayerResults { username = "b", averageAnswerTime = 2, correctAnswersCount = 4, wrongAnswersCount = 7 };
-            PlayerResults r3 = new PlayerResults { username = "e", averageAnswerTime = 4, correctAnswersCount = 36, wrongAnswersCount = 3 };
-            PlayerResults r4 = new PlayerResults { username = "c", averageAnswerTime = 9, correctAnswersCount = 1, wrongAnswersCount = 69 };
-            PlayerResults r5 = new PlayerResults { username = "d", averageAnswerTime = 6, correctAnswersCount = 54, wrongAnswersCount = 420 };
-            List<PlayerResults> l = new List<PlayerResults>();
-            l.Add(r1);
-            l.Add(r2);
-            l.Add(r3);
-            l.Add(r4);
-            l.Add(r5);
-            l.Add(r5);
-            l.Add(r5);
-            l.Add(r5);
-            l.Add(r5);
-            l.Add(r5);
-            l.Add(r5);
-            l.Add(r5);
-            l.Add(r5);
-            l.Add(r5);
-            winnerUsername.Text = r1.username;
-            playersResult.ItemsSource = l;
+                 playersResult.ItemsSource = resp.playerResults;
+             }
         }
 
         private void backToMenu_Click(object sender, RoutedEventArgs e)
