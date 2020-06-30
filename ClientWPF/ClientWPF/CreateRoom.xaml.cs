@@ -88,8 +88,8 @@ namespace ClientWPF
 
                 MessageBox.Show("about to open room admin.");
                 // Show the room details to the admin.
-                var roomAdmin = new RoomAdmin(roomData, clientStream, true);
-                roomAdmin.Show();
+                var waitInRoom = new WaitInRoom(roomData, clientStream, true);
+                waitInRoom.Show();
             }
             Close();
         }

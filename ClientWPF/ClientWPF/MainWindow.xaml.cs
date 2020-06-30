@@ -26,12 +26,15 @@ namespace ClientWPF
         public MainWindow()
         {
             InitializeComponent();
+            var GameResults = new GameResults(clientStream);
+            GameResults.Show();
+            this.Close();
 
             //Initiate the socket with all the details.
-            TcpClient client = new TcpClient();
+            /*TcpClient client = new TcpClient();
             IPEndPoint serverEndPoint = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 1050);
             client.Connect(serverEndPoint);
-            this.clientStream = client.GetStream();
+            this.clientStream = client.GetStream();*/
         }
 
         public MainWindow(NetworkStream clientStream)

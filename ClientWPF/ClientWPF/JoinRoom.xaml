@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ClientWPF"
         mc:Ignorable="d" FontSize="28" FontFamily="Forte"
-        Title="JoinRoom" Height="600" Width="800">
+        Title="Join Room" Height="600" Width="800">
     <Grid>
         <Grid.Background>
             <ImageBrush ImageSource="Images/genBackground.png" Stretch="UniformToFill"/>
@@ -14,7 +14,7 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="20"/>
             <ColumnDefinition Width="auto"/>
-            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="20"/>
         </Grid.ColumnDefinitions>
@@ -30,15 +30,22 @@
             <RowDefinition Height="20"/>
         </Grid.RowDefinitions>
 
-        <TextBlock Grid.Row="1" Grid.Column="2"
+        <TextBlock Grid.Row="1" Grid.Column="1"
                    Text="Join Room"
                    FontFamily="Ravie"
                    FontSize="50"
-                   Margin="200, 0, 200, 10">
+                   HorizontalAlignment="Center"
+                   Grid.ColumnSpan="3"
+                   Margin="0, 0, 0, 10"
+                   >
         </TextBlock>
         
-        <ScrollViewer Grid.Row="2" Grid.Column="2" 
-                      Margin="150,10,150,20">
+        <ScrollViewer Grid.Row="2" Grid.Column="1"
+                      Grid.ColumnSpan="3"
+                      HorizontalAlignment="Center"
+                      MinWidth="300"
+                      Margin="0, 10"
+                      >
             <ListBox x:Name="availableRooms" 
                      MinHeight="170" 
                      ItemsSource="{Binding rooms, Mode=OneWayToSource}"
@@ -63,14 +70,21 @@
         </Button>
         
         <TextBlock x:Name="showRoomPlayers"
-                   Grid.Column="2" Grid.Row="3"
+                   HorizontalAlignment="Center"
+                   Grid.ColumnSpan="3"
+                   Grid.Column="1" Grid.Row="3"
                    Text="Room Players:" FontSize="28"
-                   Margin="50, 5, 150, 5">
+                   Margin="0, 0, 0, 0">
 
         </TextBlock>
 
-        <ScrollViewer Grid.Row="4" Grid.Column="2"
-                      Margin="250,10,250,10">
+        <ScrollViewer Grid.Row="4" Grid.Column="1"
+                      HorizontalAlignment="Center"
+                      Grid.ColumnSpan="3"
+                      MinHeight="100"
+                      Margin="0 ,0, 0, 40"
+                      MinWidth="250"
+                      >
             <ListBox x:Name="playersInRoom" 
                      MinHeight="100" 
                      ItemsSource="{Binding roomPlayers, Mode=OneWayToSource}"
@@ -79,10 +93,11 @@
         </ScrollViewer>
 
         <Button x:Name="joinRoomButton" 
-                Grid.Column="2" Grid.Row="5"
+                Grid.Column="3" Grid.Row="5"
                 Content="Join"
                 FontSize="36"
-                Margin="320, 35, 270, 0"
+                HorizontalAlignment="Center"
+                Padding="10"
                 Click="joinRoomButton_Click"
                 IsEnabled="{Binding ElementName=availableRooms, 
                         Path=SelectedItems.Count}">
@@ -92,12 +107,19 @@
                 </Style>
             </Button.Resources>
         </Button>
+
         <Button x:Name="CancelButton" 
-            Grid.Column="1" Grid.Row="5"
+            Grid.Column="2" Grid.Row="5"
             Content="Cancel"
+            Padding="10"
             FontSize="36"
-            Margin="200, 35, 480, 0"
-            Click="CancelButton_Click"
-            Grid.ColumnSpan="2"/>
+            HorizontalAlignment="Center"
+            Click="CancelButton_Click">
+            <Button.Resources>
+                <Style TargetType="Border">
+                    <Setter Property="CornerRadius" Value="5"/>
+                </Style>
+            </Button.Resources>
+        </Button>
     </Grid>
 </Window>

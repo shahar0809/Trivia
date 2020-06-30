@@ -21,7 +21,6 @@ namespace ClientWPF
     /// Interaction logic for JoinRoom.xaml
     /// </summary>
     /// 
-
     public struct RoomData
     {
         public int RoomId { set; get; }
@@ -123,8 +122,8 @@ namespace ClientWPF
                     IsActive = resp.IsActive
                 };
 
-                var roomAdmin = new RoomAdmin(roomData, clientStream, false);
-                roomAdmin.Show();
+                var waitInRoom = new WaitInRoom(roomData, clientStream, false);
+                waitInRoom.Show();
                 this.Close();
             }
         }
@@ -164,6 +163,5 @@ namespace ClientWPF
             mainWindow.Show();
             this.Close();
         }
-        
     }
 }

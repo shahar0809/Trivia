@@ -62,6 +62,9 @@
     <Compile Include="CreateRoom.xaml.cs">
       <DependentUpon>CreateRoom.xaml</DependentUpon>
     </Compile>
+    <Compile Include="GameResults.xaml.cs">
+      <DependentUpon>GameResults.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Helper.cs" />
     <Compile Include="HighScores.xaml.cs">
       <DependentUpon>HighScores.xaml</DependentUpon>
@@ -75,8 +78,8 @@
     <Compile Include="MyStatistics.xaml.cs">
       <DependentUpon>MyStatistics.xaml</DependentUpon>
     </Compile>
-    <Compile Include="RoomAdmin.xaml.cs">
-      <DependentUpon>RoomAdmin.xaml</DependentUpon>
+    <Compile Include="WaitInRoom.xaml.cs">
+      <DependentUpon>WaitInRoom.xaml</DependentUpon>
     </Compile>
     <Compile Include="SignUp.xaml.cs">
       <DependentUpon>SignUp.xaml</DependentUpon>
@@ -87,6 +90,10 @@
     <Page Include="CreateRoom.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="GameResults.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="HighScores.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -116,7 +123,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="RoomAdmin.xaml">
+    <Page Include="WaitInRoom.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
