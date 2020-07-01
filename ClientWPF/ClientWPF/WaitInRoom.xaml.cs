@@ -23,7 +23,7 @@ namespace ClientWPF
     /// </summary>
     /// 
 
-    public partial class RoomAdmin : Window
+    public partial class WaitInRoom : Window
     {
         private RoomData roomData;
         private bool isAdmin;
@@ -36,7 +36,7 @@ namespace ClientWPF
             public List<string> roomPlayers;
         }
 
-        public RoomAdmin(RoomData data, NetworkStream clientStream, bool isAdmin)
+        public WaitInRoom(RoomData data, NetworkStream clientStream, bool isAdmin)
         {
             InitializeComponent();
             this.roomData= data;
@@ -54,7 +54,7 @@ namespace ClientWPF
                 leaveRoom.Visibility = Visibility.Collapsed;
             }
 
-            // Showing room data to the admin
+            // Displaying room data to the users
             displayMaxNumPlayers.Text = roomData.NumOfplayers.ToString();
             displayNumOfQuestions.Text = roomData.NumOfQuestions.ToString();
             displayTimePerQuestion.Text = roomData.TimeForQuestion.ToString();
@@ -88,8 +88,10 @@ namespace ClientWPF
 
         private void leaveRoom_Click(object sender, RoutedEventArgs e)
         {
+            // Sending a Leave Room request to the server.
             Response resp = Communicator.ManageSendAndGetData<Response>("", this.clientStream, (int)Codes.LEAVE_ROOM_CODE);
 
+            // Terminating the thread that updates the players.
             if (resp.status != (int)Codes.ERROR_CODE)
             {
                 stopUpdating = true;
@@ -112,6 +114,7 @@ namespace ClientWPF
             this.Close();
         }
 
+        /* A thread that constantly updates the players in the room */
         public void updateRoomPlayers(object sender, DoWorkEventArgs e)
         {
             // Getting the players connected to the room
@@ -138,7 +141,6 @@ namespace ClientWPF
                 Thread.Sleep(600);
             }
         }
-
         void playersChanged(object sender, ProgressChangedEventArgs e)
         {
             workerParameter param = (workerParameter)e.UserState;

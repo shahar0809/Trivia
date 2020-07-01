@@ -23,7 +23,6 @@ Game::Game(IDatabase* db,Room r)
 	}*/
 }
 
-
 Question Game::getQuestionForUser(LoggedUser user)
 {
 	int currentQuestion = m_players[user].currentQuestionIndex;

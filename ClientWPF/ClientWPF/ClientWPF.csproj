@@ -64,6 +64,9 @@
     <Compile Include="CreateRoom.xaml.cs">
       <DependentUpon>CreateRoom.xaml</DependentUpon>
     </Compile>
+    <Compile Include="GameResults.xaml.cs">
+      <DependentUpon>GameResults.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Helper.cs" />
     <Compile Include="HighScores.xaml.cs">
       <DependentUpon>HighScores.xaml</DependentUpon>
@@ -77,11 +80,16 @@
     <Compile Include="MyStatistics.xaml.cs">
       <DependentUpon>MyStatistics.xaml</DependentUpon>
     </Compile>
+<<<<<<< HEAD
     <Compile Include="Questions.xaml.cs">
       <DependentUpon>Questions.xaml</DependentUpon>
     </Compile>
     <Compile Include="RoomAdmin.xaml.cs">
       <DependentUpon>RoomAdmin.xaml</DependentUpon>
+=======
+    <Compile Include="WaitInRoom.xaml.cs">
+      <DependentUpon>WaitInRoom.xaml</DependentUpon>
+>>>>>>> 4c8b4f627a99f09e2e5224e851e4c6e48a8b08f4
     </Compile>
     <Compile Include="SignUp.xaml.cs">
       <DependentUpon>SignUp.xaml</DependentUpon>
@@ -92,6 +100,10 @@
     <Page Include="CreateRoom.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="GameResults.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="HighScores.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -121,11 +133,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+<<<<<<< HEAD
     <Page Include="Questions.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="RoomAdmin.xaml">
+=======
+    <Page Include="WaitInRoom.xaml">
+>>>>>>> 4c8b4f627a99f09e2e5224e851e4c6e48a8b08f4
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
