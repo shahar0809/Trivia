@@ -1,5 +1,10 @@
 #include "Question.h"
 
+Question::Question()
+{
+
+}
+
 Question::Question(std::string question, std::vector<std::string> possibleAnswers, int correctAnsId)
 {
 	m_question = question;
@@ -16,7 +21,10 @@ std::map<unsigned int, std::string> Question::getPossibleAnswers()
 {
 	std::map<unsigned int, std::string> answers;
 
-	for (int i = 0; i < NUM_OF_POSSIBLE_ANSWERS; i++)
+	pushAnswerWithRandomIndex(&answers, m_possibleAnswers[0]);
+	m_correctAnswerId = answers.begin()->first;
+
+	for (int i = 1; i < NUM_OF_POSSIBLE_ANSWERS; i++)
 	{
 		//answers.insert[i + 1] = m_possibleAnswers[i];
 		pushAnswerWithRandomIndex(&answers, m_possibleAnswers[i]);
@@ -45,4 +53,9 @@ std::string Question::getCorrectAnswer()
 unsigned int Question::getCorrectAnswerId()
 {
 	return m_correctAnswerId;
+}
+
+void Question::setQuestion(std::string question)
+{
+	this->m_question = question;
 }

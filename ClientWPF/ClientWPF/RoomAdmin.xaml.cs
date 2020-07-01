@@ -65,7 +65,6 @@ namespace ClientWPF
             worker.WorkerReportsProgress = true;
             worker.DoWork += updateRoomPlayers;
             worker.ProgressChanged += playersChanged;
-            worker.RunWorkerCompleted += leaveWindow;
             worker.RunWorkerAsync();
         }
 
@@ -77,9 +76,9 @@ namespace ClientWPF
             if (resp.status != (int)Codes.ERROR_CODE)
             {
                 stopUpdating = true;
-                //var mainWindow = new MainWindow(this.clientStream);
-                //mainWindow.Show();
-                //this.Close();
+                var mainWindow = new MainWindow(this.clientStream);
+                mainWindow.Show();
+                this.Close();
             }
             else
             {
@@ -94,6 +93,9 @@ namespace ClientWPF
             if (resp.status != (int)Codes.ERROR_CODE)
             {
                 stopUpdating = true;
+                var mainWindow = new MainWindow(this.clientStream);
+                mainWindow.Show();
+                this.Close();
             }
             else
             {
@@ -103,7 +105,11 @@ namespace ClientWPF
 
         private void startGame_Click(object sender, RoutedEventArgs e)
         {
-            // About to be updated in the next version.
+            stopUpdating = true;
+            Response resp = Communicator.ManageSendAndGetData<Response>("", this.clientStream, (int)Codes.START_GAME_CODE);
+            Questions q = new Questions(this.clientStream);
+            q.Show();
+            this.Close();
         }
 
         public void updateRoomPlayers(object sender, DoWorkEventArgs e)
@@ -111,7 +117,7 @@ namespace ClientWPF
             // Getting the players connected to the room
             GetPlayersInRoomRequest request = new GetPlayersInRoomRequest { RoomId = this.roomData.RoomId };
 
-            while(!stopUpdating)
+            while (!stopUpdating)
             {
                 // Requesting the players in the room
                 GetPlayersInRoomResponse resp = Communicator.ManageSendAndGetData<GetPlayersInRoomResponse>(
@@ -126,19 +132,11 @@ namespace ClientWPF
                     return;
                 }
 
-                workerParameter param = new workerParameter{ roomPlayers = resp.PlayersInRoom };
+                workerParameter param = new workerParameter { roomPlayers = resp.PlayersInRoom };
                 worker.ReportProgress(0, param);
-               
+
                 Thread.Sleep(600);
             }
-        }
-
-        void leaveWindow(object sender, RunWorkerCompletedEventArgs e)
-        {
-            // Closing the Log in window and returing to the menu.
-            var mainWindow = new MainWindow(this.clientStream);
-            mainWindow.Show();
-            this.Close();
         }
 
         void playersChanged(object sender, ProgressChangedEventArgs e)

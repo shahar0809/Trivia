@@ -4,6 +4,9 @@
 #include "IDatabase.h"
 #include "LoggedUser.h"
 #include <iostream>
+#include <vector>
+#include "Room.h"
+#include "Question.h"
 
 struct GameData
 {
@@ -19,7 +22,7 @@ class GameManager;
 class Game
 {
 public:
-	Game(std::vector<LoggedUser> users, int id);
+	Game(IDatabase* db,Room r);
 
 	Question getQuestionForUser(LoggedUser user);
 	int submitAnswer(LoggedUser user, int answerId);
@@ -32,7 +35,7 @@ public:
 	std::map<LoggedUser, GameData> getPlayersGameData();
 
 private:
-	std::vector<Question> m_questions;
+	std::vector<Question>* m_questions;
 	std::map<LoggedUser, GameData> m_players;
 	int m_Id;
 };

@@ -2,7 +2,7 @@
 #include <iomanip>
 #include <sstream>
 #include "JsonResponsePacketSerializer.h"
-#define SIGN_FOR_TWO_BITS_CODES 81
+
 
 std::string JsonResponsePacketSerializer::serializeResponse(ErrorResponse error)
 {
@@ -113,13 +113,13 @@ std::string JsonResponsePacketSerializer::serializeCloseRoomResponse(CloseRoomRe
 {
 	json j;
 	j[jsonFields[STATUS]] = closeRoom.status;
-	return JsonResponsePacketSerializer::serializeResponse(j, CLOSE_ROOM_CODE+ SIGN_FOR_TWO_BITS_CODES);
+	return JsonResponsePacketSerializer::serializeResponse(j, CLOSE_ROOM_CODE);
 }
 std::string JsonResponsePacketSerializer::serializeStartGameResponse(StartGameResponse startGame)
 {
 	json j;
 	j[jsonFields[STATUS]] = startGame.status;
-	return JsonResponsePacketSerializer::serializeResponse(j, START_GAME_CODE + SIGN_FOR_TWO_BITS_CODES);
+	return JsonResponsePacketSerializer::serializeResponse(j, START_GAME_CODE);
 }
 std::string JsonResponsePacketSerializer::serializeGetRoomStateResponse(GetRoomStateResponse getRoomState)
 {
@@ -129,7 +129,7 @@ std::string JsonResponsePacketSerializer::serializeGetRoomStateResponse(GetRoomS
 	j[jsonFields[PLAYERS_IN_ROOM]] = getRoomState.players;
 	j[jsonFields[QUESTIONS_COUNT]] = getRoomState.questionsCount;
 	j[jsonFields[IS_ACTIVE]] = getRoomState.hasGameBegun;
-	return JsonResponsePacketSerializer::serializeResponse(j, GET_ROOM_STATE_CODE+ SIGN_FOR_TWO_BITS_CODES);
+	return JsonResponsePacketSerializer::serializeResponse(j, GET_ROOM_STATE_CODE);
 	
 }
 
@@ -137,7 +137,7 @@ std::string JsonResponsePacketSerializer::serializeLeaveRoomResponse(LeaveRoomRe
 {
 	json j;
 	j[jsonFields[STATUS]] = leaveRoom.status;
-	return JsonResponsePacketSerializer::serializeResponse(j, LEAVE_ROOM_CODE+ SIGN_FOR_TWO_BITS_CODES);
+	return JsonResponsePacketSerializer::serializeResponse(j, LEAVE_ROOM_CODE);
 }
 
 std::string JsonResponsePacketSerializer::serializeGetGameResultsResponse(GetGameResultsResponse getGameResults)
@@ -151,7 +151,7 @@ std::string JsonResponsePacketSerializer::serializeGetGameResultsResponse(GetGam
 		results.push_back(user.toString());
 	}
 	j[jsonFields[RESULTS]] = json(results);
-	return JsonResponsePacketSerializer::serializeResponse(j, GET_GAME_RESULTS_CODE + SIGN_FOR_TWO_BITS_CODES);
+	return JsonResponsePacketSerializer::serializeResponse(j, GET_GAME_RESULTS_CODE);
 }
 
 std::string JsonResponsePacketSerializer::serializeSubmitAnswerResponse(SubmitAnswerResponse submitAnswer)
@@ -159,7 +159,7 @@ std::string JsonResponsePacketSerializer::serializeSubmitAnswerResponse(SubmitAn
 	json j;
 	j[jsonFields[STATUS]] = submitAnswer.status;
 	j[jsonFields[CORRECT_ANS_ID]] = submitAnswer.correctAnswerId;
-	return JsonResponsePacketSerializer::serializeResponse(j, SUBMIT_ANS_CODE + SIGN_FOR_TWO_BITS_CODES);
+	return JsonResponsePacketSerializer::serializeResponse(j, SUBMIT_ANS_CODE);
 }
 
 std::string JsonResponsePacketSerializer::serializeGetQuestionResponse(GetQuestionResponse getQuestion)
@@ -168,12 +168,12 @@ std::string JsonResponsePacketSerializer::serializeGetQuestionResponse(GetQuesti
 	j[jsonFields[STATUS]] = getQuestion.status;
 	j[jsonFields[QUESTION]] = getQuestion.question;
 	j[jsonFields[ANSWERS]] = json(getQuestion.answers);
-	return JsonResponsePacketSerializer::serializeResponse(j, GET_QUESTION_CODE + SIGN_FOR_TWO_BITS_CODES);
+	return JsonResponsePacketSerializer::serializeResponse(j, GET_QUESTION_CODE);
 }
 
 std::string JsonResponsePacketSerializer::serializeLeaveGameResponse(LeaveGameResponse leaveGame)
 {
 	json j;
 	j[jsonFields[STATUS]] = leaveGame.status;
-	return JsonResponsePacketSerializer::serializeResponse(j, LEAVE_GAME_CODE + SIGN_FOR_TWO_BITS_CODES);
+	return JsonResponsePacketSerializer::serializeResponse(j, LEAVE_GAME_CODE);
 }
