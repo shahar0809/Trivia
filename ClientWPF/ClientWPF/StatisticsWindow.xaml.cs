@@ -36,7 +36,7 @@ namespace ClientWPF
         public int NumOfGames;
     }
 
-    public struct Statistics
+    public struct Statistic
     {
         public string UserStatistics;
         public string HighScores;
@@ -45,27 +45,27 @@ namespace ClientWPF
     public partial class StatisticsWindow : Window
     {
         private NetworkStream clientStream;
-        private Statistics stats;
+        private Statistic stats;
         public StatisticsWindow(NetworkStream clientStream)
         {
             InitializeComponent();
             this.clientStream = clientStream;
 
             // Sending message.
-            stats = Communicator.ManageSendAndGetData<Statistics>("", clientStream, (int)Codes.GET_STATISTICS_CODE);
+            stats = Communicator.ManageSendAndGetData<Statistic>("", clientStream, (int)Codes.GET_STATISTICS_CODE);
         }
 
         private void myStatisticsButton_Click(object sender, RoutedEventArgs e)
         {
             string[] userStats = stats.UserStatistics.Split(',');
-            UserStats statistics = new UserStats
+            UserStats statistic = new UserStats
             {
                  AvgAnswerTime = float.Parse(userStats[0]),
                  CorrectAnswers= int.Parse(userStats[1]),
                  TotalAnswers=int.Parse(userStats[2]),
                  NumOfGames=int.Parse(userStats[3])
     };
-            var MyStatistics = new MyStatistics(clientStream, statistics);
+            var MyStatistics = new MyStatistics(clientStream, statistic);
             MyStatistics.Show();
             this.Close();
         }

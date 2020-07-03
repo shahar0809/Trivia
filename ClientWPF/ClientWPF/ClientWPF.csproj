@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{3C288592-1007-4D6F-AA82-C0AAFF7ADFA4}</ProjectGuid>
+    <ProjectGuid>{B328F3DD-FD8D-4CED-8DE7-B4732978C00C}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <RootNamespace>ClientWPF</RootNamespace>
     <AssemblyName>ClientWPF</AssemblyName>
@@ -40,8 +40,6 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -64,8 +62,8 @@
     <Compile Include="CreateRoom.xaml.cs">
       <DependentUpon>CreateRoom.xaml</DependentUpon>
     </Compile>
-    <Compile Include="GameResults.xaml.cs">
-      <DependentUpon>GameResults.xaml</DependentUpon>
+    <Compile Include="gameResults.xaml.cs">
+      <DependentUpon>gameResults.xaml</DependentUpon>
     </Compile>
     <Compile Include="Helper.cs" />
     <Compile Include="HighScores.xaml.cs">
@@ -77,19 +75,8 @@
     <Compile Include="Login.xaml.cs">
       <DependentUpon>Login.xaml</DependentUpon>
     </Compile>
-    <Compile Include="MyStatistics.xaml.cs">
-      <DependentUpon>MyStatistics.xaml</DependentUpon>
-    </Compile>
-<<<<<<< HEAD
     <Compile Include="Questions.xaml.cs">
       <DependentUpon>Questions.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="RoomAdmin.xaml.cs">
-      <DependentUpon>RoomAdmin.xaml</DependentUpon>
-=======
-    <Compile Include="WaitInRoom.xaml.cs">
-      <DependentUpon>WaitInRoom.xaml</DependentUpon>
->>>>>>> 4c8b4f627a99f09e2e5224e851e4c6e48a8b08f4
     </Compile>
     <Compile Include="SignUp.xaml.cs">
       <DependentUpon>SignUp.xaml</DependentUpon>
@@ -97,25 +84,28 @@
     <Compile Include="StatisticsWindow.xaml.cs">
       <DependentUpon>StatisticsWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="WaitInRoom.xaml.cs">
+      <DependentUpon>WaitInRoom.xaml</DependentUpon>
+    </Compile>
     <Page Include="CreateRoom.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="GameResults.xaml">
-      <SubType>Designer</SubType>
+    <Page Include="gameResults.xaml">
       <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="HighScores.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
     <Page Include="JoinRoom.xaml">
-      <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Login.xaml">
-      <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -130,31 +120,30 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="MyStatistics.xaml">
-      <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
-<<<<<<< HEAD
     <Page Include="Questions.xaml">
-      <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="RoomAdmin.xaml">
-=======
-    <Page Include="WaitInRoom.xaml">
->>>>>>> 4c8b4f627a99f09e2e5224e851e4c6e48a8b08f4
       <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="SignUp.xaml">
-      <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="StatisticsWindow.xaml">
-      <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WaitInRoom.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MyStatistics.xaml.cs">
+      <DependentUpon>MyStatistics.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -182,10 +171,11 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\goodl.png" />
+    <Resource Include="goodl.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\genBackground.png" />
+    <Resource Include="Images\goodl.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

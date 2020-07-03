@@ -10,7 +10,7 @@
         <Grid.Background>
             <ImageBrush ImageSource="Images/goodl.png" Stretch="UniformToFill"/>
         </Grid.Background>
-        
+
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="20"/>
             <ColumnDefinition Width="auto"/>

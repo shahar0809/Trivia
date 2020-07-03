@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Newtonsoft.Json;
 using System.Net.Sockets;
 using System.Net;
 
@@ -25,16 +26,17 @@ namespace ClientWPF
         private NetworkStream clientStream;
         public MainWindow()
         {
+
             InitializeComponent();
-            var GameResults = new GameResults(clientStream);
+            /*var GameResults = new GameResults(clientStream);
             GameResults.Show();
-            this.Close();
+            this.Close();*/
 
             //Initiate the socket with all the details.
-            /*TcpClient client = new TcpClient();
+            TcpClient client = new TcpClient();
             IPEndPoint serverEndPoint = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 1050);
             client.Connect(serverEndPoint);
-            this.clientStream = client.GetStream();*/
+            this.clientStream = client.GetStream();
         }
 
         public MainWindow(NetworkStream clientStream)
@@ -46,12 +48,12 @@ namespace ClientWPF
         {
             var Login = new Login(clientStream); // Create the login form.
             Login.Show(); // Show the form.
-            this.Close(); 
+            this.Close();
         }
         private void signupButtonClicked(object sender, RoutedEventArgs e)
         {
             var SignUp = new SignUp(clientStream);
-            SignUp.Show(); 
+            SignUp.Show();
             this.Close();
         }
 
@@ -83,3 +85,5 @@ namespace ClientWPF
         }
     }
 }
+
+   
