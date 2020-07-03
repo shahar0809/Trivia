@@ -50,16 +50,29 @@ RequestResult RoomAdminRequestHandler::closeRoom(RequestInfo info)
 
 RequestResult RoomAdminRequestHandler::startGame(RequestInfo info)
 {
-	// Once GameManger is implemented -> we call it to actually start the game.
-	StartGameResponse resp{ SUCCEEDED };
+	StartGameResponse resp;
 
+	try
+	{
+		this->m_handlerFactory.getGameManager()->createGame(*m_room);
+	}
+	catch (const std::exception & e)
+	{
+		resp.status = FAILED;
+		return RequestResult
+		{
+			JsonResponsePacketSerializer::serializeStartGameResponse(resp),
+			this->m_handlerFactory.createMenuRequestHandler(this->m_user)
+		};
+	}
+
+	resp.status = SUCCEEDED;
 	return RequestResult
 	{
 		JsonResponsePacketSerializer::serializeStartGameResponse(resp),
-		this->m_handlerFactory.createRoomAdminRequestHandler(
-			this->m_room,
+		this->m_handlerFactory.createGameRequestHandler(
 			this->m_user,
-			&this->m_handlerFactory,this->m_roomManager)
+			&this->m_handlerFactory,*this->m_handlerFactory.getGameManager())
 	};
 }
 

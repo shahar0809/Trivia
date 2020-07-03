@@ -50,18 +50,24 @@ int SqliteDatabase::statisticsCallback(void* data, int argc, char** argv, char**
 
 int SqliteDatabase::questionsCallback(void* data, int argc, char** argv, char** azColName)
 {
-	std::list<Question>* questionsList = (std::list<Question>*)data;
-	Question* question = nullptr;
+	std::vector<Question>* questionsList = (std::vector<Question>*)data;
+	Question* question = new Question();
 
 	for (int i = 0; i < argc; i++)
 	{
 		if (std::string(azColName[i]) == "QUESTION")
-			question->setQuestion(argv[i]);
+		{
+			question->setQuestion(std::string(argv[i]));
+		}
+			
 
 		//There is no matter what answer it is...
 		//Correct answer will be alwayes the first because of the order in the DB
-		else
-			question->addPossibleAnswer(argv[i]);
+		if(std::string(azColName[i]) == "CORRECT_ANSWER" ||
+			std::string(azColName[i]) == "ANSWER2" || 
+			std::string(azColName[i]) == "ANSWER3" || 
+			std::string(azColName[i]) == "ANSWER4" )
+			question->addPossibleAnswer(std::string(argv[i]));
 	}
 
 	questionsList->push_back(*question);
@@ -285,10 +291,10 @@ void SqliteDatabase::initQuestionTable()
 	insertOneQuestion("Neo is a character in which movie?", "Matrix", "Lord of the Ring", "Fight Club", "Intouchables");
 }
 
-std::list<Question> SqliteDatabase::getQuestions(int maybeNumOfQuestions)
+std::vector<Question>* SqliteDatabase::getQuestions(int maybeNumOfQuestions)
 {
-	std::list<Question> questionsList;
-	executeMsg("SELECT * FROM QUESTIONS;", questionsCallback, &questionsList);
+	std::vector<Question> *questionsList = new std::vector<Question>();
+	executeMsg("SELECT * FROM QUESTIONS;", questionsCallback, questionsList);
 	return questionsList;
 }
 

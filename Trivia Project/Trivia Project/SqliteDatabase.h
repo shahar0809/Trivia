@@ -17,7 +17,7 @@ public:
 	bool doesPasswordMatch(std::string userName, std::string password);
 	bool addNewUser(std::string name, std::string password, std::string email);
 
-	std::list<Question> getQuestions(int maybeNumOfQuestions);
+	std::vector<Question>* getQuestions(int maybeNumOfQuestions);
 	float getPlayerAverageAnswerTime(std::string username);
 	int getNumOfCorrectAnswers(std::string username);
 	int getNumOfTotalAnswers(std::string username);

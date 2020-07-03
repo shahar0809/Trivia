@@ -1,13 +1,16 @@
 #include "Game.h"
 #include "GameManager.h"
 
-Game::Game(std::vector<LoggedUser> users, int id)
+Game::Game(IDatabase* db,Room r)
 {
-	this->m_Id = id;
-	GameData beginGameData{ nullptr, 0, 0, 0, 0 };
-
+	this->m_Id = r.getMetadata().id;
+	//this->m_questions = new std::vector<Question>(r.getMetadata().numOfQuestions);
+	this->m_questions = db->getQuestions(r.getMetadata().numOfQuestions);
+	
+	GameData beginGameData{ &this->m_questions->front() , 0, 0, 0, 0 };
+	
 	// Initializing game data of all users
-	for (auto user : users)
+	for (auto user : r.getAllUsers())
 	{
 		this->m_players.insert(std::pair <LoggedUser, GameData>(user, beginGameData));
 	}
@@ -23,14 +26,14 @@ Game::Game(std::vector<LoggedUser> users, int id)
 Question Game::getQuestionForUser(LoggedUser user)
 {
 	int currentQuestion = m_players[user].currentQuestionIndex;
-	std::vector<Question>::iterator it = this->m_questions.begin();
+	std::vector<Question>::iterator it = this->m_questions->begin();
 	m_players[user].currentQuestionIndex++;
 
 	for (int i = 0; i < currentQuestion; i++)
 	{
-		if (it == this->m_questions.end())//Case there aren't enough questions, should start again?
+		if (it == this->m_questions->end())//Case there aren't enough questions, should start again?
 		{
-			it = this->m_questions.begin();
+			it = this->m_questions->begin();
 		}
 	}
 	return *it;

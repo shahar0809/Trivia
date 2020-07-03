@@ -1,8 +1,13 @@
 #include "GameManager.h"
 
+GameManager::GameManager(IDatabase* db)
+{
+	this->database = db;
+}
+
 Game* GameManager::createGame(Room room)
 {
-	Game * game = new Game(room.getAllUsers(),room.getMetadata().id);
+	Game * game = new Game(this->database,room);
 	this->m_games.push_back(*game);
 	return game;
 }
@@ -59,7 +64,5 @@ std::vector<PlayerResults> GameManager::getGameResults(LoggedUser user)
 
 Question GameManager::getQuestion(LoggedUser user)
 {
-	Game* g = getGame(user);
-	std::map<LoggedUser, GameData> players = g->getPlayersGameData();
-	return *players[user].currentQuestion;
+	return *getGame(user)->getPlayersGameData()[user].currentQuestion;
 }

@@ -107,7 +107,11 @@ namespace ClientWPF
 
         private void startGame_Click(object sender, RoutedEventArgs e)
         {
-            // About to be updated in the next version.
+            stopUpdating = true;
+            Response resp = Communicator.ManageSendAndGetData<Response>("", this.clientStream, (int)Codes.START_GAME_CODE);
+            Questions q = new Questions(this.clientStream);
+            q.Show();
+            this.Close();
         }
 
         /* A thread that constantly updates the players in the room */
@@ -116,7 +120,7 @@ namespace ClientWPF
             // Getting the players connected to the room
             GetPlayersInRoomRequest request = new GetPlayersInRoomRequest { RoomId = this.roomData.RoomId };
 
-            while(!stopUpdating)
+            while (!stopUpdating)
             {
                 // Requesting the players in the room
                 GetPlayersInRoomResponse resp = Communicator.ManageSendAndGetData<GetPlayersInRoomResponse>(
@@ -131,14 +135,12 @@ namespace ClientWPF
                     return;
                 }
 
-                workerParameter param = new workerParameter{ roomPlayers = resp.PlayersInRoom };
+                workerParameter param = new workerParameter { roomPlayers = resp.PlayersInRoom };
                 worker.ReportProgress(0, param);
-               
+
                 Thread.Sleep(600);
             }
         }
-
-        /* Updates the list displaying the players, once the players list has changed. */
         void playersChanged(object sender, ProgressChangedEventArgs e)
         {
             workerParameter param = (workerParameter)e.UserState;

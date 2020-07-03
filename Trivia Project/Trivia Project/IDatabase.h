@@ -30,7 +30,7 @@ public:
 	virtual bool addNewUser(std::string name, std::string password, std::string email) = 0;
 	virtual bool openDb() = 0;
 
-	virtual std::list<Question> getQuestions(int maybeNumOfQuestions) = 0;
+	virtual std::vector<Question>* getQuestions(int maybeNumOfQuestions) = 0;
 	virtual float getPlayerAverageAnswerTime(std::string username) = 0;
 	virtual int getNumOfCorrectAnswers(std::string username) = 0;
 	virtual int getNumOfTotalAnswers(std::string username) = 0;

@@ -28,6 +28,7 @@ class Game;
 class GameManager
 {
 public:
+	GameManager(IDatabase* db);
 	Game* createGame(Room r);
 	bool deleteGame(LoggedUser user);
 	Game* getGame(LoggedUser);
