@@ -11,20 +11,22 @@ class Question
 {
 public:
 	Question();
-	Question(std::string question, std::vector<std::string> possibleAnswers, int correctAnsId);
+	Question(std::string question, std::vector<std::string> possibleAnswers, int correctAns);
 
 	std::string getQuestion();
-	void setQuestion(std::string question); //{ m_question = question; };
-	void addPossibleAnswer(std::string answer) { m_possibleAnswers.push_back(answer); };
+	void setQuestion(std::string question) { m_question = question; };
+	void addPossibleAnswer(std::string answer);
+	void setCorrectAnswer(std::string correctAns); 
 
 	std::map<unsigned int, std::string> getPossibleAnswers();
 	std::string getCorrectAnswer();
 	unsigned int getCorrectAnswerId();
-	void pushAnswerWithRandomIndex(std::map<unsigned int, std::string>* answers, std::string ans);
+	void pushAnswerWithRandomIndex(std::string ans);
 
 private:
+	std::string m_correctAnswer;
 	std::string m_question;
-	std::vector<std::string> m_possibleAnswers;
+	std::map<unsigned int,std::string> m_possibleAnswers;
 	int m_correctAnswerId;
 };
 
