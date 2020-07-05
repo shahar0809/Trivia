@@ -28,7 +28,9 @@ namespace ClientWPF
         private TimeSpan m_time;
         private DispatcherTimer m_timer;
         private List<Tuple<Button, TextBlock>> m_answersButtons;
-        private NetworkStream clientStream;
+        private NetworkStream m_clientStream;
+        private int m_correctAnswers = 0;
+        private int m_questionsLeft;
 
         private struct Answer
         {
@@ -51,8 +53,11 @@ namespace ClientWPF
             public int correctAnswerId { set; get; }
         }
 
-        public DisplayQuestion(NetworkStream clientStream, TimeSpan timePerQuestion)
+        public DisplayQuestion(NetworkStream clientStream, TimeSpan timePerQuestion, int numOfQuestions)
         {
+            m_clientStream = clientStream;
+            m_questionsLeft = numOfQuestions;
+
             InitializeComponent();
             m_answersButtons = new List<Tuple<Button, TextBlock>>();
             m_answersButtons.Add( Tuple.Create( new Button(), new TextBlock()));
@@ -95,7 +100,10 @@ namespace ClientWPF
         void updateQuestion()
         {
             // Requesting the current question
-            GetQuestionResponse resp = Communicator.ManageSendAndGetData<GetQuestionResponse>("", clientStream, Codes.GET_QUESTION_CODE);
+            GetQuestionResponse resp = Communicator.ManageSendAndGetData<GetQuestionResponse>("", m_clientStream, Codes.GET_QUESTION_CODE);
+
+            questionsLeft.Text = m_questionsLeft.ToString();
+            correctAnswers.Text = m_correctAnswers.ToString();
 
             questionBox.Text = resp.Question;
             // Displaying the question and the possible answers on the screen.
@@ -135,7 +143,7 @@ namespace ClientWPF
 
             // Edit and send question request.
             string json = JsonConvert.SerializeObject(submitAns, Formatting.Indented);
-            SubmitAnswerResponse sendAns = Communicator.ManageSendAndGetData<SubmitAnswerResponse>(json, clientStream, Codes.LOGIN_CODE);
+            SubmitAnswerResponse sendAns = Communicator.ManageSendAndGetData<SubmitAnswerResponse>(json, m_clientStream, Codes.LOGIN_CODE);
            
             // Coloring the selected answer Green if correct, and Red if wrong.
             if (sendAns.correctAnswerId != answerId)
@@ -144,9 +152,10 @@ namespace ClientWPF
             }
             else
             {
+                m_correctAnswers++;
                 m_answersButtons[answerId].Item1.Background = Brushes.Green;
             }
-
+            m_questionsLeft--;
             // Wait till everybody has answered, and call updateQuestion and update the buttons.
         }
 
