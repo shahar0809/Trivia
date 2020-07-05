@@ -63,11 +63,12 @@ int SqliteDatabase::questionsCallback(void* data, int argc, char** argv, char** 
 
 		//There is no matter what answer it is...
 		//Correct answer will be alwayes the first because of the order in the DB
-		if(std::string(azColName[i]) == "CORRECT_ANSWER" ||
-			std::string(azColName[i]) == "ANSWER2" || 
+		if(std::string(azColName[i]) == "ANSWER2" || 
 			std::string(azColName[i]) == "ANSWER3" || 
 			std::string(azColName[i]) == "ANSWER4" )
 			question->addPossibleAnswer(std::string(argv[i]));
+		if (std::string(azColName[i]) == "CORRECT_ANSWER")
+			question->setCorrectAnswer(std::string(argv[i]));
 	}
 
 	questionsList->push_back(*question);

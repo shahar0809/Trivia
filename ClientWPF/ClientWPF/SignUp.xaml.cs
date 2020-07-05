@@ -58,7 +58,7 @@ namespace ClientWPF
 
             if (signUpResponse.status == ERROR_CODE)
             {
-                MessageBox.Show("Sorry! Sign up failed");
+                MessageBox.Show("Sign up failed!");
             }
             var mainWindow = new MainWindow(this.clientStream);
             mainWindow.Show();
