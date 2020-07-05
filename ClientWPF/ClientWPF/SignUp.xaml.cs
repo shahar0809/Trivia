@@ -45,21 +45,20 @@ namespace ClientWPF
         }
         private void SubmitButton_Click(object sender, RoutedEventArgs e)
         {
-            SignUpRequest signUp = new SignUpRequest 
+            SignUpRequest signUp = new SignUpRequest
             {
-                Password = passwordBox.Text,
+                Password = passwordBox.Password,
                 Username = usernameBox.Text,
-                Email= emailBox.Text
+                Email = emailBox.Text
             };
 
             // Edit and send signUp request.
             string json = JsonConvert.SerializeObject(signUp, Formatting.Indented);
-            Response signUpResponse = Communicator.ManageSendAndGetData<Response>(
-                json, clientStream, (int)Codes.SIGN_UP_CODE);
+            Response signUpResponse = Communicator.ManageSendAndGetData<Response>(json, clientStream, Codes.SIGN_UP_CODE);
 
             if (signUpResponse.status == ERROR_CODE)
             {
-                MessageBox.Show("Sorry! Username was taken \n please change your username ");
+                MessageBox.Show("Sorry! Sign up failed");
             }
             var mainWindow = new MainWindow(this.clientStream);
             mainWindow.Show();

@@ -14,6 +14,8 @@ using System.Windows.Shapes;
 using System.Net.Sockets;
 using System.Net;
 using Newtonsoft.Json;
+using System.ComponentModel;
+using System.Threading;
 
 namespace ClientWPF
 {
@@ -64,15 +66,19 @@ namespace ClientWPF
 
     public partial class JoinRoom : Window
     {
-
         private NetworkStream clientStream;
+        private BackgroundWorker worker = new BackgroundWorker();
+        private bool stopUpdating = false;
         public JoinRoom(NetworkStream clientStream)
         {
             InitializeComponent();
             this.clientStream = clientStream;
 
-            // Getting the available rooms.
-            availableRooms.ItemsSource = updateAvailableRooms();
+            // Creating a background worker that constantly updates the available rooms.
+            worker.WorkerReportsProgress = true;
+            worker.DoWork += updateAvailableRooms;
+            worker.ProgressChanged += roomsChanged;
+            worker.RunWorkerAsync();
         }
 
         private void availableRooms_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -86,7 +92,7 @@ namespace ClientWPF
             string json = JsonConvert.SerializeObject(req);
 
             // Getting the players in the room changed
-            GetPlayersInRoomResponse resp = Communicator.ManageSendAndGetData<GetPlayersInRoomResponse>(json, clientStream, (int)Codes.GET_PLAYERS_IN_ROOM_CODE);
+            GetPlayersInRoomResponse resp = Communicator.ManageSendAndGetData<GetPlayersInRoomResponse>(json, clientStream, Codes.GET_PLAYERS_IN_ROOM_CODE);
 
             // Displaying the room players in a listBox
             playersInRoom.ItemsSource = resp.PlayersInRoom;
@@ -103,7 +109,7 @@ namespace ClientWPF
             string json = JsonConvert.SerializeObject(req);
 
             // Requesting to join the selected items
-            JoinRoomResponse resp = Communicator.ManageSendAndGetData<JoinRoomResponse>(json, clientStream, (int)Codes.JOIN_ROOM_CODE);
+            JoinRoomResponse resp = Communicator.ManageSendAndGetData<JoinRoomResponse>(json, clientStream, Codes.JOIN_ROOM_CODE);
 
             if (resp.Status == 0)
             {
@@ -127,41 +133,49 @@ namespace ClientWPF
                 this.Close();
             }
         }
-        private void refreshGames_Click(object sender, RoutedEventArgs e)
+
+        public void updateAvailableRooms(object sender, DoWorkEventArgs e) 
         {
-            availableRooms.ItemsSource = updateAvailableRooms();
+            while (!stopUpdating)
+            {
+                // Requesting available rooms from the server
+                GetRoomsResponse resp = Communicator.ManageSendAndGetData<GetRoomsResponse>("", clientStream, Codes.GET_ROOMS_CODE);
+                WorkerParameter param = new WorkerParameter { list = resp.Rooms };
+                worker.ReportProgress(0, param);
+
+                Thread.Sleep(3000);
+            }
         }
 
-        public List<string> updateAvailableRooms()
+        // Updating list on screen
+        void roomsChanged(object sender, ProgressChangedEventArgs e)
         {
-            GetRoomsResponse resp = Communicator.ManageSendAndGetData<GetRoomsResponse>("",
-                    clientStream,
-                    (int)Codes.GET_ROOMS_CODE);
-            List<string> rooms = new List<string>();
-            try
-            {
-                foreach (string room in resp.Rooms)
-                {
-                    var splitted = room.Split(',');
-                    string name = splitted[0];
-                    if (name != "") //Is not a room that was erased.
-                    {
-                        int id = Int32.Parse(splitted[1]);
-                        rooms.Add("Name: " + name + ", Id: " + id.ToString());
-                    }
-                }
-            }
-            catch (NullReferenceException e)
-            {
-                MessageBox.Show("Sorry there are no available rooms");
-            }
-            return rooms;
+            WorkerParameter param = (WorkerParameter)e.UserState;
+            playersInRoom.ItemsSource = param.list;
         }
+
+        // Going back to the main menu
         private void CancelButton_Click(object sender, RoutedEventArgs e)
         {
             var mainWindow = new MainWindow(this.clientStream);
             mainWindow.Show();
             this.Close();
+        }
+
+        private List<string> getRoomsNames(List<string> rooms)
+        {
+            List<string> roomsNames = new List<string>();
+
+            foreach (string room in rooms)
+            {
+                var splitted = room.Split(',');
+                string name = splitted[0];
+
+                // Checking that the room wasn't erased
+                if (name != "") 
+                    rooms.Add(name);
+            }
+            return roomsNames;
         }
     }
 }

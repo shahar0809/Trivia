@@ -29,7 +29,7 @@ namespace ClientWPF
     }
 
     public struct GetGameResultsResponse
-    { 
+    {
         public int status { get; set; }
         public List<PlayerResults> playerResults { set; get; }
     }
@@ -43,23 +43,24 @@ namespace ClientWPF
             InitializeComponent();
 
             // Requesting game results from the server
-            GetGameResultsResponse resp = Communicator.ManageSendAndGetData<GetGameResultsResponse>("", clientStream, (int)Codes.GET_GAME_RESULTS_CODE);
+            GetGameResultsResponse resp = 
+                Communicator.ManageSendAndGetData<GetGameResultsResponse>("", clientStream, Codes.GET_GAME_RESULTS_CODE);
 
-             if (resp.status == (int)Codes.ERROR_CODE)
-             {
-                 MessageBox.Show("Couldn't load the scores!");
-                 var mainWindow = new MainWindow(this.clientStream);
-                 mainWindow.Show();
-                 this.Close();
-             }
-             else
-             {
-                 // Displaying the winner's username 
-                 winnerUsername.Text = resp.playerResults[0].username;
+            if (resp.status == (int)Codes.ERROR_CODE)
+            {
+                MessageBox.Show("Couldn't load the scores!");
+                var mainWindow = new MainWindow(this.clientStream);
+                mainWindow.Show();
+                this.Close();
+            }
+            else
+            {
+                // Displaying the winner's username 
+                winnerUsername.Text = resp.playerResults[0].username;
 
-                 // Displaying all the results in the data grid
-                 playersResult.ItemsSource = resp.playerResults;
-             }
+                // Displaying all the results in the data grid
+                playersResult.ItemsSource = resp.playerResults;
+            }
         }
 
         private void backToMenu_Click(object sender, RoutedEventArgs e)

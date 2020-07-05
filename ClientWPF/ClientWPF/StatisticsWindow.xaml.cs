@@ -52,7 +52,7 @@ namespace ClientWPF
             this.clientStream = clientStream;
 
             // Sending message.
-            stats = Communicator.ManageSendAndGetData<Statistic>("", clientStream, (int)Codes.GET_STATISTICS_CODE);
+            stats = Communicator.ManageSendAndGetData<Statistic>("", clientStream, Codes.GET_STATISTICS_CODE);
         }
 
         private void myStatisticsButton_Click(object sender, RoutedEventArgs e)
@@ -60,11 +60,11 @@ namespace ClientWPF
             string[] userStats = stats.UserStatistics.Split(',');
             UserStats statistic = new UserStats
             {
-                 AvgAnswerTime = float.Parse(userStats[0]),
-                 CorrectAnswers= int.Parse(userStats[1]),
-                 TotalAnswers=int.Parse(userStats[2]),
-                 NumOfGames=int.Parse(userStats[3])
-    };
+                AvgAnswerTime = float.Parse(userStats[0]),
+                CorrectAnswers = int.Parse(userStats[1]),
+                TotalAnswers = int.Parse(userStats[2]),
+                NumOfGames = int.Parse(userStats[3])
+            };
             var MyStatistics = new MyStatistics(clientStream, statistic);
             MyStatistics.Show();
             this.Close();

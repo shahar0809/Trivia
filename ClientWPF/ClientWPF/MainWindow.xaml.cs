@@ -21,6 +21,7 @@ namespace ClientWPF
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
+    /// 
     public partial class MainWindow : Window
     {
         private NetworkStream clientStream;
@@ -28,16 +29,18 @@ namespace ClientWPF
         {
 
             InitializeComponent();
-            /*var GameResults = new GameResults(clientStream);
-            GameResults.Show();
-            this.Close();*/
 
             //Initiate the socket with all the details.
             TcpClient client = new TcpClient();
             IPEndPoint serverEndPoint = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 1050);
             client.Connect(serverEndPoint);
             this.clientStream = client.GetStream();
+
+            //var ques = new q(clientStream, new TimeSpan(0, 0, 20));
+            //ques.Show();
+            //this.Close();
         }
+
 
         public MainWindow(NetworkStream clientStream)
         {
@@ -85,5 +88,3 @@ namespace ClientWPF
         }
     }
 }
-
-   

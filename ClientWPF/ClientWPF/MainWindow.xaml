@@ -8,7 +8,7 @@
         Title="Trivia" Height="600" Width="800">
     <Grid>
         <Grid.Background>
-            <ImageBrush ImageSource="Images/goodl.png" Stretch="UniformToFill"/>
+            <ImageBrush ImageSource="Resources/homeScreen.png" Stretch="UniformToFill"/>
         </Grid.Background>
 
         <Grid.ColumnDefinitions>
@@ -44,11 +44,6 @@
                 Grid.ColumnSpan="3"
                 Margin="240, 10" 
                 Click="loginButtonClicked">
-            <Button.Resources>
-                <Style TargetType="Border">
-                    <Setter Property="CornerRadius" Value="5"/>
-                </Style>
-            </Button.Resources>
         </Button>
 
         <Button x:Name="signupButton"
@@ -57,11 +52,6 @@
                 Grid.ColumnSpan="3"
                 Margin="240, 10" 
                 Click="signupButtonClicked" FontFamily="Forte">
-            <Button.Resources>
-                <Style TargetType="Border">
-                    <Setter Property="CornerRadius" Value="5"/>
-                </Style>
-            </Button.Resources>
         </Button>
 
         <Button x:Name="createRoomButton"
@@ -70,11 +60,6 @@
                 Margin="240, 10" 
                 Grid.ColumnSpan="3"
                 Click="createRoomButtonClicked">
-            <Button.Resources>
-                <Style TargetType="Border">
-                    <Setter Property="CornerRadius" Value="5"/>
-                </Style>
-            </Button.Resources>
         </Button>
 
         <Button x:Name="joinRoomButton"
@@ -83,11 +68,6 @@
                 Margin="240, 10" 
                 Grid.ColumnSpan="3"
                 Click="joinRoomButtonClicked">
-            <Button.Resources>
-                <Style TargetType="Border">
-                    <Setter Property="CornerRadius" Value="5"/>
-                </Style>
-            </Button.Resources>
         </Button>
 
         <Button x:Name="statisticsButton"
@@ -96,11 +76,6 @@
                 Grid.ColumnSpan="3"
                 Margin="240, 10"
                 Click="statsButtonClicked">
-            <Button.Resources>
-                <Style TargetType="Border">
-                    <Setter Property="CornerRadius" Value="5"/>
-                </Style>
-            </Button.Resources>
         </Button>
 
         <Button x:Name="exitButton"
@@ -109,11 +84,6 @@
                 Grid.ColumnSpan="3"
                 Margin="240, 10"
                 Click="exitButtonClicked">
-            <Button.Resources>
-                <Style TargetType="Border">
-                    <Setter Property="CornerRadius" Value="5"/>
-                </Style>
-            </Button.Resources>
         </Button>
     </Grid>
 </Window>

@@ -4,18 +4,19 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ClientWPF"
-        mc:Ignorable="d" FontSize="36"
-        Title="DisplayQuestion" Height="600" Width="800">
+        mc:Ignorable="d" FontSize="30" FontFamily="Aharoni"
+        Title="q" Height="600" Width="800">
     <Grid>
         <Grid.Background>
-            <ImageBrush ImageSource="Images/genBackground.png" Stretch="UniformToFill"/>
+            <ImageBrush ImageSource="Resources/genBackground.png" Stretch="UniformToFill"/>
         </Grid.Background>
 
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="20"/>
+            <ColumnDefinition Width="80"/>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="100"/>
+            <ColumnDefinition Width="80"/>
             <ColumnDefinition Width="20"/>
         </Grid.ColumnDefinitions>
 
@@ -28,74 +29,137 @@
             <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="20"/>
+
         </Grid.RowDefinitions>
 
-        <Border Grid.Column="1" Grid.Row="2"
-                Margin="120, 10, 120, 10"
-                Grid.ColumnSpan="3"
-                Background="White"/>
-        <Border Grid.Column="1" Grid.Row="3"
-                Margin="120, 10"
-                Grid.ColumnSpan="3"
-                Background="White"/>
-        <Border Grid.Column="1" Grid.Row="4"
-                Margin="120, 10"
-                Grid.ColumnSpan="3"
-                Background="White"/>
-        <Border Grid.Column="1" Grid.Row="5"
-                Margin="120, 10"
-                Grid.ColumnSpan="3"
-                Background="White"/>
-        <Border Grid.Column="1" Grid.Row="6"
-                Margin="120, 10"
-                Grid.ColumnSpan="3"
-                Background="White"/>
-
-        <TextBlock x:Name="question"
-                   Text="question here"
-                   HorizontalAlignment="Center"
-                   FontSize="58"
-                   Grid.Column="1"
-                   Grid.Row="2"
-                   Grid.ColumnSpan="4"
+        <Button Content="Exit"
+                FontFamily="Forte" FontSize="32"
+                Grid.Column="1"
+                Grid.Row="1"
         />
 
-        <TextBlock x:Name="QuestionTimer"
-                   Background="White"
-                   Grid.Column="3"
-                   Grid.Row="1"
-                   Text="Timer here"
+
+        <Grid x:Name="QuestionGrid"
+              Grid.Column="2" Grid.Row="2"
+              Grid.ColumnSpan="2" 
+              MinWidth="550" MinHeight="75"
+              VerticalAlignment="Center"
+              HorizontalAlignment="Center"
+              Margin="0, 2, 0, 30"
+              Background="White">
+
+            <TextBlock x:Name="questionBox"
+                       TextWrapping="Wrap"
+                       FontFamily="Aharoni"
+                       VerticalAlignment="Center"
+                       HorizontalAlignment="Center"/>
+        </Grid>
+
+        <Grid x:Name="GridAnswer1"
+              Grid.Column="2" Grid.Row="3"
+              Grid.ColumnSpan="2" 
+              MinWidth="500" MinHeight="50"
+              VerticalAlignment="Center"
+              HorizontalAlignment="Center"
+              Margin="0, 10"
+              Background="White">
+            <Button x:Name="Answer1_button"
+                    Click="Answer1_Box_Click">
+                <TextBlock x:Name="Answer1_Box" TextWrapping="Wrap"/>
+            </Button>
+        </Grid>
+
+        <Grid x:Name="GridAnswer2"
+              Grid.Column="2" Grid.Row="4"
+              Grid.ColumnSpan="2" 
+              MinWidth="500" MinHeight="50"
+              VerticalAlignment="Center"
+              HorizontalAlignment="Center"
+              Margin="0, 10"
+              Background="White">
+            <Button Background="White"
+                    x:Name="Answer2_button"
+                    Click="Answer2_Box_Click">
+                <TextBlock x:Name="Answer2_Box" TextWrapping="Wrap"/>
+            </Button>
+        </Grid>
+
+        <Grid x:Name="GridAnswer3"
+              Grid.Column="2" Grid.Row="5"
+              Grid.ColumnSpan="2" 
+              MinWidth="500" MinHeight="50"
+              VerticalAlignment="Center"
+              HorizontalAlignment="Center"
+              Margin="0, 10"
+              Background="White">
+            <Button x:Name="Answer3_button"
+                    Click="Answer3_Box_Click">
+                <TextBlock x:Name="Answer3_Box" TextWrapping="Wrap"/>
+            </Button>
+        </Grid>
+
+        <Grid x:Name="GridAnswer4"
+              Grid.Column="2" Grid.Row="6"
+              Grid.ColumnSpan="2" 
+              MinWidth="500" MinHeight="50"
+              VerticalAlignment="Center"
+              HorizontalAlignment="Center"
+              Margin="0, 10"
+              Background="White">
+            <Button x:Name="Answer4_button"
+                    Click="Answer4_Box_Click">
+                <TextBlock x:Name="Answer4_Box" TextWrapping="Wrap"/>
+            </Button>
+        </Grid>
+
+        <Grid x:Name="TimerGrid"
+              Grid.Column="4" Grid.Row="1"
+              HorizontalAlignment="Center"
+              Background="White">
+            <TextBlock x:Name="Timer"
+                       Text="timer"
+                       VerticalAlignment="Center"
+                       HorizontalAlignment="Center"
+            />
+        </Grid>
+
+        <TextBlock Text="Questions Left:"
+                   HorizontalAlignment="Center"
+                   Margin="0, 25, 0, 0"
+                   FontSize="24"
+                   Grid.Column="2" Grid.Row="7"
         />
 
-        <TextBlock x:Name="Answer1"
-                   Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2"
+        <TextBlock Text="Correct Answers:"
                    HorizontalAlignment="Center"
-                   VerticalAlignment="Center"
-                   Text="ans1"
-                   Margin="5"/>
+                   Margin="0, 25, 0, 0"
+                   FontSize="24"
+                   Grid.Column="3" Grid.Row="7"
+        />
 
-        <TextBlock x:Name="Answer2"
-                   Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2"
-                   HorizontalAlignment="Center"
-                   VerticalAlignment="Center"
-                   Text="ans2"
-                   Margin="5"/>
+        <Grid Grid.Column="2" Grid.Row="8"
+              HorizontalAlignment="Center"
+              Margin="0, 10, 0, 30"
+              Background="White">
+            <TextBlock x:Name="questionsLeft"
+                       Text="left"
+                       VerticalAlignment="Center"
+                       HorizontalAlignment="Center"
+            />
+        </Grid>
 
-        <TextBlock x:Name="Answer3"
-                   Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="2"
-                   HorizontalAlignment="Center"
-                   VerticalAlignment="Center"
-                   Text="ans3"
-                   Margin="5"/>
-
-        <TextBlock x:Name="Answer4"
-                   Grid.Row="6" Grid.Column="1" Grid.ColumnSpan="2"
-                   HorizontalAlignment="Center"
-                   VerticalAlignment="Center"
-                   Text="ans4"
-                   Margin="5"/>
-
+        <Grid Grid.Column="3" Grid.Row="8"
+              HorizontalAlignment="Center"
+              Margin="0, 10, 0, 30"
+              Background="White">
+            <TextBlock x:Name="correctAnswers"
+                       Text="correct"
+                       VerticalAlignment="Center"
+                       HorizontalAlignment="Center"
+            />
+        </Grid>
     </Grid>
 </Window>

@@ -46,6 +46,6 @@ namespace ClientWPF
             mainWindow.Show();
             this.Close();
         }
-        
+
     }
 }

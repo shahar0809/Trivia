@@ -9,7 +9,7 @@
 
     <Grid>
         <Grid.Background>
-            <ImageBrush ImageSource="Images/genBackground.png" Stretch="UniformToFill"/>
+            <ImageBrush ImageSource="Resources/genBackground.png" Stretch="UniformToFill"/>
         </Grid.Background>
 
         <Grid.ColumnDefinitions>
@@ -103,22 +103,15 @@
                 </DataGrid>
             </Grid>
         </Border>
-        
+
         <Button x:Name="backToMenu"
                 Content="Menu"
                 HorizontalAlignment="Center"
                 Padding="7"
-                Grid.Column="1"
-                Grid.Row="5"
-                Margin="320, 28"
-                FontFamily="forte"
-                
+                Grid.Column="1" Grid.Row="5"
+                Margin="320, 20"
+                FontFamily="Forte" FontSize="36"
                 Click="backToMenu_Click">
-            <Button.Resources>
-                <Style TargetType="Border">
-                    <Setter Property="CornerRadius" Value="5"/>
-                </Style>
-            </Button.Resources>
         </Button>
     </Grid>
 </Window>

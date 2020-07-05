@@ -8,7 +8,7 @@
         Title="Wait For Game" Height="600" Width="800">
     <Grid>
         <Grid.Background>
-            <ImageBrush ImageSource="Images/genBackground.png" Stretch="UniformToFill"/>
+            <ImageBrush ImageSource="Resources/genBackground.png" Stretch="UniformToFill"/>
         </Grid.Background>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="20"/>
@@ -144,11 +144,6 @@
                 Click="closeRoom_Click"
                 Visibility="{Binding isAdmin}"
                 >
-            <Button.Resources>
-                <Style TargetType="Border">
-                    <Setter Property="CornerRadius" Value="5"/>
-                </Style>
-            </Button.Resources>
         </Button>
 
         <Button x:Name="leaveRoom"
@@ -160,11 +155,6 @@
                 Click="leaveRoom_Click"
                 Visibility="{Binding isAdmin}"
                 >
-            <Button.Resources>
-                <Style TargetType="Border">
-                    <Setter Property="CornerRadius" Value="5"/>
-                </Style>
-            </Button.Resources>
         </Button>
 
         <Button x:Name="startGame"
@@ -175,11 +165,6 @@
                 Visibility="{Binding isAdmin}"
                 Click="startGame_Click"
                 Margin="30, 5">
-            <Button.Resources>
-                <Style TargetType="Border">
-                    <Setter Property="CornerRadius" Value="5"/>
-                </Style>
-            </Button.Resources>
         </Button>
     </Grid>
 </Window>

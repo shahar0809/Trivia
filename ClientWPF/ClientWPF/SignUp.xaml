@@ -6,10 +6,10 @@
         xmlns:local="clr-namespace:ClientWPF"
         mc:Ignorable="d" FontSize="36" FontFamily="Forte"
         Title="SignUp" Height="600" Width="800">
-    
+
     <Grid>
         <Grid.Background>
-            <ImageBrush ImageSource="Images/genBackground.png" Stretch="UniformToFill"/>
+            <ImageBrush ImageSource="Resources/genBackground.png" Stretch="UniformToFill"/>
         </Grid.Background>
 
         <Grid.ColumnDefinitions>
@@ -59,53 +59,49 @@
 
         <TextBox x:Name="usernameBox"
                  Grid.Row="2" Grid.Column="2"
-                 Grid.ColumnSpan="2"
+                 Grid.ColumnSpan="2" 
                  Margin="0, 0, 70, 0"
                  FontFamily="Arial"
+                 Template="{StaticResource TextBoxBaseControlTemplate}"
+                 MinHeight="40" Padding="2, 0"
+                 BorderBrush="{x:Null}"
+                 VerticalAlignment="Center"
         />
 
-        <TextBox x:Name="passwordBox"
+        <PasswordBox Template="{StaticResource passwordbox}"
+                 x:Name="passwordBox"
+                 VerticalAlignment="Center"
                  Grid.Row="3" Grid.Column="2"
-                 Grid.ColumnSpan="2"
-                 Margin="0, 15, 70, 0"
+                 Grid.ColumnSpan="2" MinHeight="40"
+                 Margin="0, 0, 70, 0"
                  FontFamily="Arial"
         />
 
         <TextBox x:Name="emailBox"
                  Grid.Row="4" Grid.Column="2"
                  Grid.ColumnSpan="2"
-                 Margin="0, 15, 70, 0"
-                 FontFamily="Arial"
+                 Margin="0, 0, 70, 0"
+                 Template="{StaticResource TextBoxBaseControlTemplate}"
+                 MinHeight="40" Padding="2, 0"
+                 BorderBrush="{x:Null}"
+                 VerticalAlignment="Center"
         />
 
         <Button x:Name="submitSignUp"
-                Grid.Column="3"
-                Grid.Row="5"
-                Grid.RowSpan="3"
+                Grid.Column="3" Grid.Row="5"
+                Grid.RowSpan="3" IsDefault="True"
                 Margin="130, 40, 100, 90"
                 Click="SubmitButton_Click"
                 Content="Sign Up">
-            <Button.Resources>
-                <Style TargetType="Border">
-                    <Setter Property="CornerRadius" Value="5"/>
-                </Style>
-            </Button.Resources>
         </Button>
 
-        <Button x:Name="cancelLogin"
-                Grid.Column="1"
+        <Button Grid.Column="1"
                 Grid.Row="5"
                 Grid.RowSpan="3"
                 Grid.ColumnSpan="3"
                 Margin="180, 40, 380, 90"
-         
                 Click="CancelButton_Click"
                 Content="Cancel">
-            <Button.Resources>
-                <Style TargetType="Border">
-                    <Setter Property="CornerRadius" Value="5"/>
-                </Style>
-            </Button.Resources>
         </Button>
     </Grid>
 </Window>

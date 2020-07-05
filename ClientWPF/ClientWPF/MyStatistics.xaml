@@ -8,7 +8,7 @@
         Title="MyStatistics" Height="600" Width="800">
     <Grid>
         <Grid.Background>
-            <ImageBrush ImageSource="Images/genBackground.png" Stretch="UniformToFill"/>
+            <ImageBrush ImageSource="Resources/genBackground.png" Stretch="UniformToFill"/>
         </Grid.Background>
 
         <Grid.ColumnDefinitions>
@@ -64,21 +64,21 @@
                        FontSize="36"
                        Margin="0, 10"
                        ></TextBlock>
-            
+
             <TextBlock x:Name="displayNumOfCorrectAns"
                        Text="{Binding}"
                        HorizontalAlignment="Center"
                        FontSize="36"
                        Margin="0, 10"
                        ></TextBlock>
-            
+
             <TextBlock x:Name="displayNumOfAns"
                        Text="{Binding}"
                        HorizontalAlignment="Center"
                        FontSize="36"
                        Margin="0, 10"
                        ></TextBlock>
-            
+
             <TextBlock x:Name="displayNumOfGames"
                        Text="{Binding}"
                        HorizontalAlignment="Center"

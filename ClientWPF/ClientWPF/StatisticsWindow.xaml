@@ -8,7 +8,7 @@
         Title="StatisticsWindow" Height="600" Width="800">
     <Grid>
         <Grid.Background>
-            <ImageBrush ImageSource="Images/genBackground.png" Stretch="UniformToFill"/>
+            <ImageBrush ImageSource="Resources/genBackground.png" Stretch="UniformToFill"/>
         </Grid.Background>
 
         <Grid.ColumnDefinitions>
@@ -17,7 +17,7 @@
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="20"/>
         </Grid.ColumnDefinitions>
-        
+
         <Grid.RowDefinitions>
             <RowDefinition Height="20"/>
             <RowDefinition Height="auto"/>
@@ -43,7 +43,7 @@
                 </Style>
             </Button.Resources>
         </Button>
-        
+
         <TextBlock Grid.Row="2" Grid.Column="1"
                    Text="Statistics"
                    HorizontalAlignment="Center"

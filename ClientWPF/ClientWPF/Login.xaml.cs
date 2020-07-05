@@ -27,7 +27,7 @@ namespace ClientWPF
         private struct LoginRequest
         {
             public string Username { set; get; }
-            public string Password { set; get; }  
+            public string Password { set; get; }
         }
         public Login(NetworkStream clientStream)
         {
@@ -43,15 +43,15 @@ namespace ClientWPF
         }
         private void SubmitButton_Click(object sender, RoutedEventArgs e)
         {
-            LoginRequest login = new LoginRequest 
-            { 
-                Password = passwordBox.Text,
+            LoginRequest login = new LoginRequest
+            {
+                Password = passwordBox.Password,
                 Username = usernameBox.Text
             };
 
             // Edit and send login request.
             string json = JsonConvert.SerializeObject(login, Formatting.Indented);
-            Response loginResponse = Communicator.ManageSendAndGetData<Response>(json, clientStream, (int)Codes.LOGIN_CODE);
+            Response loginResponse = Communicator.ManageSendAndGetData<Response>(json, clientStream, Codes.LOGIN_CODE);
 
             if (loginResponse.status == ERROR_CODE)
             {

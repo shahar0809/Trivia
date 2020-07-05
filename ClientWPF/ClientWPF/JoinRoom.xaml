@@ -8,7 +8,7 @@
         Title="Join Room" Height="600" Width="800">
     <Grid>
         <Grid.Background>
-            <ImageBrush ImageSource="Images/genBackground.png" Stretch="UniformToFill"/>
+            <ImageBrush ImageSource="Resources/genBackground.png" Stretch="UniformToFill"/>
         </Grid.Background>
 
         <Grid.ColumnDefinitions>
@@ -39,7 +39,7 @@
                    Margin="0, 0, 0, 10"
                    >
         </TextBlock>
-        
+
         <ScrollViewer Grid.Row="2" Grid.Column="1"
                       Grid.ColumnSpan="3"
                       HorizontalAlignment="Center"
@@ -53,22 +53,6 @@
             </ListBox>
         </ScrollViewer>
 
-        <Button x:Name="refreshGames"
-                Content="Refresh"
-                FontSize="24"
-                Grid.Column="1"
-                Grid.Row="2"
-                Margin="0, 70"
-                Padding="5, 7"
-                HorizontalAlignment="Center"
-                Click="refreshGames_Click">
-            <Button.Resources>
-                <Style TargetType="Border">
-                    <Setter Property="CornerRadius" Value="5"/>
-                </Style>
-            </Button.Resources>
-        </Button>
-        
         <TextBlock x:Name="showRoomPlayers"
                    HorizontalAlignment="Center"
                    Grid.ColumnSpan="3"
@@ -101,11 +85,6 @@
                 Click="joinRoomButton_Click"
                 IsEnabled="{Binding ElementName=availableRooms, 
                         Path=SelectedItems.Count}">
-            <Button.Resources>
-                <Style TargetType="Border">
-                    <Setter Property="CornerRadius" Value="5"/>
-                </Style>
-            </Button.Resources>
         </Button>
 
         <Button x:Name="CancelButton" 
@@ -115,11 +94,6 @@
             FontSize="36"
             HorizontalAlignment="Center"
             Click="CancelButton_Click">
-            <Button.Resources>
-                <Style TargetType="Border">
-                    <Setter Property="CornerRadius" Value="5"/>
-                </Style>
-            </Button.Resources>
         </Button>
     </Grid>
 </Window>

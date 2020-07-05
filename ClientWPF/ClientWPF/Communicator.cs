@@ -24,11 +24,11 @@ namespace ClientWPF
             this.clientStream = clientStream;
         }
 
-        public static string EditRequest(int code, string request)
+        public static string EditRequest(Codes code, string request)
         {
             //Create the request acording to the protocol.
             return
-                Helper.ToBinary(code.ToString().PadLeft(SIZE_OF_CODE, '0')) +
+                Helper.ToBinary(((int)code).ToString().PadLeft(SIZE_OF_CODE, '0')) +
                 Helper.ToBinary((request.Length).ToString().PadLeft(SIZE_OF_DATA_LEN, '0')) +
                 Helper.ToBinary(request);
         }
@@ -40,10 +40,8 @@ namespace ClientWPF
             clientStream.Flush();
         }
 
-        public static T ManageSendAndGetData<T>(string json, NetworkStream clientStream, int code)
+        public static T ManageSendAndGetData<T>(string json, NetworkStream clientStream, Codes code)
         {
-            
-
             // Edit and send request.
             json = EditRequest(code, json);
             SendRequest(json, clientStream);

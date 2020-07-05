@@ -23,6 +23,11 @@ namespace ClientWPF
     /// </summary>
     /// 
 
+    public struct WorkerParameter
+    {
+        public List<string> list;
+    }
+
     public partial class WaitInRoom : Window
     {
         private RoomData roomData;
@@ -31,15 +36,10 @@ namespace ClientWPF
         private BackgroundWorker worker = new BackgroundWorker();
         private bool stopUpdating;
 
-        public struct workerParameter
-        {
-            public List<string> roomPlayers;
-        }
-
         public WaitInRoom(RoomData data, NetworkStream clientStream, bool isAdmin)
         {
             InitializeComponent();
-            this.roomData= data;
+            this.roomData = data;
             this.clientStream = clientStream;
             this.isAdmin = isAdmin;
             stopUpdating = false;
@@ -71,8 +71,9 @@ namespace ClientWPF
         private void closeRoom_Click(object sender, RoutedEventArgs e)
         {
             // Sends a Close Room request to the server.
-            Response resp = Communicator.ManageSendAndGetData<Response>("", this.clientStream, (int)Codes.CLOSE_ROOM_CODE);
+            Response resp = Communicator.ManageSendAndGetData<Response>("", this.clientStream, Codes.CLOSE_ROOM_CODE);
 
+            // Terminating the thread that updates the players, and going back to the main menu.
             if (resp.status != (int)Codes.ERROR_CODE)
             {
                 stopUpdating = true;
@@ -89,9 +90,9 @@ namespace ClientWPF
         private void leaveRoom_Click(object sender, RoutedEventArgs e)
         {
             // Sending a Leave Room request to the server.
-            Response resp = Communicator.ManageSendAndGetData<Response>("", this.clientStream, (int)Codes.LEAVE_ROOM_CODE);
+            Response resp = Communicator.ManageSendAndGetData<Response>("", this.clientStream, Codes.LEAVE_ROOM_CODE);
 
-            // Terminating the thread that updates the players.
+            // Terminating the thread that updates the players, and going back to the main menu.
             if (resp.status != (int)Codes.ERROR_CODE)
             {
                 stopUpdating = true;
@@ -108,10 +109,18 @@ namespace ClientWPF
         private void startGame_Click(object sender, RoutedEventArgs e)
         {
             stopUpdating = true;
-            Response resp = Communicator.ManageSendAndGetData<Response>("", this.clientStream, (int)Codes.START_GAME_CODE);
-            Questions q = new Questions(this.clientStream);
-            q.Show();
-            this.Close();
+            Response resp = Communicator.ManageSendAndGetData<Response>("", this.clientStream, Codes.START_GAME_CODE);
+
+            if (resp.status == (int)Codes.ERROR_CODE)
+            {
+                MessageBox.Show("Couldn't start the game! Try again");
+            }
+            else
+            {
+                DisplayQuestion question = new DisplayQuestion(this.clientStream, new TimeSpan(0, roomData.TimeForQuestion, 0));
+                question.Show();
+                this.Close();
+            }
         }
 
         /* A thread that constantly updates the players in the room */
@@ -126,26 +135,26 @@ namespace ClientWPF
                 GetPlayersInRoomResponse resp = Communicator.ManageSendAndGetData<GetPlayersInRoomResponse>(
                     JsonConvert.SerializeObject(request),
                     clientStream,
-                    (int)Codes.GET_PLAYERS_IN_ROOM_CODE);
+                    Codes.GET_PLAYERS_IN_ROOM_CODE);
 
-                // Room was closed
+                // If the room was closed, then the player must leave (sending a leave room request)
                 if (resp.PlayersInRoom == null || resp.PlayersInRoom.Count == 0)
                 {
-                    Response response = Communicator.ManageSendAndGetData<Response>("", this.clientStream, (int)Codes.LEAVE_ROOM_CODE);
+                    Response response = Communicator.ManageSendAndGetData<Response>("", this.clientStream, Codes.LEAVE_ROOM_CODE);
                     return;
                 }
 
-                workerParameter param = new workerParameter { roomPlayers = resp.PlayersInRoom };
+                // Updating list on the screen
+                WorkerParameter param = new WorkerParameter { list = resp.PlayersInRoom };
                 worker.ReportProgress(0, param);
 
-                Thread.Sleep(600);
+                Thread.Sleep(3000);
             }
         }
         void playersChanged(object sender, ProgressChangedEventArgs e)
         {
-            workerParameter param = (workerParameter)e.UserState;
-            List<string> roomPlayers = param.roomPlayers;
-            playersInRoom.ItemsSource = roomPlayers;
+            WorkerParameter param = (WorkerParameter)e.UserState;
+            playersInRoom.ItemsSource = param.list;
         }
     }
 }

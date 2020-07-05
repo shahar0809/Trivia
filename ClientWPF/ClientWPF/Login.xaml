@@ -8,7 +8,7 @@
         Title="Login" Height="600" Width="800">
     <Grid>
         <Grid.Background>
-            <ImageBrush ImageSource="Images/genBackground.png" Stretch="UniformToFill"/>
+            <ImageBrush ImageSource="Resources/genBackground.png" Stretch="UniformToFill"/>
         </Grid.Background>
 
         <Grid.ColumnDefinitions>
@@ -18,7 +18,7 @@
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="20"/>
         </Grid.ColumnDefinitions>
-        
+
         <Grid.RowDefinitions>
             <RowDefinition Height="20"/>
             <RowDefinition Height="auto"/>
@@ -32,10 +32,8 @@
         <TextBlock Grid.Row="1" Grid.Column="1"
                    Grid.ColumnSpan="3"
                    HorizontalAlignment="Center"
-                   Text="Log In"
-                   FontFamily="Ravie"
-                   Margin="0, 10, 0, 35"
-                   FontSize="72"/>
+                   Text="Log In" FontFamily="Ravie"
+                   Margin="0, 10, 0, 35" FontSize="72"/>
 
         <TextBlock Text="User Name:"
                    Grid.Column="1"
@@ -49,48 +47,43 @@
                    Margin="100, 15, 40, 15"
                    VerticalAlignment="Center"/>
 
-        <TextBox x:Name="usernameBox"
+        <TextBox Template="{StaticResource TextBoxBaseControlTemplate}"
+                 x:Name="usernameBox"
                  Grid.Row="2" Grid.Column="2"
                  Grid.ColumnSpan="2"
+                 VerticalAlignment="Center"
                  Margin="0, 0, 70, 0"
-                 FontFamily="Arial"
+                 MinHeight="40" Padding="2, 0"
+                 BorderBrush="{x:Null}"
+                 FontSize="18"
         />
 
-        <TextBox x:Name="passwordBox"
+        <PasswordBox Template="{StaticResource passwordbox}"
+                 x:Name="passwordBox"
                  Grid.Row="3" Grid.Column="2"
+                 VerticalAlignment="Center"
                  Grid.ColumnSpan="2"
-                 Margin="0, 15, 70, 0"
-                 FontFamily="Arial"
+                 Margin="0, 0, 70, 0"
+                 FontSize="18" Padding="2, 0"
+                 MinHeight="40"
         />
 
-        <Button x:Name="submitLogin"
-                Grid.Column="3"
-                Grid.Row="4"
-                Grid.RowSpan="2"
+        <Button Grid.Column="3" Grid.Row="4"
+                Grid.RowSpan="2" IsDefault="True"
                 Margin="130, 90, 100, 90"
                 Click="SubmitButton_Click"
+                Background="AliceBlue"
                 Content="Log In">
-            <Button.Resources>
-                <Style TargetType="Border">
-                    <Setter Property="CornerRadius" Value="5"/>
-                </Style>
-            </Button.Resources>
         </Button>
 
-        <Button x:Name="cancelLogin"
-                Grid.Column="1"
+        <Button Grid.Column="1"
                 Grid.Row="4"
                 Grid.RowSpan="2"
                 Grid.ColumnSpan="3"
                 Margin="180, 90, 380, 90"
-         
                 Click="CancelButton_Click"
-                Content="Cancel">
-            <Button.Resources>
-                <Style TargetType="Border">
-                    <Setter Property="CornerRadius" Value="5"/>
-                </Style>
-            </Button.Resources>
+                Content="Cancel"
+                Background="AliceBlue">
         </Button>
     </Grid>
 </Window>
