@@ -35,7 +35,9 @@ Question Game::getQuestionForUser(LoggedUser user)
 		{
 			it = this->m_questions->begin();
 		}
+		it++;
 	}
+	m_players[user].currentQuestion = &(*it);
 	return *it;
 }
 

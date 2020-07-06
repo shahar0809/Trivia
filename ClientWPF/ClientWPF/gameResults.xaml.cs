@@ -25,13 +25,13 @@ namespace ClientWPF
         public string username { get; set; }
         public int correctAnswersCount { get; set; }
         public int wrongAnswersCount { get; set; }
-        public int averageAnswerTime { get; set; }
+        public double averageAnswerTime { get; set; }
     }
 
     public struct GetGameResultsResponse
     {
         public int status { get; set; }
-        public List<PlayerResults> playerResults { set; get; }
+        public List<string> Results { set; get; }
     }
 
     public partial class GameResults : Window
@@ -55,11 +55,23 @@ namespace ClientWPF
             }
             else
             {
-                // Displaying the winner's username 
-                winnerUsername.Text = resp.playerResults[0].username;
+                 // Displaying the winner's username 
+                 winnerUsername.Text = (string)resp.Results[0].Split(',')[0] ;
+                List<PlayerResults> results = new List<PlayerResults>();
+                foreach (string playerResult in resp.Results)
+                {
+                    PlayerResults player = new PlayerResults
+                    {
+                        username = playerResult.Split(',')[0],
+                        correctAnswersCount = int.Parse(playerResult.Split(',')[1]),
+                        wrongAnswersCount = int.Parse(playerResult.Split(',')[2]),
+                        averageAnswerTime = double.Parse(playerResult.Split(',')[3])
+                    };
+                    results.Add(player);
+                }
 
                 // Displaying all the results in the data grid
-                playersResult.ItemsSource = resp.playerResults;
+                playersResult.ItemsSource = results;
             }
         }
 
