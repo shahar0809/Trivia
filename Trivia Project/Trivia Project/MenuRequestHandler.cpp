@@ -71,6 +71,14 @@ RequestResult MenuRequestHandler::getRooms(RequestInfo info)
 {
 	RoomManager* roomManager = m_handlerFactory.getRoomManager();
 	std::vector<std::string> roomNames;
+	std::vector<std::tuple<unsigned int, std::string>> rooms;
+
+	for (auto room : roomManager->getRooms())
+	{
+		rooms.push_back(std::tuple<unsigned int, std::string>(room.id, room.name));
+	}
+
+	json j_vec = json(rooms);
 
 	for (auto room : roomManager->getRooms())
 	{

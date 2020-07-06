@@ -151,7 +151,7 @@ namespace ClientWPF
         void roomsChanged(object sender, ProgressChangedEventArgs e)
         {
             WorkerParameter param = (WorkerParameter)e.UserState;
-            playersInRoom.ItemsSource = param.list;
+            availableRooms.ItemsSource = param.list;
         }
 
         // Going back to the main menu
