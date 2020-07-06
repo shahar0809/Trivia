@@ -64,5 +64,5 @@ std::vector<PlayerResults> GameManager::getGameResults(LoggedUser user)
 
 Question GameManager::getQuestion(LoggedUser user)
 {
-	return *getGame(user)->getPlayersGameData()[user].currentQuestion;
+	return getGame(user)->getQuestionForUser(user);
 }

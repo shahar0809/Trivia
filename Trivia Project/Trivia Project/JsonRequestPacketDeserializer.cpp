@@ -91,7 +91,7 @@ SubmitAnswerRequest JsonRequestPacketDeserializer::deserializerSubmitAnswerReque
 	// Printing json fields (to make sure that the data transformation is valid).
 	std::cout <<
 		"Submit Answer Request:" << std::endl <<
-		"Correct Answer ID: " << j[jsonFields[CORRECT_ANS_ID]] << std::endl << std::endl;
+		"Answer ID: " << j[jsonFields[ANS_ID]] << std::endl << std::endl;
 
-	return SubmitAnswerRequest{ j[jsonFields[CORRECT_ANS_ID]] };
+	return SubmitAnswerRequest{ j[jsonFields[ANS_ID]] };
 }

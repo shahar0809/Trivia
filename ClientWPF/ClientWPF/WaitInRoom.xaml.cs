@@ -117,7 +117,8 @@ namespace ClientWPF
             }
             else
             {
-                DisplayQuestion question = new DisplayQuestion(this.clientStream, new TimeSpan(0, roomData.TimeForQuestion, 0), roomData.NumOfQuestions);
+                //DisplayQuestion question = new DisplayQuestion(this.clientStream, new TimeSpan(0, roomData.TimeForQuestion, 0), roomData.NumOfQuestions);
+                DisplayQuestion question = new DisplayQuestion(this.clientStream, roomData);
                 question.Show();
                 this.Close();
             }

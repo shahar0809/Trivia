@@ -16,10 +16,10 @@ struct PlayerResults
 
 	std::string toString()
 	{
-		return username + "'" +
-			std::to_string(correctAnswersCount) + "'" +
-			std::to_string(wrongAnswersCount) + "'" +
-			std::to_string(averageAnswerTime) + "'";
+		return username + "," +
+			std::to_string(correctAnswersCount) + "," +
+			std::to_string(wrongAnswersCount) + "," +
+			std::to_string(averageAnswerTime);
 	}
 };
 

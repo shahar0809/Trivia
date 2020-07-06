@@ -23,8 +23,12 @@ namespace ClientWPF
     /// 
     public partial class DisplayQuestion : Window
     {
-        private const int timerWarning = 10;
-        private const int numOfPossibleAnswers = 4;
+        public const int TIMER_WARNING = 10;
+        public const int INDEX = 0;
+        public const int ANSWER = 1;
+        
+       
+        private RoomData m_roomData;
         private TimeSpan m_time;
         private DispatcherTimer m_timer;
         private List<Tuple<Button, TextBlock>> m_answersButtons;
@@ -41,7 +45,7 @@ namespace ClientWPF
         {
             public int Status;
             public string Question;
-            public List<Answer> Answers;
+            public List<List<object>> Answers;
         }
         private struct SubmitAnswerRequest
         {
@@ -50,14 +54,14 @@ namespace ClientWPF
         private struct SubmitAnswerResponse
         {
             public int status { set; get; }
-            public int correctAnswerId { set; get; }
+            public int CorrectAnswerId { set; get; }
         }
 
-        public DisplayQuestion(NetworkStream clientStream, TimeSpan timePerQuestion, int numOfQuestions)
+        public DisplayQuestion(NetworkStream clientStream,RoomData roomData)
         {
             m_clientStream = clientStream;
-            m_questionsLeft = numOfQuestions;
-
+            m_questionsLeft = roomData.NumOfQuestions;
+            m_roomData = roomData;
             InitializeComponent();
             m_answersButtons = new List<Tuple<Button, TextBlock>>();
             m_answersButtons.Add( Tuple.Create( new Button(), new TextBlock()));
@@ -68,7 +72,7 @@ namespace ClientWPF
             updateQuestion();
 
             // Creating a timer for the question
-            m_time = timePerQuestion;
+            m_time = TimeSpan.FromMinutes(m_roomData.TimeForQuestion);
             m_timer = new DispatcherTimer();
             m_timer.Interval = TimeSpan.FromSeconds(1);
             m_timer.Tick += tickTimer;
@@ -78,38 +82,56 @@ namespace ClientWPF
         void tickTimer(object sender, EventArgs e)
         {
             if (m_time.TotalSeconds > 0)
-            {
-                if (m_time.TotalSeconds <= timerWarning)
-                {
-                    Timer.Foreground = Brushes.Red;
-                    m_time = new TimeSpan(0, 0, (int)m_time.TotalSeconds - 1); // Updating countdown
-                    Timer.Text = string.Format("{0} : 0{1}", (int)m_time.TotalMinutes, (int)m_time.Seconds); // Updating Timer text box
+            { 
+                    if (m_time.TotalSeconds <= TIMER_WARNING)
+                    {
+                        Timer.Foreground = Brushes.Red;
+                        m_time = new TimeSpan(0, 0, (int)m_time.TotalSeconds - 1); // Updating countdown
+                        Timer.Text = string.Format("{0} : 0{1}", (int)m_time.TotalMinutes, (int)m_time.Seconds); // Updating Timer text box
+                    }
+                    else
+                    {
+                        m_time = new TimeSpan(0, 0, (int)m_time.TotalSeconds - 1); // Updating countdown
+                        Timer.Text = string.Format("{0} : {1}", (int)m_time.TotalMinutes, (int)m_time.Seconds); // Updating Timer text box
+                    }
                 }
                 else
                 {
-                    m_time = new TimeSpan(0, 0, (int)m_time.TotalSeconds - 1); // Updating countdown
-                    Timer.Text = string.Format("{0} : {1}", (int)m_time.TotalMinutes, (int)m_time.Seconds); // Updating Timer text box
+                    updateQuestion();
                 }
-            }
-            else
-            {
-                updateQuestion();
-            }
         }
 
         void updateQuestion()
         {
-            // Requesting the current question
-            GetQuestionResponse resp = Communicator.ManageSendAndGetData<GetQuestionResponse>("", m_clientStream, Codes.GET_QUESTION_CODE);
-
-            questionsLeft.Text = m_questionsLeft.ToString();
-            correctAnswers.Text = m_correctAnswers.ToString();
-
-            questionBox.Text = resp.Question;
-            // Displaying the question and the possible answers on the screen.
-            foreach (var answer in resp.Answers)
+            if (m_questionsLeft == 0)
             {
-                m_answersButtons[answer.index].Item2.Text = answer.answer;
+                m_timer.Stop();
+                var results = new GameResults(m_clientStream);
+                results.Show();
+                Close();
+            }
+            else
+            {
+                // Requesting the current question
+                GetQuestionResponse resp = Communicator.ManageSendAndGetData<GetQuestionResponse>("", m_clientStream, Codes.GET_QUESTION_CODE);
+
+                questionsLeft.Text = m_questionsLeft.ToString();
+                correctAnswers.Text = m_correctAnswers.ToString();
+
+                questionBox.Text = resp.Question;
+                // Displaying the question and the possible answers on the screen.
+                foreach (var answer in resp.Answers)
+                {
+                    m_answersButtons[Convert.ToInt32(answer[INDEX])].Item2.Text = (string)answer[ANSWER];
+                }
+            
+            
+                m_time = TimeSpan.FromMinutes(m_roomData.TimeForQuestion);
+                updateButtons(true);
+                foreach (Tuple<Button, TextBlock> answer in m_answersButtons)
+                {
+                    answer.Item1.Background = Brushes.White;
+                }
             }
         }
 
@@ -143,10 +165,10 @@ namespace ClientWPF
 
             // Edit and send question request.
             string json = JsonConvert.SerializeObject(submitAns, Formatting.Indented);
-            SubmitAnswerResponse sendAns = Communicator.ManageSendAndGetData<SubmitAnswerResponse>(json, m_clientStream, Codes.LOGIN_CODE);
+            SubmitAnswerResponse sendAns = Communicator.ManageSendAndGetData<SubmitAnswerResponse>(json, m_clientStream, Codes.SUBMIT_ANS_CODE);
            
             // Coloring the selected answer Green if correct, and Red if wrong.
-            if (sendAns.correctAnswerId != answerId)
+            if (sendAns.CorrectAnswerId != answerId)
             {
                 m_answersButtons[answerId].Item1.Background = Brushes.Red;
             }

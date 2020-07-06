@@ -31,7 +31,7 @@ namespace ClientWPF
             public string RoomName { set; get; }
             public int NumOfPlayers { set; get; }
             public int NumOfQuestions { set; get; }
-            public int TimeForQuestion { set; get; }
+            public double TimeForQuestion { set; get; }
         }
 
         private struct CreateRoomResponse
@@ -59,7 +59,7 @@ namespace ClientWPF
                 RoomName = roomName.Text,
                 NumOfPlayers = int.Parse(numOfPlayers.Text),
                 NumOfQuestions = int.Parse(numOfQuestions.Text),
-                TimeForQuestion = int.Parse(timeout.Text),
+                TimeForQuestion = double.Parse(timeout.Text),
             };
 
             string json = JsonConvert.SerializeObject(createRoom, Formatting.Indented);

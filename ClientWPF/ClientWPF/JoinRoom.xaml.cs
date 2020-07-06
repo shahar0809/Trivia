@@ -29,7 +29,7 @@ namespace ClientWPF
         public string RoomName { set; get; }
         public int NumOfplayers { set; get; }
         public int NumOfQuestions { set; get; }
-        public int TimeForQuestion { set; get; }
+        public double TimeForQuestion { set; get; }
         public int IsActive { set; get; }
     };
     public struct GetRoomsResponse
@@ -52,7 +52,7 @@ namespace ClientWPF
         public string RoomName;
         public int NumOfplayers;
         public int NumOfQuestions;
-        public int TimeForQuestion;
+        public double TimeForQuestion;
         public int IsActive;
     }
     public struct GetPlayersInRoomRequest

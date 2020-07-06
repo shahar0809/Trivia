@@ -64,14 +64,14 @@ RequestResult GameRequestHandler::getGameResults(RequestInfo info)
 		return RequestResult
 		{
 			JsonResponsePacketSerializer::serializeGetGameResultsResponse(resp),
-			this->m_handlerFactory->createGameRequestHandler(m_user, m_handlerFactory, *m_gameManager)
+			this->m_handlerFactory->createMenuRequestHandler(m_user)
 		};
 	}
 	resp.status = SUCCEEDED;
 	return RequestResult
 	{
 		JsonResponsePacketSerializer::serializeGetGameResultsResponse(resp),
-		this->m_handlerFactory->createGameRequestHandler(m_user, m_handlerFactory, *m_gameManager)
+		this->m_handlerFactory->createMenuRequestHandler(m_user)
 	};
 }
 
