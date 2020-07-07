@@ -136,15 +136,15 @@ public:
 	static std::string serializeResponse(CreateRoomResponse createRoom);
 	static std::string serializeResponse(GetStatisticsResponse getStatistics);
 
-	static std::string serializeCloseRoomResponse(CloseRoomResponse closeRoom);
-	static std::string serializeStartGameResponse(StartGameResponse startGame);
-	static std::string serializeGetRoomStateResponse(GetRoomStateResponse getRoomState);
-	static std::string serializeLeaveRoomResponse(LeaveRoomResponse leaveRoom);
+	static std::string serializeResponse(CloseRoomResponse closeRoom);
+	static std::string serializeResponse(StartGameResponse startGame);
+	static std::string serializeResponse(GetRoomStateResponse getRoomState);
+	static std::string serializeResponse(LeaveRoomResponse leaveRoom);
 
-	static std::string serializeGetGameResultsResponse(GetGameResultsResponse getGameResults);
-	static std::string serializeSubmitAnswerResponse(SubmitAnswerResponse submitAnswer);
-	static std::string serializeGetQuestionResponse(GetQuestionResponse getQuestion);
-	static std::string serializeLeaveGameResponse(LeaveGameResponse leaveGame);
+	static std::string serializeResponse(GetGameResultsResponse getGameResults);
+	static std::string serializeResponse(SubmitAnswerResponse submitAnswer);
+	static std::string serializeResponse(GetQuestionResponse getQuestion);
+	static std::string serializeResponse(LeaveGameResponse leaveGame);
 
 private:
 	static std::string serializeResponse(json j, int code);

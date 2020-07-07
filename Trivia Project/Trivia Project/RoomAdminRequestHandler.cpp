@@ -43,7 +43,7 @@ RequestResult RoomAdminRequestHandler::closeRoom(RequestInfo info)
 	
 	return RequestResult
 	{
-		JsonResponsePacketSerializer::serializeCloseRoomResponse(resp),
+		JsonResponsePacketSerializer::serializeResponse(resp),
 		this->m_handlerFactory.createMenuRequestHandler(this->m_user)
 	};
 }
@@ -61,7 +61,7 @@ RequestResult RoomAdminRequestHandler::startGame(RequestInfo info)
 		resp.status = FAILED;
 		return RequestResult
 		{
-			JsonResponsePacketSerializer::serializeStartGameResponse(resp),
+			JsonResponsePacketSerializer::serializeResponse(resp),
 			this->m_handlerFactory.createMenuRequestHandler(this->m_user)
 		};
 	}
@@ -69,7 +69,7 @@ RequestResult RoomAdminRequestHandler::startGame(RequestInfo info)
 	resp.status = SUCCEEDED;
 	return RequestResult
 	{
-		JsonResponsePacketSerializer::serializeStartGameResponse(resp),
+		JsonResponsePacketSerializer::serializeResponse(resp),
 		this->m_handlerFactory.createGameRequestHandler(
 			this->m_user,
 			&this->m_handlerFactory,*this->m_handlerFactory.getGameManager())

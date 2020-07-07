@@ -70,21 +70,13 @@ RequestResult MenuRequestHandler::logout(RequestInfo info)
 RequestResult MenuRequestHandler::getRooms(RequestInfo info)
 {
 	RoomManager* roomManager = m_handlerFactory.getRoomManager();
-	std::vector<std::string> roomNames;
-	std::vector<std::tuple<unsigned int, std::string>> rooms;
+	std::vector<std::string> roomsNames;
 
 	for (auto room : roomManager->getRooms())
 	{
-		rooms.push_back(std::tuple<unsigned int, std::string>(room.id, room.name));
+		roomsNames.push_back(room.name + "," + std::to_string(room.id));
 	}
-
-	json j_vec = json(rooms);
-
-	for (auto room : roomManager->getRooms())
-	{
-		roomNames.push_back(room.name + "," + std::to_string(room.id));
-	}
-	GetRoomResponse resp{ SUCCEEDED, roomNames };
+	GetRoomResponse resp{ SUCCEEDED, roomsNames };
 	return RequestResult
 	{
 		JsonResponsePacketSerializer::serializeResponse(resp),

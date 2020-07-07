@@ -63,8 +63,9 @@ namespace ClientWPF
             m_questionsLeft = roomData.NumOfQuestions;
             m_roomData = roomData;
             InitializeComponent();
+
             m_answersButtons = new List<Tuple<Button, TextBlock>>();
-            m_answersButtons.Add( Tuple.Create( new Button(), new TextBlock()));
+            m_answersButtons.Add( Tuple.Create( new Button(), new TextBlock())); // Random element
             m_answersButtons.Add(Tuple.Create(Answer1_button, Answer1_Box));
             m_answersButtons.Add(Tuple.Create(Answer2_button, Answer2_Box));
             m_answersButtons.Add(Tuple.Create(Answer3_button, Answer3_Box));
@@ -178,7 +179,7 @@ namespace ClientWPF
                 m_answersButtons[answerId].Item1.Background = Brushes.Green;
             }
             m_questionsLeft--;
-            // Wait till everybody has answered, and call updateQuestion and update the buttons.
+            // Wait till everybody has answered, and call updateQuestion + update the buttons.
         }
 
         /* Releases / Locks the buttons so that the user won't be able to submit another answer */

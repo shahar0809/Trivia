@@ -63,6 +63,11 @@ namespace ClientWPF
     {
         public int RoomId;
     }
+    public struct Room
+    {
+        public int RoomId;
+        public string name;
+    }
 
     public partial class JoinRoom : Window
     {
@@ -151,7 +156,7 @@ namespace ClientWPF
         void roomsChanged(object sender, ProgressChangedEventArgs e)
         {
             WorkerParameter param = (WorkerParameter)e.UserState;
-            availableRooms.ItemsSource = param.list;
+            availableRooms.ItemsSource = getRoomsNames(param.list);
         }
 
         // Going back to the main menu
@@ -165,15 +170,15 @@ namespace ClientWPF
         private List<string> getRoomsNames(List<string> rooms)
         {
             List<string> roomsNames = new List<string>();
-
+            Room
             foreach (string room in rooms)
             {
                 var splitted = room.Split(',');
                 string name = splitted[0];
 
                 // Checking that the room wasn't erased
-                if (name != "") 
-                    rooms.Add(name);
+                if (name != "")
+                    roomsNames.Add(name);
             }
             return roomsNames;
         }

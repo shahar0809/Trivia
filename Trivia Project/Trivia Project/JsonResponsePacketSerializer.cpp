@@ -109,19 +109,19 @@ std::string JsonResponsePacketSerializer::parseVector(std::vector<std::string> v
 	return parsedVec.substr(0, parsedVec.size() - 1);
 }
 
-std::string JsonResponsePacketSerializer::serializeCloseRoomResponse(CloseRoomResponse closeRoom)
+std::string JsonResponsePacketSerializer::serializeResponse(CloseRoomResponse closeRoom)
 {
 	json j;
 	j[jsonFields[STATUS]] = closeRoom.status;
 	return JsonResponsePacketSerializer::serializeResponse(j, CLOSE_ROOM_CODE);
 }
-std::string JsonResponsePacketSerializer::serializeStartGameResponse(StartGameResponse startGame)
+std::string JsonResponsePacketSerializer::serializeResponse(StartGameResponse startGame)
 {
 	json j;
 	j[jsonFields[STATUS]] = startGame.status;
 	return JsonResponsePacketSerializer::serializeResponse(j, START_GAME_CODE);
 }
-std::string JsonResponsePacketSerializer::serializeGetRoomStateResponse(GetRoomStateResponse getRoomState)
+std::string JsonResponsePacketSerializer::serializeResponse(GetRoomStateResponse getRoomState)
 {
 	json j;
 	j[jsonFields[STATUS]] = getRoomState.status;
@@ -133,14 +133,14 @@ std::string JsonResponsePacketSerializer::serializeGetRoomStateResponse(GetRoomS
 	
 }
 
-std::string JsonResponsePacketSerializer::serializeLeaveRoomResponse(LeaveRoomResponse leaveRoom)
+std::string JsonResponsePacketSerializer::serializeResponse(LeaveRoomResponse leaveRoom)
 {
 	json j;
 	j[jsonFields[STATUS]] = leaveRoom.status;
 	return JsonResponsePacketSerializer::serializeResponse(j, LEAVE_ROOM_CODE);
 }
 
-std::string JsonResponsePacketSerializer::serializeGetGameResultsResponse(GetGameResultsResponse getGameResults)
+std::string JsonResponsePacketSerializer::serializeResponse(GetGameResultsResponse getGameResults)
 {
 	json j;
 	j[jsonFields[STATUS]] = getGameResults.status;
@@ -154,7 +154,7 @@ std::string JsonResponsePacketSerializer::serializeGetGameResultsResponse(GetGam
 	return JsonResponsePacketSerializer::serializeResponse(j, GET_GAME_RESULTS_CODE);
 }
 
-std::string JsonResponsePacketSerializer::serializeSubmitAnswerResponse(SubmitAnswerResponse submitAnswer)
+std::string JsonResponsePacketSerializer::serializeResponse(SubmitAnswerResponse submitAnswer)
 {
 	json j;
 	j[jsonFields[STATUS]] = submitAnswer.status;
@@ -162,7 +162,7 @@ std::string JsonResponsePacketSerializer::serializeSubmitAnswerResponse(SubmitAn
 	return JsonResponsePacketSerializer::serializeResponse(j, SUBMIT_ANS_CODE);
 }
 
-std::string JsonResponsePacketSerializer::serializeGetQuestionResponse(GetQuestionResponse getQuestion)
+std::string JsonResponsePacketSerializer::serializeResponse(GetQuestionResponse getQuestion)
 {
 	json j;
 	j[jsonFields[STATUS]] = getQuestion.status;
@@ -171,7 +171,7 @@ std::string JsonResponsePacketSerializer::serializeGetQuestionResponse(GetQuesti
 	return JsonResponsePacketSerializer::serializeResponse(j, GET_QUESTION_CODE);
 }
 
-std::string JsonResponsePacketSerializer::serializeLeaveGameResponse(LeaveGameResponse leaveGame)
+std::string JsonResponsePacketSerializer::serializeResponse(LeaveGameResponse leaveGame)
 {
 	json j;
 	j[jsonFields[STATUS]] = leaveGame.status;

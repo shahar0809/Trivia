@@ -46,7 +46,7 @@ RequestResult GameRequestHandler::leaveGame(RequestInfo info)
 
 	return RequestResult
 	{
-		JsonResponsePacketSerializer::serializeLeaveGameResponse(resp),
+		JsonResponsePacketSerializer::serializeResponse(resp),
 		this->m_handlerFactory->createGameRequestHandler(m_user, m_handlerFactory, *m_gameManager)
 	};
 }
@@ -63,14 +63,14 @@ RequestResult GameRequestHandler::getGameResults(RequestInfo info)
 		resp.status = FAILED;
 		return RequestResult
 		{
-			JsonResponsePacketSerializer::serializeGetGameResultsResponse(resp),
+			JsonResponsePacketSerializer::serializeResponse(resp),
 			this->m_handlerFactory->createMenuRequestHandler(m_user)
 		};
 	}
 	resp.status = SUCCEEDED;
 	return RequestResult
 	{
-		JsonResponsePacketSerializer::serializeGetGameResultsResponse(resp),
+		JsonResponsePacketSerializer::serializeResponse(resp),
 		this->m_handlerFactory->createMenuRequestHandler(m_user)
 	};
 }
@@ -90,7 +90,7 @@ RequestResult GameRequestHandler::getQuestion(RequestInfo info)
 		resp.status = FAILED;
 		return RequestResult
 		{
-			JsonResponsePacketSerializer::serializeGetQuestionResponse(resp),
+			JsonResponsePacketSerializer::serializeResponse(resp),
 			this->m_handlerFactory->createMenuRequestHandler(this->m_user)
 		};
 	}
@@ -98,7 +98,7 @@ RequestResult GameRequestHandler::getQuestion(RequestInfo info)
 	resp.status = SUCCEEDED;
 	return RequestResult
 	{
-		JsonResponsePacketSerializer::serializeGetQuestionResponse(resp),
+		JsonResponsePacketSerializer::serializeResponse(resp),
 		this->m_handlerFactory->createGameRequestHandler(this->m_user,this->m_handlerFactory,*this->m_gameManager)
 	};
 }
@@ -114,7 +114,7 @@ RequestResult GameRequestHandler::submitAnswer(RequestInfo info)
 		resp.status = SUCCEEDED;
 		return RequestResult
 		{
-			JsonResponsePacketSerializer::serializeSubmitAnswerResponse(resp),
+			JsonResponsePacketSerializer::serializeResponse(resp),
 			this->m_handlerFactory->createGameRequestHandler(this->m_user,this->m_handlerFactory,*this->m_gameManager)
 		};
 	}
@@ -123,7 +123,7 @@ RequestResult GameRequestHandler::submitAnswer(RequestInfo info)
 		resp.status = FAILED;
 		return RequestResult
 		{
-			JsonResponsePacketSerializer::serializeSubmitAnswerResponse(resp),
+			JsonResponsePacketSerializer::serializeResponse(resp),
 			this->m_handlerFactory->createMenuRequestHandler(this->m_user)
 		};
 	}

@@ -40,7 +40,7 @@ RequestResult RoomMemberRequestHandler::leaveRoom(RequestInfo info)
 	}
 	return RequestResult
 	{
-		JsonResponsePacketSerializer::serializeLeaveRoomResponse(resp),
+		JsonResponsePacketSerializer::serializeResponse(resp),
 		m_handlerFactory.createMenuRequestHandler(m_user)
 	};
 }

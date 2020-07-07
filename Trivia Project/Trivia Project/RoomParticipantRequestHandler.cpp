@@ -28,7 +28,7 @@ RequestResult RoomParticipantRequestHandler::getRoomState(RequestInfo info)
 	//Should understand when this rrequest is used and what is the next handler.
 	return RequestResult
 	{
-		JsonResponsePacketSerializer::serializeGetRoomStateResponse(resp), nullptr
+		JsonResponsePacketSerializer::serializeResponse(resp), nullptr
 	};
 }
 
