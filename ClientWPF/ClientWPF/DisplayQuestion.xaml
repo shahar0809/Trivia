@@ -36,6 +36,7 @@
         </Grid.RowDefinitions>
 
         <Button Content="Exit"
+                Click="Exit_Button_Click"
                 FontFamily="Forte" FontSize="32"
                 Grid.Column="1"
                 Grid.Row="1"

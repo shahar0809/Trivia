@@ -90,15 +90,23 @@ RequestResult MenuRequestHandler::getPlayersInRoom(RequestInfo info)
 	RoomManager* roomManager = m_handlerFactory.getRoomManager();
 	std::vector<LoggedUser> loggedUsers = roomManager->getRoom(req.roomId)->getAllUsers();
 	std::vector<std::string> roomPlayers;
-
+	
 	for (auto user : loggedUsers)
 	{
 		roomPlayers.push_back(user.getUsername());
 	}
 
+	if (roomManager->getRoom(req.roomId)->getHasGameBegun())
+	{
+		return RequestResult
+		{
+			JsonResponsePacketSerializer::serializeResponse(GetPlayersInRoomResponse { 0,roomPlayers }),
+			m_handlerFactory.createGameRequestHandler(this->m_user,&m_handlerFactory,*m_handlerFactory.getGameManager())
+		};
+	}
 	return RequestResult
 	{
-		JsonResponsePacketSerializer::serializeResponse(GetPlayersInRoomResponse { roomPlayers }),
+		JsonResponsePacketSerializer::serializeResponse(GetPlayersInRoomResponse { 1,roomPlayers }),
 		m_handlerFactory.createMenuRequestHandler(this->m_user)
 	};
 }

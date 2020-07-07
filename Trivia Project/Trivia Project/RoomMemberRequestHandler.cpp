@@ -48,6 +48,7 @@ RequestResult RoomMemberRequestHandler::leaveRoom(RequestInfo info)
 RequestResult RoomMemberRequestHandler::getPlayersInRoom(RequestInfo info)
 {
 	RequestResult res = this->m_handlerFactory.createMenuRequestHandler(m_user)->getPlayersInRoom(info);
-	res.newHandler = this->m_handlerFactory.createRoomMemberRequestHandler(m_room, m_user, &m_handlerFactory, m_roomManager);
+	if (!this->m_room->getHasGameBegun())
+		res.newHandler = this->m_handlerFactory.createRoomMemberRequestHandler(m_room, m_user, &m_handlerFactory, m_roomManager);
 	return res;
 }

@@ -55,6 +55,7 @@ RequestResult RoomAdminRequestHandler::startGame(RequestInfo info)
 	try
 	{
 		this->m_handlerFactory.getGameManager()->createGame(*m_room);
+		m_room->setHasGameBegun(true);
 	}
 	catch (const std::exception & e)
 	{

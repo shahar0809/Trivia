@@ -27,6 +27,7 @@ namespace ClientWPF
     {
         public List<string> list;
     }
+    
 
     public partial class WaitInRoom : Window
     {
@@ -66,6 +67,7 @@ namespace ClientWPF
             worker.DoWork += updateRoomPlayers;
             worker.ProgressChanged += playersChanged;
             worker.RunWorkerAsync();
+            
         }
 
         private void closeRoom_Click(object sender, RoutedEventArgs e)
@@ -127,6 +129,7 @@ namespace ClientWPF
         /* A thread that constantly updates the players in the room */
         public void updateRoomPlayers(object sender, DoWorkEventArgs e)
         {
+            
             // Getting the players connected to the room
             GetPlayersInRoomRequest request = new GetPlayersInRoomRequest { RoomId = this.roomData.RoomId };
 
@@ -144,7 +147,13 @@ namespace ClientWPF
                     Response response = Communicator.ManageSendAndGetData<Response>("", this.clientStream, Codes.LEAVE_ROOM_CODE);
                     return;
                 }
-
+                if (resp.Status == 0)
+                {
+                    stopUpdating = true;
+                    DisplayQuestion q = new DisplayQuestion(this.clientStream, roomData);
+                    q.Show();
+                    Close();
+                }
                 // Updating list on the screen
                 WorkerParameter param = new WorkerParameter { list = resp.PlayersInRoom };
                 worker.ReportProgress(0, param);
@@ -157,5 +166,6 @@ namespace ClientWPF
             WorkerParameter param = (WorkerParameter)e.UserState;
             playersInRoom.ItemsSource = param.list;
         }
+        
     }
 }

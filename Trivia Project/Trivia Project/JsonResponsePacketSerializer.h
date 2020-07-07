@@ -52,6 +52,7 @@ struct GetRoomResponse
 
 struct GetPlayersInRoomResponse
 {
+	unsigned int status;
 	std::vector<std::string> players;
 };
 

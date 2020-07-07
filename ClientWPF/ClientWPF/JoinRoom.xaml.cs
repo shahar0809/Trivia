@@ -39,6 +39,7 @@ namespace ClientWPF
     }
     public struct GetPlayersInRoomResponse
     {
+        public int Status;
         public List<string> PlayersInRoom;
     }
     public struct JoinRoomRequest

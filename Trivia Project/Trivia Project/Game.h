@@ -32,6 +32,7 @@ public:
 	bool operator==(const Game& other) const;
 	bool operator<(const Game& other) const;
 	int getId();
+	std::map<LoggedUser, GameData> getPlayers();
 	std::map<LoggedUser, GameData> getPlayersGameData();
 
 private:

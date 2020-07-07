@@ -106,3 +106,8 @@ std::map<LoggedUser, GameData> Game::getPlayersGameData()
 {
 	return this->m_players;
 }
+
+std::map<LoggedUser, GameData> Game::getPlayers()
+{
+	return this->m_players;
+}

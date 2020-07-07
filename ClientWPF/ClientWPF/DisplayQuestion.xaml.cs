@@ -189,5 +189,17 @@ namespace ClientWPF
                 button.Item1.IsHitTestVisible = isEnabled;
             }
         }
+        private void Exit_Button_Click(object sender, RoutedEventArgs e)
+        {
+            Response exitGameResponse = Communicator.ManageSendAndGetData<Response>("", 
+                m_clientStream, Codes.LEAVE_GAME_CODE);
+            if (exitGameResponse.status == 1)
+            {
+                MainWindow mainWindow = new MainWindow(m_clientStream);
+                mainWindow.Show();
+                Close();
+            }
+        }
+
     }
 }

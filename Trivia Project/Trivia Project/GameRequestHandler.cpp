@@ -35,8 +35,12 @@ RequestResult GameRequestHandler::handleRequest(RequestInfo info)
 RequestResult GameRequestHandler::leaveGame(RequestInfo info)
 {
 	LeaveGameResponse resp;
-	if (m_handlerFactory->getGameManager()->deleteGame(*this->m_user))
+	if (m_game->removePlayer(*m_user))
 	{
+		if (m_game->getPlayers().size() == 0)
+		{
+			m_handlerFactory->getGameManager()->deleteGame(*m_user);
+		}
 		resp.status = SUCCEEDED;
 	}
 	else
@@ -47,7 +51,7 @@ RequestResult GameRequestHandler::leaveGame(RequestInfo info)
 	return RequestResult
 	{
 		JsonResponsePacketSerializer::serializeLeaveGameResponse(resp),
-		this->m_handlerFactory->createGameRequestHandler(m_user, m_handlerFactory, *m_gameManager)
+		this->m_handlerFactory->createMenuRequestHandler(m_user)
 	};
 }
 
@@ -57,6 +61,7 @@ RequestResult GameRequestHandler::getGameResults(RequestInfo info)
 	try
 	{
 		resp.results = m_handlerFactory->getGameManager()->getGameResults(*this->m_user);
+		m_handlerFactory->getGameManager()->deleteGame(*m_user);
 	}
 	catch (const std::exception & e)
 	{
@@ -108,7 +113,7 @@ RequestResult GameRequestHandler::submitAnswer(RequestInfo info)
 	SubmitAnswerRequest req = JsonRequestPacketDeserializer::deserializerSubmitAnswerRequest(info.buffer);
 	SubmitAnswerResponse resp;
 
-	resp.correctAnswerId = m_handlerFactory->getGameManager()->getGame(*m_user)->submitAnswer(*m_user, req.answerId);
+	resp.correctAnswerId = m_game->submitAnswer(*m_user, req.answerId);
 	if (resp.correctAnswerId != ERROR)
 	{
 		resp.status = SUCCEEDED;
