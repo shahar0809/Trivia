@@ -97,31 +97,27 @@ namespace ClientWPF
 
         private void leaveRoom_Click(object sender, RoutedEventArgs e)
         {
-            // Sending a Leave Room request to the server.
-            Response resp = Communicator.ManageSendAndGetData<Response>("", this.clientStream, Codes.LEAVE_ROOM_CODE);
-
-            // Terminating the thread that updates the players, and going back to the main menu.
-            if (resp.status != (int)Codes.ERROR_CODE)
+            if (stopUpdating == false)
             {
+                // Sending a Leave Room request to the server.
+                Response resp = Communicator.ManageSendAndGetData<Response>("", this.clientStream, Codes.LEAVE_ROOM_CODE);
                 stopUpdating = true;
-                var mainWindow = new MainWindow(this.clientStream);
-                mainWindow.Show();
-                this.Close();
+                if (resp.status == (int)Codes.ERROR_CODE)
+                {
+                    MessageBox.Show("Error wwhile leaving the room!");
+                }
             }
-            else
-            {
-                MessageBox.Show("Couldn't leave the room!");
-            }
-        }
+            var nextWindow = new MainWindow(this.clientStream);
+            nextWindow.Show();
+            this.Close();
+        }  
 
         private void startGame_Click(object sender, RoutedEventArgs e)
         {
-            Response resp;
-            
             if (stopUpdating == false)
             {
                 // Sending a Start Game request to the server (includes code only)
-                resp = Communicator.ManageSendAndGetData<Response>("", this.clientStream, Codes.START_GAME_CODE);
+                Response resp = Communicator.ManageSendAndGetData<Response>("", this.clientStream, Codes.START_GAME_CODE);
                 stopUpdating = true;
                 if (resp.status == (int)Codes.ERROR_CODE)
                 {
@@ -149,7 +145,10 @@ namespace ClientWPF
                 if (resp.PlayersInRoom == null || resp.Status == (int)Codes.ERROR_CODE || resp.PlayersInRoom.Count == 0 )
                 {
                     stopUpdating = true;
-                    leaveRoom_Click(sender, new RoutedEventArgs());
+                    Application.Current.Dispatcher.Invoke((Action)delegate {
+                        leaveRoom_Click(sender, new RoutedEventArgs());
+                    });
+                    
                 }
 
                 // If the game has sarted, then the player moves to the DisplayQuestion window.
