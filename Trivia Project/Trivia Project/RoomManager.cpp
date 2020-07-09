@@ -12,7 +12,6 @@ bool RoomManager::deleteRoom(int ID)
 {
 	std::map<int, Room>::iterator it;
 	it = this->m_rooms.find(ID);
-
 	if (it != this->m_rooms.end())
 	{
 		this->m_rooms.erase(ID);

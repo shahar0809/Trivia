@@ -149,7 +149,8 @@ namespace ClientWPF
                 // If the game has started, then the player moves to the DisplayQuestion window.
                 else if (resp.HasGameBegun)
                 {
-                    // Need to figure out how to open DisplayQuestion from MTA thread
+                    stopUpdating = true;
+                    startGame_Click(sender, new RoutedEventArgs());
                 }
                 
                 // Updating list on the screen

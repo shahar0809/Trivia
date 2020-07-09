@@ -145,20 +145,23 @@ namespace ClientWPF
 
         private List<Room> getRoomsNames(List<string> rooms)
         {
-            List<string> roomsNames = new List<string>();
+            //List<string> roomsNames = new List<string>();
             List<Room> availRooms = new List<Room>();
 
-            foreach (string room in rooms)
+            if (rooms != null)
             {
-                var splitted = room.Split(',');
-                string name = splitted[0];
-
-                // Checking that the room wasn't erased
-                if (name != "")
+                foreach (string room in rooms)
                 {
-                    availRooms.Add(new Room { name = name, RoomId = Int32.Parse(splitted[1]) });
-                }
+                    var splitted = room.Split(',');
+                    string name = splitted[0];
+
+                    // Checking that the room wasn't erased
+                    if (name != "")
+                    {
+                        availRooms.Add(new Room { name = name, RoomId = Int32.Parse(splitted[1]) });
+                    }
                     //roomsNames.Add(name);
+                }
             }
             return availRooms;
         }

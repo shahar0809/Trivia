@@ -16,7 +16,7 @@ public:
 
 	virtual RequestResult handleRequest(RequestInfo info) = 0;
 	virtual bool isRequestRelevant(RequestInfo info) = 0;
-	virtual RequestResult getRoomState(RequestInfo info) = 0;
+	RequestResult getRoomState(RequestInfo info);
 	virtual RequestResult getPlayersInRoom(RequestInfo info) = 0;
 
 protected:
