@@ -127,7 +127,7 @@ std::string JsonResponsePacketSerializer::serializeResponse(GetRoomStateResponse
 	json j;
 	j[jsonFields[STATUS]] = getRoomState.status;
 	j[jsonFields[ANS_TIMEOUT]] = getRoomState.answerTimeout;
-	j[jsonFields[PLAYERS_IN_ROOM]] = getRoomState.players;
+	j[jsonFields[PLAYERS_IN_ROOM]] = json(getRoomState.players); 
 	j[jsonFields[QUESTIONS_COUNT]] = getRoomState.questionsCount;
 	j[jsonFields[IS_ACTIVE]] = getRoomState.hasGameBegun;
 	return JsonResponsePacketSerializer::serializeResponse(j, GET_ROOM_STATE_CODE);

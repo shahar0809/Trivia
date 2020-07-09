@@ -141,7 +141,7 @@ namespace ClientWPF
                 GetRoomStateResponse resp = Communicator.ManageSendAndGetData<GetRoomStateResponse>(clientStream, Codes.GET_ROOM_STATE_CODE);
                
                 // If the room was closed / request wasn't valid, then the player returns to the menu.
-                if (resp.Players == null || resp.Status == (int)Codes.ERROR_CODE || resp.Players.Count == 0 )
+                if (resp.PlayersInRoom == null || resp.Status == (int)Codes.ERROR_CODE || resp.PlayersInRoom.Count == 0 )
                 {
                     // Need to figure out how to open MainWindow from MTA thread
                 }
@@ -153,7 +153,7 @@ namespace ClientWPF
                 }
                 
                 // Updating list on the screen
-                WorkerParameter param = new WorkerParameter { list = resp.Players };
+                WorkerParameter param = new WorkerParameter { list = resp.PlayersInRoom };
                 worker.ReportProgress(0, param);
 
                 Thread.Sleep(3000);

@@ -115,7 +115,7 @@ namespace ClientWPF
         {
             public int Status;
             public bool HasGameBegun;
-            public List<string> Players;
+            public List<string> PlayersInRoom;
             public int QuestionsCount;
             public int AnswerTimeout;
         };
