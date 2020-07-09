@@ -27,8 +27,7 @@ RequestResult RoomParticipantRequestHandler::getRoomState(RequestInfo info)
 
 		return RequestResult
 		{
-			JsonResponsePacketSerializer::serializeResponse(resp),
-			m_handlerFactory.createRoomMemberRequestHandler(m_room, m_user, &m_handlerFactory, m_roomManager)
+			JsonResponsePacketSerializer::serializeResponse(resp),nullptr
 		};
 	}
 
@@ -43,12 +42,12 @@ RequestResult RoomParticipantRequestHandler::getRoomState(RequestInfo info)
 	};
 
 
+	if (m_room->getHasGameBegun())
+	{
+		res.newHandler = m_handlerFactory.createGameRequestHandler(m_user, &m_handlerFactory);
+	}
 	if (!roomData.isActive)
 	{
-		if (m_room->getHasGameBegun())
-		{
-			res.newHandler = m_handlerFactory.createGameRequestHandler(m_user, &m_handlerFactory);
-		}
 		res.newHandler = m_handlerFactory.createMenuRequestHandler(m_user);
 	}
 	return res;

@@ -108,25 +108,8 @@ namespace ClientWPF
                     IsActive = resp.IsActive
                 };
 
-                // create a thread  
-                Thread newWindowThread = new Thread(new ThreadStart(() =>
-                {
-                    // create and show the window
-                    WaitInRoom obj = new WaitInRoom(roomData, clientStream, false);
-                    obj.Show();
-
-                    // start the Dispatcher processing  
-                    System.Windows.Threading.Dispatcher.Run();
-                }));
-
-                // set the apartment state  
-                newWindowThread.SetApartmentState(ApartmentState.STA);
-
-                // make the thread a background thread  
-                newWindowThread.IsBackground = true;
-
-                // start the thread  
-                newWindowThread.Start();
+                WaitInRoom obj = new WaitInRoom(roomData, clientStream, false);
+                obj.Show();
                 this.Close();
             }
         }
@@ -156,27 +139,6 @@ namespace ClientWPF
         private void CancelButton_Click(object sender, RoutedEventArgs e)
         {
             stopUpdating = true;
-
-            // create a thread  
-            Thread newWindowThread = new Thread(new ThreadStart(() =>
-            {
-                // create and show the window
-                MainWindow obj = new MainWindow(clientStream);
-                obj.Show();
-
-                // start the Dispatcher processing  
-                System.Windows.Threading.Dispatcher.Run();
-            }));
-
-            // set the apartment state  
-            newWindowThread.SetApartmentState(ApartmentState.STA);
-
-            // make the thread a background thread  
-            newWindowThread.IsBackground = true;
-
-            // start the thread  
-            newWindowThread.Start();
-
             var mainWindow = new MainWindow(this.clientStream);
             mainWindow.Show();
             this.Close();
