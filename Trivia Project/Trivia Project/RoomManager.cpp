@@ -15,7 +15,9 @@ bool RoomManager::deleteRoom(int ID)
 
 	if (it != this->m_rooms.end())
 	{
-		this->m_rooms.erase(ID);
+		RoomData data = it->second.getMetadata();
+		data.isActive = false;
+		it->second.setMetadata(data);
 		return true;
 	}
 	return false;

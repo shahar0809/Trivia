@@ -38,7 +38,7 @@ namespace ClientWPF
     public struct Room
     {
         public int RoomId { set; get; }
-        public string name { set; get; }
+        public string Name { set; get; }
     }
 
     public partial class JoinRoom : Window
@@ -116,7 +116,7 @@ namespace ClientWPF
             while (!stopUpdating)
             {
                 // Requesting available rooms from the server
-                GetRoomsResponse resp = Communicator.ManageSendAndGetData<GetRoomsResponse>("", clientStream, Codes.GET_ROOMS_CODE);
+                GetRoomsResponse resp = Communicator.ManageSendAndGetData<GetRoomsResponse>(clientStream, Codes.GET_ROOMS_CODE);
 
                 WorkerParameter param = new WorkerParameter { list = resp.Rooms };
                 worker.ReportProgress(0, param);
@@ -130,7 +130,7 @@ namespace ClientWPF
         {
             WorkerParameter param = (WorkerParameter)e.UserState;
             availableRooms.DataContext = param.list;
-            Binding binding = new Binding() { Path = new PropertyPath("name") };
+            Binding binding = new Binding() { Path = new PropertyPath("Name") };
             availableRooms.ItemsSource = getRoomsNames(param.list);
         }
 
@@ -156,7 +156,7 @@ namespace ClientWPF
                 // Checking that the room wasn't erased
                 if (name != "")
                 {
-                    availRooms.Add(new Room { name = name, RoomId = Int32.Parse(splitted[1]) });
+                    availRooms.Add(new Room { Name = name, RoomId = Int32.Parse(splitted[1]) });
                 }
                     //roomsNames.Add(name);
             }
