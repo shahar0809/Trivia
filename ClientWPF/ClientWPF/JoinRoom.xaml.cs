@@ -18,6 +18,7 @@ using System.ComponentModel;
 using System.Threading;
 using ClientWPF.Requests;
 using ClientWPF.Responses;
+using System.Windows.Threading;
 
 namespace ClientWPF
 {
@@ -43,12 +44,14 @@ namespace ClientWPF
 
     public partial class JoinRoom : Window
     {
+        private List<Room> roomsList = new List<Room>();
         private NetworkStream clientStream;
         private BackgroundWorker worker = new BackgroundWorker();
         private bool stopUpdating = false;
         public JoinRoom(NetworkStream clientStream)
         {
             InitializeComponent();
+            availableRooms.ItemsSource = roomsList;
             this.clientStream = clientStream;
 
             // Creating a background worker that constantly updates the available rooms.
@@ -105,8 +108,25 @@ namespace ClientWPF
                     IsActive = resp.IsActive
                 };
 
-                var waitInRoom = new WaitInRoom(roomData, clientStream, false);
-                waitInRoom.Show();
+                // create a thread  
+                Thread newWindowThread = new Thread(new ThreadStart(() =>
+                {
+                    // create and show the window
+                    WaitInRoom obj = new WaitInRoom(roomData, clientStream, false);
+                    obj.Show();
+
+                    // start the Dispatcher processing  
+                    System.Windows.Threading.Dispatcher.Run();
+                }));
+
+                // set the apartment state  
+                newWindowThread.SetApartmentState(ApartmentState.STA);
+
+                // make the thread a background thread  
+                newWindowThread.IsBackground = true;
+
+                // start the thread  
+                newWindowThread.Start();
                 this.Close();
             }
         }
@@ -117,7 +137,6 @@ namespace ClientWPF
             {
                 // Requesting available rooms from the server
                 GetRoomsResponse resp = Communicator.ManageSendAndGetData<GetRoomsResponse>(clientStream, Codes.GET_ROOMS_CODE);
-
                 WorkerParameter param = new WorkerParameter { list = resp.Rooms };
                 worker.ReportProgress(0, param);
 
@@ -129,15 +148,35 @@ namespace ClientWPF
         void roomsChanged(object sender, ProgressChangedEventArgs e)
         {
             WorkerParameter param = (WorkerParameter)e.UserState;
-            availableRooms.DataContext = param.list;
-            Binding binding = new Binding() { Path = new PropertyPath("Name") };
-            availableRooms.ItemsSource = getRoomsNames(param.list);
+            roomsList = getRoomsNames(param.list);
+            availableRooms.ItemsSource = roomsList;
         }
 
         // Going back to the main menu
         private void CancelButton_Click(object sender, RoutedEventArgs e)
         {
             stopUpdating = true;
+
+            // create a thread  
+            Thread newWindowThread = new Thread(new ThreadStart(() =>
+            {
+                // create and show the window
+                MainWindow obj = new MainWindow(clientStream);
+                obj.Show();
+
+                // start the Dispatcher processing  
+                System.Windows.Threading.Dispatcher.Run();
+            }));
+
+            // set the apartment state  
+            newWindowThread.SetApartmentState(ApartmentState.STA);
+
+            // make the thread a background thread  
+            newWindowThread.IsBackground = true;
+
+            // start the thread  
+            newWindowThread.Start();
+
             var mainWindow = new MainWindow(this.clientStream);
             mainWindow.Show();
             this.Close();
