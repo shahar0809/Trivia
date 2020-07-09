@@ -52,7 +52,7 @@ RequestResult MenuRequestHandler::handleRequest(RequestInfo info)
 RequestResult MenuRequestHandler::logout(RequestInfo info)
 {
 	LogoutResponse resp;
-	if (this->m_handlerFactory.getLoginManger().logout(this->m_user->getUsername()))
+	if (this->m_handlerFactory.getLoginManger()->logout(this->m_user->getUsername()))
 	{
 		resp.status = SUCCEEDED;
 	}

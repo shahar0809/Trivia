@@ -159,19 +159,25 @@ namespace ClientWPF
             if (sendAns.CorrectAnswerId != answerId)
             {
                 m_answersButtons[answerId].Item1.Background = Brushes.Red;
-                m_answersButtons[answerId].Item2.Background = Brushes.Blue;
             }
             else
             {
                 m_correctAnswers++;
                 m_answersButtons[answerId].Item1.Background = Brushes.Green;
-                m_answersButtons[answerId].Item2.Background = Brushes.Blue;
             }
 
-            Thread.Sleep(10000);
-            m_questionsLeft--;
+            DispatcherTimer waitForButtons = new DispatcherTimer();
+            waitForButtons.Interval = TimeSpan.FromSeconds(2);
+            waitForButtons.Tick += Tick;
+            waitForButtons.Start();
 
+            m_questionsLeft--;
             updateQuestion();
+        }
+
+        private void Tick(object sender, EventArgs e)
+        {
+
         }
 
         /* Releases / Locks the buttons so that the user won't be able to submit another answer */
@@ -195,5 +201,7 @@ namespace ClientWPF
                 Close();
             }
         }
+
+
     }
 }

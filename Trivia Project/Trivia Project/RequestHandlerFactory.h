@@ -25,13 +25,13 @@ public:
 	RoomAdminRequestHandler* createRoomAdminRequestHandler(Room* room, LoggedUser* user, RequestHandlerFactory* handlerFactory, RoomManager* roomManger);
 	GameRequestHandler* createGameRequestHandler(LoggedUser* user, RequestHandlerFactory* handlerFactory);
 
-	LoginManager& getLoginManger();
+	LoginManager* getLoginManger();
 	StatisticsManager& getStatisticsManager();
 	RoomManager* getRoomManager();
 	GameManager* getGameManager();
 
 private:
-	LoginManager m_loginManager;
+	LoginManager* m_loginManager;
 	IDatabase* m_database;
 	RoomManager* m_roomManager;
 	GameManager* m_gameManager;

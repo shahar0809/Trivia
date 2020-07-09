@@ -29,7 +29,7 @@ RequestResult LoginRequestHandler::login(RequestInfo info)
 	LoginRequest loginReq = JsonRequestPacketDeserializer::deserializeLoginRequest(info.buffer);
 	LoginResponse response;
 	RequestResult result;
-	LoggedUser* user = m_loginManager.login(loginReq.username, loginReq.password);
+	LoggedUser* user = m_loginManager->login(loginReq.username, loginReq.password);
 	if (user != nullptr)
 	{
 		response.status = SUCCEEDED;
@@ -50,7 +50,7 @@ RequestResult LoginRequestHandler::signup(RequestInfo info)
 	SignupResponse response;
 	RequestResult result;
 
-	if (m_loginManager.signup(signupReq.username, signupReq.password, signupReq.email))
+	if (m_loginManager->signup(signupReq.username, signupReq.password, signupReq.email))
 	{
 		response.status = 1;
 		result.newHandler = m_handlerFactory.createLoginRequestHandler(); // Setting next state to the login handler.

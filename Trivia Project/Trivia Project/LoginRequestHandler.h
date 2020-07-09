@@ -19,6 +19,6 @@ private:
 	RequestResult login(RequestInfo info);
 	RequestResult signup(RequestInfo info);
 
-	LoginManager m_loginManager;
+	LoginManager* m_loginManager;
 	RequestHandlerFactory m_handlerFactory;
 };

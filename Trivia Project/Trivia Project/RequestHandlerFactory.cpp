@@ -15,7 +15,7 @@ RequestHandlerFactory::RequestHandlerFactory(IDatabase* db)
 	this->m_database = db;
 	this->m_StatisticsManager = StatisticsManager(db);
 	this->m_roomManager = new RoomManager();
-	this->m_loginManager = *new LoginManager(db);
+	this->m_loginManager = new LoginManager(db);
 	this->m_gameManager = new GameManager(db);
 }
 
@@ -29,7 +29,7 @@ LoginRequestHandler* RequestHandlerFactory::createLoginRequestHandler()
 }
 
 // LoginManager getter
-LoginManager& RequestHandlerFactory::getLoginManger()
+LoginManager* RequestHandlerFactory::getLoginManger()
 {
 	return this->m_loginManager;
 }
