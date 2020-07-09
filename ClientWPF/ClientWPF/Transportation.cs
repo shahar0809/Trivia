@@ -114,10 +114,10 @@ namespace ClientWPF
         public struct GetRoomStateResponse
         {
             public int Status;
-            public bool HasGameBegun;
+            public bool IsActive;
             public List<string> PlayersInRoom;
-            public int QuestionsCount;
-            public int AnswerTimeout;
+            public int NumOfQuestions;
+            public int TimePerQuestion;
         };
     }
 }

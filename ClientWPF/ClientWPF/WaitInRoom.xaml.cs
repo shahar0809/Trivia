@@ -73,6 +73,7 @@ namespace ClientWPF
             worker.DoWork += updateRoomPlayers;
             worker.ProgressChanged += playersChanged;
             worker.RunWorkerAsync();
+       
         }
 
         private void closeRoom_Click(object sender, RoutedEventArgs e)
@@ -115,26 +116,30 @@ namespace ClientWPF
 
         private void startGame_Click(object sender, RoutedEventArgs e)
         {
-            stopUpdating = true;
-
-            // Sending a Start Game request to the server (includes code only)
-            Response resp = Communicator.ManageSendAndGetData<Response>("", this.clientStream, Codes.START_GAME_CODE);
-
-            if (resp.status == (int)Codes.ERROR_CODE)
+            Response resp;
+            
+            if (stopUpdating == false)
             {
-                MessageBox.Show("Couldn't start the game! Try again");
+                // Sending a Start Game request to the server (includes code only)
+                resp = Communicator.ManageSendAndGetData<Response>("", this.clientStream, Codes.START_GAME_CODE);
+                stopUpdating = true;
+                if (resp.status == (int)Codes.ERROR_CODE)
+                {
+                    MessageBox.Show("Couldn't start the game!");
+                    var nextWindow = new MainWindow(this.clientStream);
+                    nextWindow.Show();
+                    this.Close();
+                }
             }
-            else
-            {
-                DisplayQuestion question = new DisplayQuestion(this.clientStream, roomData);
-                question.Show();
-                this.Close();
-            }
+            var question = new DisplayQuestion(this.clientStream, roomData);
+            question.Show();
+            this.Close();
         }
 
         /* A thread that constantly updates the players in the room */
         public void updateRoomPlayers(object sender, DoWorkEventArgs e)
         {
+            
             while (!stopUpdating)
             {
                 // Requesting the players in the room
@@ -143,14 +148,17 @@ namespace ClientWPF
                 // If the room was closed / request wasn't valid, then the player returns to the menu.
                 if (resp.PlayersInRoom == null || resp.Status == (int)Codes.ERROR_CODE || resp.PlayersInRoom.Count == 0 )
                 {
-                    // Need to figure out how to open MainWindow from MTA thread
+                    stopUpdating = true;
+                    leaveRoom_Click(sender, new RoutedEventArgs());
                 }
 
-                // If the game has started, then the player moves to the DisplayQuestion window.
-                else if (resp.HasGameBegun)
+                // If the game has sarted, then the player moves to the DisplayQuestion window.
+                else if (resp.IsActive)
                 {
                     stopUpdating = true;
+                    Application.Current.Dispatcher.Invoke((Action)delegate {
                     startGame_Click(sender, new RoutedEventArgs());
+                    });
                 }
                 
                 // Updating list on the screen
