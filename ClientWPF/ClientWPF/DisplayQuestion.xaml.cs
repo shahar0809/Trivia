@@ -16,6 +16,7 @@ using System.Windows.Shapes;
 using System.Windows.Threading;
 using ClientWPF.Requests;
 using ClientWPF.Responses;
+using System.Threading;
 
 namespace ClientWPF
 {
@@ -81,11 +82,11 @@ namespace ClientWPF
                         m_time = new TimeSpan(0, 0, (int)m_time.TotalSeconds - 1); // Updating countdown
                         Timer.Text = string.Format("{0} : {1}", (int)m_time.TotalMinutes, (int)m_time.Seconds); // Updating Timer text box
                     }
-                }
-                else
-                {
-                    updateQuestion();
-                }
+            }
+            else
+            {
+                updateQuestion();
+            }
         }
 
         void updateQuestion()
@@ -114,13 +115,8 @@ namespace ClientWPF
                     m_answersButtons[Convert.ToInt32(answer[INDEX])].Item2.Text = (string)answer[ANSWER];
                 }
             
-            
                 m_time = TimeSpan.FromMinutes(m_roomData.TimeForQuestion);
                 updateButtons(true);
-                foreach (Tuple<Button, TextBlock> answer in m_answersButtons)
-                {
-                    answer.Item1.Background = Brushes.White;
-                }
             }
         }
 
@@ -163,9 +159,11 @@ namespace ClientWPF
                 m_correctAnswers++;
                 m_answersButtons[answerId].Item1.Background = Brushes.Green;
             }
+
+            Thread.Sleep(1000);
             m_questionsLeft--;
 
-            // Wait till everybody has answered, and call updateQuestion + update the buttons.
+            updateQuestion();
         }
 
         /* Releases / Locks the buttons so that the user won't be able to submit another answer */
@@ -174,6 +172,7 @@ namespace ClientWPF
             foreach (var button in m_answersButtons)
             {
                 button.Item1.IsHitTestVisible = isEnabled;
+                button.Item1.Background = Brushes.AliceBlue;
             }
         }
 
@@ -188,6 +187,5 @@ namespace ClientWPF
                 Close();
             }
         }
-
     }
 }
