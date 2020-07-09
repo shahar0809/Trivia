@@ -16,6 +16,10 @@ public:
 	bool doesUserExist(std::string userName);
 	bool doesPasswordMatch(std::string userName, std::string password);
 	bool addNewUser(std::string name, std::string password, std::string email);
+	void insertScore(std::string username, int points);
+	void insertStatistics(int roomId,std::string username, int correctAnswers,int wrongAnswers,float avgTime);
+	bool doesUserHaveScore(std::string userName);
+	int getScore(std::string username);
 
 	std::vector<Question>* getQuestions(int maybeNumOfQuestions);
 	float getPlayerAverageAnswerTime(std::string username);

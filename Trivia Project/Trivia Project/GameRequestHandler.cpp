@@ -35,7 +35,7 @@ RequestResult GameRequestHandler::handleRequest(RequestInfo info)
 RequestResult GameRequestHandler::leaveGame(RequestInfo info)
 {
 	LeaveGameResponse resp;
-	if (m_game->removePlayer(*m_user))
+	if (m_handlerFactory->getGameManager()->removePlayer(*m_user))
 	{
 		if (m_game->getPlayers().size() == 0)
 		{
