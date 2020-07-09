@@ -1,4 +1,6 @@
 #include "GameManager.h"
+#define CORRECT_ANSWER_POINTS 2
+#define WRONG_ANSWER_POINTS -1
 
 GameManager::GameManager(IDatabase* db)
 {
@@ -16,6 +18,7 @@ Game* GameManager::createGame(Room room)
 bool GameManager::deleteGame(LoggedUser user)
 {
 	std::vector<Game>::iterator it;
+
 	for (it = this->m_games.begin(); it != this->m_games.end(); it++)
 	{
 		if (it->checkUserIsInGame(user))
@@ -59,10 +62,34 @@ std::vector<PlayerResults> GameManager::getGameResults(LoggedUser user)
 		};
 		results.push_back(playerDetails);
 	}
+	updateResultsInDatabase(user);
 	return results;
 }
-
 Question GameManager::getQuestion(LoggedUser user)
 {
 	return getGame(user)->getQuestionForUser(user);
+}
+
+bool GameManager::removePlayer(LoggedUser user)
+{
+	if (this->getGame(user)->removePlayer(user))
+	{
+		updateResultsInDatabase(user);
+		return true;
+	}
+	return false;
+}
+
+void GameManager::updateResultsInDatabase(LoggedUser user)
+{
+	//Update statistics table.
+	std::map<LoggedUser, GameData> playersData = this->getGame(user)->getPlayersGameData();
+	this->database->insertStatistics(this->getGame(user)->getId(), user.getUsername(),
+		playersData[user].correctAnswerCount, playersData[user].wrongAnswerCount,
+		playersData[user].averangeAnswerTime);
+
+	//Update socre table.
+	this->database->insertScore(user.getUsername(),
+		playersData[user].wrongAnswerCount * WRONG_ANSWER_POINTS +
+		playersData[user].correctAnswerCount * CORRECT_ANSWER_POINTS);
 }

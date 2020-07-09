@@ -37,6 +37,7 @@ public:
 
 private:
 	std::vector<Question>* m_questions;
+	IDatabase* db;
 	std::map<LoggedUser, GameData> m_players;
 	int m_Id;
 };

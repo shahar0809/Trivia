@@ -37,6 +37,9 @@ public:
 	virtual int getNumOfPlayerGames(std::string username) = 0;
 	virtual std::vector<Score> getHighScores() = 0;
 
+	virtual void insertScore(std::string username, int points)=0;
+	virtual void insertStatistics(int roomId, std::string username, int correctAnswers, int wrongAnswers, float avgTime)=0;
+
 private:
 	virtual void initDatabase() = 0;
 };

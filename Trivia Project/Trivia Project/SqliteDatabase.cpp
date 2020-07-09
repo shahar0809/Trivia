@@ -229,13 +229,14 @@ void SqliteDatabase::createQuestionsTable()
 }
 
 void SqliteDatabase::createStatisticsTable()
-{
+{ 
 	std::string createStatisticsTableQuery =
 		"CREATE TABLE IF NOT EXISTS STATISTICS ("
 		"GAME_ID INTEGER NOT NULL, "
 		"USERNAME TEXT NOT NULL, "
-		"IS_CORRECT INTEGER NOT NULL, "
-		"ANSWER_TIME INTEGER NOT NULL);";
+		"CORRECT_ANSWERS INTEGER NOT NULL, "
+		"WRONG_ANSWERS INTEGER NOT NULL,"
+		"AVG_ANSWER_TIME FLOAT NOT NULL);";
 
 	createTable("STATISTICS", createStatisticsTableQuery);
 }
@@ -348,4 +349,53 @@ std::vector<Score> SqliteDatabase::getHighScores()
 	std::vector<Score> highScore;
 	executeMsg(sqlQuery, scoresCallback, &highScore);
 	return highScore;
+}
+
+void SqliteDatabase::insertScore(std::string username, int points)
+{
+	std::string sqlMsg;
+	if (!doesUserHaveScore(username))
+	{
+		sqlMsg = "INSERT INTO	SCORE"
+			"(USERNAME, POINTS) VALUES('" +
+			username + "'," +
+			std::to_string(points) + ");";
+	}
+	else
+	{
+		sqlMsg = "UPDATE SCORE SET POINTS = "+ std::to_string(points+getScore(username))+
+			" WHERE USERNAME LIKE '" + username+ "';";
+	}
+	
+
+	executeMsg(sqlMsg, nullptr, nullptr);
+}
+
+void SqliteDatabase::insertStatistics(int roomId, std::string username, int correctAnswers, int wrongAnswers, float avgTime)
+{
+	std::string sqlMsg("INSERT INTO STATISTICS ("
+		"GAME_ID,USERNAME,CORRECT_ANSWERS,WRONG_ANSWERS, AVG_ANSWER_TIME) VALUES(" +
+		std::to_string(roomId)+",'"+username + "'," +
+		std::to_string(correctAnswers) +","+std::to_string(wrongAnswers) +","+std::to_string(avgTime)+");");
+
+	executeMsg(sqlMsg, nullptr, nullptr);
+}
+
+bool SqliteDatabase::doesUserHaveScore(std::string userName)
+{
+	bool userExist = false;
+	std::string sqlMsg = "SELECT * FROM SCORE WHERE USERNAME ='" + userName + "';";
+	executeMsg(sqlMsg, callbackExists, &userExist);
+	return userExist;
+}
+
+int SqliteDatabase::getScore(std::string username)
+{
+	for (auto score : getHighScores())
+	{
+		if (score.username == username)
+		{
+			return score.score;
+		}
+	}
 }

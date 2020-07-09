@@ -34,6 +34,8 @@ public:
 	Game* getGame(LoggedUser);
 	std::vector<PlayerResults> getGameResults(LoggedUser);
 	Question getQuestion(LoggedUser user);
+	bool removePlayer(LoggedUser user);
+	void updateResultsInDatabase(LoggedUser user);
 private:
 	IDatabase* database;		
 	std::vector<Game> m_games;
