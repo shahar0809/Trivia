@@ -45,6 +45,15 @@ std::vector<PlayerResults> GameManager::getGameResults(LoggedUser user)
 	std::map<LoggedUser, GameData> playersData = this->getGame(user)->getPlayersGameData();
 	std::vector<PlayerResults> results;
 
+	// Updating that the current user has finished the game
+	auto player = playersData.find(user);
+	player->second.isFinished = true;
+
+	if (!isEveryoneFinished(user))
+	{
+		return results;
+	}
+
 	for (auto playerData : playersData)
 	{
 		LoggedUser user = playerData.first;
@@ -65,4 +74,15 @@ std::vector<PlayerResults> GameManager::getGameResults(LoggedUser user)
 Question GameManager::getQuestion(LoggedUser user)
 {
 	return getGame(user)->getQuestionForUser(user);
+}
+
+bool GameManager::isEveryoneFinished(LoggedUser user)
+{
+	std::map<LoggedUser, GameData> playersData = this->getGame(user)->getPlayersGameData();
+	for (auto user : playersData)
+	{
+		if (!user.second.isFinished)
+			return false;
+	}
+	return true;
 }

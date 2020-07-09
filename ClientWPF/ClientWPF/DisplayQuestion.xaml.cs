@@ -33,6 +33,7 @@ namespace ClientWPF
         private RoomData m_roomData;
         private TimeSpan m_time;
         private DispatcherTimer m_timer;
+        private TimeSpan m_currTime;
         private List<Tuple<Button, TextBlock>> m_answersButtons;
         private NetworkStream m_clientStream;
         private int m_correctAnswers = 0;
@@ -80,7 +81,7 @@ namespace ClientWPF
                     else
                     {
                         m_time = new TimeSpan(0, 0, (int)m_time.TotalSeconds - 1); // Updating countdown
-                        Timer.Text = string.Format("{0} : {1}", (int)m_time.TotalMinutes, (int)m_time.Seconds); // Updating Timer text box
+                        Timer.Text = string.Format("{0} : {1}", (int)m_time.TotalMinutes, (((int)m_time.Seconds).ToString()).PadLeft(2)); // Updating Timer text box
                     }
             }
             else
@@ -117,6 +118,7 @@ namespace ClientWPF
             
                 m_time = TimeSpan.FromMinutes(m_roomData.TimeForQuestion);
                 updateButtons(true);
+                m_currTime = DateTime.Now.TimeOfDay;
             }
         }
 
@@ -143,7 +145,11 @@ namespace ClientWPF
         private void sendSubmitAnswer(int answerId)
         {
             updateButtons(false);
-            SubmitAnswerRequest submitAns = new SubmitAnswerRequest { AnswerId = answerId };
+            TimeSpan time = DateTime.Now.TimeOfDay;
+            m_currTime = time - m_currTime;
+
+            SubmitAnswerRequest submitAns = new SubmitAnswerRequest { AnswerId = answerId, 
+                Time = Int32.Parse(((int)m_currTime.TotalSeconds).ToString()) };
 
             // Edit and send question request.
             string json = JsonConvert.SerializeObject(submitAns, Formatting.Indented);
@@ -153,14 +159,16 @@ namespace ClientWPF
             if (sendAns.CorrectAnswerId != answerId)
             {
                 m_answersButtons[answerId].Item1.Background = Brushes.Red;
+                m_answersButtons[answerId].Item2.Background = Brushes.Blue;
             }
             else
             {
                 m_correctAnswers++;
                 m_answersButtons[answerId].Item1.Background = Brushes.Green;
+                m_answersButtons[answerId].Item2.Background = Brushes.Blue;
             }
 
-            Thread.Sleep(1000);
+            Thread.Sleep(10000);
             m_questionsLeft--;
 
             updateQuestion();

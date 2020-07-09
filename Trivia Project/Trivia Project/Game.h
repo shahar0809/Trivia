@@ -15,6 +15,7 @@ struct GameData
 	unsigned int correctAnswerCount;
 	unsigned int wrongAnswerCount;
 	unsigned int averangeAnswerTime;
+	bool isFinished = 0;
 };
 
 class GameManager;

@@ -44,33 +44,27 @@ namespace ClientWPF
         {
             this.clientStream = clientStream;
             InitializeComponent();
-
-            // Requesting game results from the server
-            GetGameResultsResponse resp = 
+            GetGameResultsResponse resp =
                 Communicator.ManageSendAndGetData<GetGameResultsResponse>("", clientStream, Codes.GET_GAME_RESULTS_CODE);
 
-            if (resp.Status == (int)Codes.ERROR_CODE)
+            while(resp.Status == (int)Codes.ERROR_CODE)
             {
-                MessageBox.Show("Couldn't load the scores!");
-                var mainWindow = new MainWindow(this.clientStream);
-                mainWindow.Show();
-                this.Close();
+                resp =
+                Communicator.ManageSendAndGetData<GetGameResultsResponse>("", clientStream, Codes.GET_GAME_RESULTS_CODE);
             }
-            else
+
+            // Displaying the winner's username 
+            winnerUsername.Text = (string)resp.Results[0].Split(',')[0] ;
+
+            // Getting a list of the player results
+            List<PlayerResults> results = new List<PlayerResults>();
+            foreach (string playerResult in resp.Results)
             {
-                // Displaying the winner's username 
-                winnerUsername.Text = (string)resp.Results[0].Split(',')[0] ;
-
-                // Getting a list of the player results
-                List<PlayerResults> results = new List<PlayerResults>();
-                foreach (string playerResult in resp.Results)
-                {
-                    results.Add(new PlayerResults(playerResult));
-                }
-
-                // Displaying all the results in the data grid
-                playersResult.ItemsSource = results;
+                results.Add(new PlayerResults(playerResult));
             }
+
+            // Displaying all the results in the data grid
+            playersResult.ItemsSource = results;
         }
 
         private void backToMenu_Click(object sender, RoutedEventArgs e)

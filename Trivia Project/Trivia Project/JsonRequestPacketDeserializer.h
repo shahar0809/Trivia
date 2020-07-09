@@ -12,7 +12,7 @@ static const char* jsonFields[] = {
 	"RoomId", 
 	"RoomName", "NumOfPlayers", "NumOfQuestions", "TimeForQuestion",
 	"Status", "PlayersInRoom", "Rooms", "UserStatistics", "HighScores", "IsActive",
-	"Question", "Answers", "CorrectAnswerId", "Results", "AnswerId"
+	"Question", "Answers", "CorrectAnswerId", "Results", "AnswerId", "Time"
 };
 
 enum JsonFieldsIndices 
@@ -21,7 +21,7 @@ enum JsonFieldsIndices
 	ROOM_ID,
 	ROOM_NAME, MAX_USERS, QUESTIONS_COUNT, ANS_TIMEOUT,
 	STATUS, PLAYERS_IN_ROOM, ROOMS, USER_STATS, HIGH_SCORES, IS_ACTIVE,
-	QUESTION, ANSWERS, CORRECT_ANS_ID, RESULTS, ANS_ID
+	QUESTION, ANSWERS, CORRECT_ANS_ID, RESULTS, ANS_ID, TIME
 };
 
 struct LoginRequest
@@ -71,6 +71,7 @@ struct CreateRoomRequest
 struct SubmitAnswerRequest
 {
 	unsigned int answerId;
+	unsigned int time;
 };
 
 class JsonRequestPacketDeserializer
