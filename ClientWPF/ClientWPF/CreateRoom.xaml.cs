@@ -75,7 +75,6 @@ namespace ClientWPF
                     IsActive = 1
                 };
 
-                MessageBox.Show("about to open room admin.");
                 // Show the room details to the admin.
                 var waitInRoom = new WaitInRoom(roomData, clientStream, true);
                 waitInRoom.Show();

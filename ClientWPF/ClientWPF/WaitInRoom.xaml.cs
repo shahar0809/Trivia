@@ -169,18 +169,16 @@ namespace ClientWPF
             }
         }
 
-        //private void ThreadStartingPoint()
-        //{
-        //    var tempWindow = new MainWindow();
-        //    tempWindow.Show();
-        //    System.Windows.Threading.Dispatcher.Run();
-        //    this.Close();
-        //}
 
         void playersChanged(object sender, ProgressChangedEventArgs e)
         {
             WorkerParameter param = (WorkerParameter)e.UserState;
-            playersInRoom.ItemsSource = param.list;
+
+            this.Dispatcher.Invoke(() =>
+            {
+                playersInRoom.ItemsSource = param.list;
+            });
+
         }
     }
 }
