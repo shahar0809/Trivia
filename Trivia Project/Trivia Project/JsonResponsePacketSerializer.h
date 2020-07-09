@@ -14,6 +14,7 @@ using json = nlohmann::json;
 #define ERROR_FIELD "message"
 #define ORDINARY_RESPONSE_FIELD "status"
 #define DELIMETER ","
+#define GAME_BEGUN 2
 
 enum Codes 
 { 
@@ -52,6 +53,7 @@ struct GetRoomResponse
 
 struct GetPlayersInRoomResponse
 {
+	unsigned int status;
 	std::vector<std::string> players;
 };
 
@@ -125,22 +127,26 @@ struct GetGameResultsResponse
 class JsonResponsePacketSerializer
 {
 public:
+	// Login request handler
 	static std::string serializeResponse(ErrorResponse error);
 	static std::string serializeResponse(LoginResponse login);
 	static std::string serializeResponse(SignupResponse signUp);
 	static std::string serializeResponse(LogoutResponse logout);
 
+	// Menu request handler
 	static std::string serializeResponse(GetRoomResponse getRoom);
 	static std::string serializeResponse(GetPlayersInRoomResponse getPlayersInRoom);
 	static std::string serializeResponse(JoinRoomResponse joinRoom);
 	static std::string serializeResponse(CreateRoomResponse createRoom);
 	static std::string serializeResponse(GetStatisticsResponse getStatistics);
 
+	// Room Member & Room Admin request handler
 	static std::string serializeResponse(CloseRoomResponse closeRoom);
 	static std::string serializeResponse(StartGameResponse startGame);
 	static std::string serializeResponse(GetRoomStateResponse getRoomState);
 	static std::string serializeResponse(LeaveRoomResponse leaveRoom);
 
+	// Game request handler
 	static std::string serializeResponse(GetGameResultsResponse getGameResults);
 	static std::string serializeResponse(SubmitAnswerResponse submitAnswer);
 	static std::string serializeResponse(GetQuestionResponse getQuestion);

@@ -41,6 +41,11 @@ namespace ClientWPF
             clientStream.Flush();
         }
 
+        public static T ManageSendAndGetData<T>(NetworkStream clientStream, Codes code)
+        {
+            return ManageSendAndGetData<T>("", clientStream, code);
+        }
+
         public static T ManageSendAndGetData<T>(string json, NetworkStream clientStream, Codes code)
         {
             // Edit and send request.

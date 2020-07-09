@@ -88,17 +88,30 @@ RequestResult MenuRequestHandler::getPlayersInRoom(RequestInfo info)
 {
 	GetPlayersInRoomRequest req = JsonRequestPacketDeserializer::deserializeGetPlayersRequest(info.buffer);
 	RoomManager* roomManager = m_handlerFactory.getRoomManager();
-	std::vector<LoggedUser> loggedUsers = roomManager->getRoom(req.roomId)->getAllUsers();
 	std::vector<std::string> roomPlayers;
+	std::vector<LoggedUser> loggedUsers;
 
+	try
+	{
+		loggedUsers = roomManager->getRoom(req.roomId)->getAllUsers();
+	}
+	catch (std::exception & e)
+	{
+		return RequestResult
+		{
+			JsonResponsePacketSerializer::serializeResponse(GetPlayersInRoomResponse { FAILED, roomPlayers }),
+			m_handlerFactory.createMenuRequestHandler(this->m_user)
+		};
+	}
+	
+	// Creating a vector of all the players in the room
 	for (auto user : loggedUsers)
 	{
 		roomPlayers.push_back(user.getUsername());
 	}
-
 	return RequestResult
 	{
-		JsonResponsePacketSerializer::serializeResponse(GetPlayersInRoomResponse { roomPlayers }),
+		JsonResponsePacketSerializer::serializeResponse(GetPlayersInRoomResponse { SUCCEEDED, roomPlayers }),
 		m_handlerFactory.createMenuRequestHandler(this->m_user)
 	};
 }

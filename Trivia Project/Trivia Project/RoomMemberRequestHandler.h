@@ -1,4 +1,5 @@
 #pragma once
+#include <thread>
 #include "RoomParticipantRequestHandler.h"
 
 class RequestHandlerFactory;
@@ -12,5 +13,6 @@ public:
 	RequestResult handleRequest(RequestInfo info);
 	RequestResult getPlayersInRoom(RequestInfo info);
 	RequestResult leaveRoom(RequestInfo info);
+	RequestResult getRoomState(RequestInfo info);
 };
 

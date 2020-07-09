@@ -10,25 +10,4 @@ RoomParticipantRequestHandler::RoomParticipantRequestHandler(Room* room, LoggedU
 	m_roomManager = roomManager;
 }
 
-RequestResult RoomParticipantRequestHandler::getRoomState(RequestInfo info)
-{
-	RoomData roomData = m_room->getMetadata();
-
-	// I'm not sure when the status is FAILED
-
-	GetRoomStateResponse resp
-	{
-		SUCCEEDED,
-		m_room->getHasGameBegun(),
-		m_room->getAllUsernames(),
-		roomData.numOfQuestions,
-		roomData.timeForQuestion
-	};
-
-	//Should understand when this rrequest is used and what is the next handler.
-	return RequestResult
-	{
-		JsonResponsePacketSerializer::serializeResponse(resp), nullptr
-	};
-}
 

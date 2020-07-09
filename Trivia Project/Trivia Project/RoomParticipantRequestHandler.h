@@ -4,6 +4,7 @@
 #include "RoomManager.h"
 #include "IRequestHandler.h"
 #include "MenuRequestHandler.h"
+#include "GameRequestHandler.h"
 
 class RoomMemberRequestHandler;
 class RoomAdminRequestHandler;
@@ -15,8 +16,7 @@ public:
 
 	virtual RequestResult handleRequest(RequestInfo info) = 0;
 	virtual bool isRequestRelevant(RequestInfo info) = 0;
-
-	RequestResult getRoomState(RequestInfo info);
+	virtual RequestResult getRoomState(RequestInfo info) = 0;
 	virtual RequestResult getPlayersInRoom(RequestInfo info) = 0;
 
 protected:

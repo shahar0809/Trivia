@@ -14,6 +14,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.Windows.Threading;
+using ClientWPF.Requests;
+using ClientWPF.Responses;
 
 namespace ClientWPF
 {
@@ -27,7 +29,6 @@ namespace ClientWPF
         public const int INDEX = 0;
         public const int ANSWER = 1;
         
-       
         private RoomData m_roomData;
         private TimeSpan m_time;
         private DispatcherTimer m_timer;
@@ -40,21 +41,6 @@ namespace ClientWPF
         {
             public int index;
             public string answer;
-        }
-        private struct GetQuestionResponse
-        {
-            public int Status;
-            public string Question;
-            public List<List<object>> Answers;
-        }
-        private struct SubmitAnswerRequest
-        {
-            public int answerId { set; get; }
-        }
-        private struct SubmitAnswerResponse
-        {
-            public int status { set; get; }
-            public int CorrectAnswerId { set; get; }
         }
 
         public DisplayQuestion(NetworkStream clientStream,RoomData roomData)
@@ -104,6 +90,8 @@ namespace ClientWPF
 
         void updateQuestion()
         {
+            updateButtons(true); // Releasing buttons
+
             if (m_questionsLeft == 0)
             {
                 m_timer.Stop();
@@ -159,10 +147,7 @@ namespace ClientWPF
         private void sendSubmitAnswer(int answerId)
         {
             updateButtons(false);
-            SubmitAnswerRequest submitAns = new SubmitAnswerRequest
-            {
-                answerId = answerId
-            };
+            SubmitAnswerRequest submitAns = new SubmitAnswerRequest { AnswerId = answerId };
 
             // Edit and send question request.
             string json = JsonConvert.SerializeObject(submitAns, Formatting.Indented);
@@ -179,6 +164,7 @@ namespace ClientWPF
                 m_answersButtons[answerId].Item1.Background = Brushes.Green;
             }
             m_questionsLeft--;
+
             // Wait till everybody has answered, and call updateQuestion + update the buttons.
         }
 
@@ -190,5 +176,18 @@ namespace ClientWPF
                 button.Item1.IsHitTestVisible = isEnabled;
             }
         }
+
+        private void Exit_Button_Click(object sender, RoutedEventArgs e)
+        {
+            Response exitGameResponse = Communicator.ManageSendAndGetData<Response>("", 
+                m_clientStream, Codes.LEAVE_GAME_CODE);
+            if (exitGameResponse.status == 1)
+            {
+                MainWindow mainWindow = new MainWindow(m_clientStream);
+                mainWindow.Show();
+                Close();
+            }
+        }
+
     }
 }

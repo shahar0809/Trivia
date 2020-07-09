@@ -29,13 +29,19 @@ std::map<unsigned int, std::string> Question::getPossibleAnswers()
 	return this->m_possibleAnswers;
 }
 
+/*
+Pushes the possible answer into the possible answers vector, with a random index.
+Input: The possible answer
+Output: None.
+*/
 void Question::pushAnswerWithRandomIndex(std::string ans)
 {
 	srand(time(NULL));
 	int randomNum;
+
 	do
 	{
-		randomNum = rand() % 4 + 1;
+		randomNum = rand() % NUM_OF_POSSIBLE_ANSWERS + 1;
 	}
 	while (m_possibleAnswers.find(randomNum) != this->m_possibleAnswers.end());
 
@@ -51,10 +57,12 @@ unsigned int Question::getCorrectAnswerId()
 {
 	return m_correctAnswerId;
 }
+
 void Question::addPossibleAnswer(std::string answer) 
 { 
 	pushAnswerWithRandomIndex(answer);
 }
+
 void Question::setCorrectAnswer(std::string correctAns) 
 { 
 	pushAnswerWithRandomIndex(correctAns);

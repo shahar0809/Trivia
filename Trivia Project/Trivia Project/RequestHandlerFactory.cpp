@@ -49,16 +49,16 @@ RoomManager* RequestHandlerFactory::getRoomManager()
 }
 RoomMemberRequestHandler* RequestHandlerFactory::createRoomMemberRequestHandler(Room* room, LoggedUser* user, RequestHandlerFactory* handlerFactory, RoomManager* roomManger)
 {
-	return new RoomMemberRequestHandler(room,user,handlerFactory,roomManger);
+	return new RoomMemberRequestHandler(room, user, handlerFactory, roomManger);
 }
 RoomAdminRequestHandler* RequestHandlerFactory::createRoomAdminRequestHandler(Room* room, LoggedUser* user, RequestHandlerFactory* handlerFactory, RoomManager* roomManger)
 {
 	return new RoomAdminRequestHandler(room, user, handlerFactory, roomManger);
 }
 
-GameRequestHandler* RequestHandlerFactory::createGameRequestHandler(LoggedUser* user, RequestHandlerFactory* handlerFactory, GameManager& gameManager)
+GameRequestHandler* RequestHandlerFactory::createGameRequestHandler(LoggedUser* user, RequestHandlerFactory* handlerFactory)
 {
-	return new GameRequestHandler(user, m_gameManager, handlerFactory);
+	return new GameRequestHandler(user, handlerFactory);
 }
 
 GameManager* RequestHandlerFactory::getGameManager()

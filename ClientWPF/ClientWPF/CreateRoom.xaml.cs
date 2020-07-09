@@ -14,7 +14,8 @@ using System.Windows.Shapes;
 using System.Net.Sockets;
 using System.Net;
 using Newtonsoft.Json;
-
+using ClientWPF.Requests;
+using ClientWPF.Responses;
 
 namespace ClientWPF
 {
@@ -26,19 +27,6 @@ namespace ClientWPF
         private NetworkStream clientStream;
         public const int ERROR_CODE = 0;
 
-        public struct CreateRoomRequest
-        {
-            public string RoomName { set; get; }
-            public int NumOfPlayers { set; get; }
-            public int NumOfQuestions { set; get; }
-            public double TimeForQuestion { set; get; }
-        }
-
-        private struct CreateRoomResponse
-        {
-            public int Status { set; get; }
-            public int RoomId { set; get; }
-        }
         public CreateRoom(NetworkStream clientStream)
         {
             InitializeComponent();
@@ -47,6 +35,7 @@ namespace ClientWPF
 
         private void Submit_Button_Click(object sender, RoutedEventArgs e)
         {
+            // Checking that the user has filled all of the data before creating the room.
             if (string.IsNullOrWhiteSpace(roomName.Text) || string.IsNullOrWhiteSpace(numOfPlayers.Text)
                 || string.IsNullOrWhiteSpace(numOfQuestions.Text) || string.IsNullOrWhiteSpace(timeout.Text))
             {

@@ -16,6 +16,8 @@ using System.Net;
 using Newtonsoft.Json;
 using System.ComponentModel;
 using System.Threading;
+using ClientWPF.Requests;
+using ClientWPF.Responses;
 
 namespace ClientWPF
 {
@@ -32,41 +34,11 @@ namespace ClientWPF
         public double TimeForQuestion { set; get; }
         public int IsActive { set; get; }
     };
-    public struct GetRoomsResponse
-    {
-        public int Status;
-        public List<string> Rooms;
-    }
-    public struct GetPlayersInRoomResponse
-    {
-        public List<string> PlayersInRoom;
-    }
-    public struct JoinRoomRequest
-    {
-        public int RoomId;
-    }
-    public struct JoinRoomResponse
-    {
-        public int Status;
-        public int RoomId;
-        public string RoomName;
-        public int NumOfplayers;
-        public int NumOfQuestions;
-        public double TimeForQuestion;
-        public int IsActive;
-    }
-    public struct GetPlayersInRoomRequest
-    {
-        public int RoomId;
-    }
-    public struct GetRoomRequest
-    {
-        public int RoomId;
-    }
+
     public struct Room
     {
-        public int RoomId;
-        public string name;
+        public int RoomId { set; get; }
+        public string name { set; get; }
     }
 
     public partial class JoinRoom : Window
@@ -91,9 +63,9 @@ namespace ClientWPF
             if (availableRooms.SelectedItem == null)
                 return;
 
-            var rooms = (ListBox)sender;
-            int idIndex = rooms.SelectedItem.ToString().LastIndexOf(':');
-            GetPlayersInRoomRequest req = new GetPlayersInRoomRequest { RoomId = int.Parse(rooms.SelectedItem.ToString().Substring(idIndex + 2)) };
+            /* Getting the data about the room selected */
+            int idIndex = ((Room)availableRooms.SelectedItem).RoomId;
+            GetPlayersInRoomRequest req = new GetPlayersInRoomRequest { RoomId = ((Room)availableRooms.SelectedItem).RoomId };
             string json = JsonConvert.SerializeObject(req);
 
             // Getting the players in the room changed
@@ -108,9 +80,8 @@ namespace ClientWPF
             if (availableRooms.SelectedItem == null)
                 return;
 
-            //var rooms = (ListBox)sender;
-            int idIndex = availableRooms.SelectedItem.ToString().LastIndexOf(':');
-            JoinRoomRequest req = new JoinRoomRequest { RoomId = int.Parse(availableRooms.SelectedItem.ToString().Substring(idIndex + 2)) };
+            int idIndex = ((Room)availableRooms.SelectedItem).RoomId;
+            JoinRoomRequest req = new JoinRoomRequest { RoomId = ((Room)availableRooms.SelectedItem).RoomId };
             string json = JsonConvert.SerializeObject(req);
 
             // Requesting to join the selected items
@@ -123,6 +94,7 @@ namespace ClientWPF
             }
             else
             {
+                stopUpdating = true;
                 RoomData roomData = new RoomData
                 {
                     RoomId = resp.RoomId,
@@ -145,6 +117,7 @@ namespace ClientWPF
             {
                 // Requesting available rooms from the server
                 GetRoomsResponse resp = Communicator.ManageSendAndGetData<GetRoomsResponse>("", clientStream, Codes.GET_ROOMS_CODE);
+
                 WorkerParameter param = new WorkerParameter { list = resp.Rooms };
                 worker.ReportProgress(0, param);
 
@@ -156,21 +129,25 @@ namespace ClientWPF
         void roomsChanged(object sender, ProgressChangedEventArgs e)
         {
             WorkerParameter param = (WorkerParameter)e.UserState;
+            availableRooms.DataContext = param.list;
+            Binding binding = new Binding() { Path = new PropertyPath("name") };
             availableRooms.ItemsSource = getRoomsNames(param.list);
         }
 
         // Going back to the main menu
         private void CancelButton_Click(object sender, RoutedEventArgs e)
         {
+            stopUpdating = true;
             var mainWindow = new MainWindow(this.clientStream);
             mainWindow.Show();
             this.Close();
         }
 
-        private List<string> getRoomsNames(List<string> rooms)
+        private List<Room> getRoomsNames(List<string> rooms)
         {
             List<string> roomsNames = new List<string>();
-            Room
+            List<Room> availRooms = new List<Room>();
+
             foreach (string room in rooms)
             {
                 var splitted = room.Split(',');
@@ -178,9 +155,12 @@ namespace ClientWPF
 
                 // Checking that the room wasn't erased
                 if (name != "")
-                    roomsNames.Add(name);
+                {
+                    availRooms.Add(new Room { name = name, RoomId = Int32.Parse(splitted[1]) });
+                }
+                    //roomsNames.Add(name);
             }
-            return roomsNames;
+            return availRooms;
         }
     }
 }

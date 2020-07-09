@@ -51,3 +51,47 @@ RequestResult RoomMemberRequestHandler::getPlayersInRoom(RequestInfo info)
 	res.newHandler = this->m_handlerFactory.createRoomMemberRequestHandler(m_room, m_user, &m_handlerFactory, m_roomManager);
 	return res;
 }
+
+RequestResult RoomMemberRequestHandler::getRoomState(RequestInfo info)
+{
+	RoomData roomData;
+
+	try
+	{
+		roomData = m_room->getMetadata();
+	}
+	catch (std::exception & e)
+	{
+		GetRoomStateResponse resp
+		{
+			FAILED, false, std::vector<std::string>(), 0, 0
+		};
+
+		return RequestResult
+		{
+			JsonResponsePacketSerializer::serializeResponse(resp),
+			m_handlerFactory.createRoomMemberRequestHandler(m_room, m_user, &m_handlerFactory, m_roomManager)
+		};
+	}
+
+	GetRoomStateResponse resp
+	{
+		SUCCEEDED, roomData.isActive, m_room->getAllUsernames(), roomData.numOfQuestions, roomData.timeForQuestion
+	};
+
+	RequestResult res
+	{
+		JsonResponsePacketSerializer::serializeResponse(resp), nullptr
+	};
+
+	if (roomData.isActive)
+	{
+		res.newHandler = m_handlerFactory.createGameRequestHandler(m_user, &m_handlerFactory);
+	}
+	else
+	{
+		res.newHandler = m_handlerFactory.createRoomMemberRequestHandler(m_room, m_user, &m_handlerFactory, m_roomManager);
+	}
+
+	return res;
+}

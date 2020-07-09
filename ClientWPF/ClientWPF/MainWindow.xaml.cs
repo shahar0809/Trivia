@@ -25,9 +25,9 @@ namespace ClientWPF
     public partial class MainWindow : Window
     {
         private NetworkStream clientStream;
+
         public MainWindow()
         {
-
             InitializeComponent();
 
             //Initiate the socket with all the details.
@@ -35,10 +35,6 @@ namespace ClientWPF
             IPEndPoint serverEndPoint = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 1050);
             client.Connect(serverEndPoint);
             this.clientStream = client.GetStream();
-
-            //var ques = new q(clientStream, new TimeSpan(0, 0, 20));
-            //ques.Show();
-            //this.Close();
         }
 
 

@@ -12,21 +12,14 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using ClientWPF.Responses;
+using ClientWPF.Requests;
 
 namespace ClientWPF
 {
     /// <summary>
     /// Interaction logic for StatisticsWindow.xaml
     /// </summary>
-
-    public struct Question
-    {
-        public string question;
-        public string correctAns;
-        public string ans2;
-        public string ans3;
-        public string ans4;
-    }
 
     public struct UserStats
     {
@@ -36,28 +29,24 @@ namespace ClientWPF
         public int NumOfGames;
     }
 
-    public struct Statistic
-    {
-        public string UserStatistics;
-        public string HighScores;
-    }
-
     public partial class StatisticsWindow : Window
     {
         private NetworkStream clientStream;
-        private Statistic stats;
+        private StatisticRequest stats;
+
         public StatisticsWindow(NetworkStream clientStream)
         {
             InitializeComponent();
             this.clientStream = clientStream;
 
-            // Sending message.
-            stats = Communicator.ManageSendAndGetData<Statistic>("", clientStream, Codes.GET_STATISTICS_CODE);
+            // Sending a GetStatistics request.
+            stats = Communicator.ManageSendAndGetData<StatisticRequest>(clientStream, Codes.GET_STATISTICS_CODE);
         }
 
         private void myStatisticsButton_Click(object sender, RoutedEventArgs e)
         {
             string[] userStats = stats.UserStatistics.Split(',');
+
             UserStats statistic = new UserStats
             {
                 AvgAnswerTime = float.Parse(userStats[0]),
@@ -65,6 +54,8 @@ namespace ClientWPF
                 TotalAnswers = int.Parse(userStats[2]),
                 NumOfGames = int.Parse(userStats[3])
             };
+
+            // Opening a My Statistics window.
             var MyStatistics = new MyStatistics(clientStream, statistic);
             MyStatistics.Show();
             this.Close();

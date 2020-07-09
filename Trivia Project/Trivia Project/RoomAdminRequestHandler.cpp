@@ -28,6 +28,50 @@ RequestResult RoomAdminRequestHandler::handleRequest(RequestInfo info)
 	}
 }
 
+RequestResult RoomAdminRequestHandler::getRoomState(RequestInfo info)
+{
+	RoomData roomData;
+
+	try
+	{
+		roomData = m_room->getMetadata();
+	}
+	catch (std::exception & e)
+	{
+		GetRoomStateResponse resp
+		{
+			FAILED, false, std::vector<std::string>(), 0, 0
+		};
+
+		return RequestResult
+		{
+			JsonResponsePacketSerializer::serializeResponse(resp),
+			m_handlerFactory.createRoomAdminRequestHandler(m_room, m_user, &m_handlerFactory, m_roomManager)
+		};
+	}
+
+	GetRoomStateResponse resp
+	{
+		SUCCEEDED, roomData.isActive, m_room->getAllUsernames(), roomData.numOfQuestions, roomData.timeForQuestion
+	};
+
+	RequestResult res
+	{
+		JsonResponsePacketSerializer::serializeResponse(resp), nullptr
+	};
+
+	if (roomData.isActive)
+	{
+		res.newHandler = m_handlerFactory.createGameRequestHandler(m_user, &m_handlerFactory);
+	}
+	else
+	{
+		res.newHandler = m_handlerFactory.createRoomAdminRequestHandler(m_room, m_user, &m_handlerFactory, m_roomManager);
+	}
+	
+	return res;
+}
+
 RequestResult RoomAdminRequestHandler::closeRoom(RequestInfo info)
 {
 	CloseRoomResponse resp;
@@ -55,6 +99,7 @@ RequestResult RoomAdminRequestHandler::startGame(RequestInfo info)
 	try
 	{
 		this->m_handlerFactory.getGameManager()->createGame(*m_room);
+		m_room->setHasGameBegun(true);
 	}
 	catch (const std::exception & e)
 	{
@@ -70,9 +115,7 @@ RequestResult RoomAdminRequestHandler::startGame(RequestInfo info)
 	return RequestResult
 	{
 		JsonResponsePacketSerializer::serializeResponse(resp),
-		this->m_handlerFactory.createGameRequestHandler(
-			this->m_user,
-			&this->m_handlerFactory,*this->m_handlerFactory.getGameManager())
+		this->m_handlerFactory.createGameRequestHandler(this->m_user, &this->m_handlerFactory)
 	};
 }
 

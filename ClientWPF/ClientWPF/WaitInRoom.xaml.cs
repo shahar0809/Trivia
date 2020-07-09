@@ -15,6 +15,8 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using ClientWPF.Requests;
+using ClientWPF.Responses;
 
 namespace ClientWPF
 {
@@ -44,6 +46,11 @@ namespace ClientWPF
             this.isAdmin = isAdmin;
             stopUpdating = false;
 
+            initWindow();
+        }
+
+        private void initWindow()
+        {
             if (!isAdmin)
             {
                 closeRoom.Visibility = Visibility.Collapsed;
@@ -109,6 +116,8 @@ namespace ClientWPF
         private void startGame_Click(object sender, RoutedEventArgs e)
         {
             stopUpdating = true;
+
+            // Sending a Start Game request to the server (includes code only)
             Response resp = Communicator.ManageSendAndGetData<Response>("", this.clientStream, Codes.START_GAME_CODE);
 
             if (resp.status == (int)Codes.ERROR_CODE)
@@ -117,7 +126,6 @@ namespace ClientWPF
             }
             else
             {
-                //DisplayQuestion question = new DisplayQuestion(this.clientStream, new TimeSpan(0, roomData.TimeForQuestion, 0), roomData.NumOfQuestions);
                 DisplayQuestion question = new DisplayQuestion(this.clientStream, roomData);
                 question.Show();
                 this.Close();
@@ -127,31 +135,39 @@ namespace ClientWPF
         /* A thread that constantly updates the players in the room */
         public void updateRoomPlayers(object sender, DoWorkEventArgs e)
         {
-            // Getting the players connected to the room
-            GetPlayersInRoomRequest request = new GetPlayersInRoomRequest { RoomId = this.roomData.RoomId };
-
             while (!stopUpdating)
             {
                 // Requesting the players in the room
-                GetPlayersInRoomResponse resp = Communicator.ManageSendAndGetData<GetPlayersInRoomResponse>(
-                    JsonConvert.SerializeObject(request),
-                    clientStream,
-                    Codes.GET_PLAYERS_IN_ROOM_CODE);
-
-                // If the room was closed, then the player must leave (sending a leave room request)
-                if (resp.PlayersInRoom == null || resp.PlayersInRoom.Count == 0)
+                GetRoomStateResponse resp = Communicator.ManageSendAndGetData<GetRoomStateResponse>(clientStream, Codes.GET_ROOM_STATE_CODE);
+               
+                // If the room was closed / request wasn't valid, then the player returns to the menu.
+                if (resp.Players == null || resp.Status == (int)Codes.ERROR_CODE || resp.Players.Count == 0 )
                 {
-                    Response response = Communicator.ManageSendAndGetData<Response>("", this.clientStream, Codes.LEAVE_ROOM_CODE);
-                    return;
+                    // Need to figure out how to open MainWindow from MTA thread
                 }
 
+                // If the game has started, then the player moves to the DisplayQuestion window.
+                else if (resp.HasGameBegun)
+                {
+                    // Need to figure out how to open DisplayQuestion from MTA thread
+                }
+                
                 // Updating list on the screen
-                WorkerParameter param = new WorkerParameter { list = resp.PlayersInRoom };
+                WorkerParameter param = new WorkerParameter { list = resp.Players };
                 worker.ReportProgress(0, param);
 
                 Thread.Sleep(3000);
             }
         }
+
+        //private void ThreadStartingPoint()
+        //{
+        //    var tempWindow = new MainWindow();
+        //    tempWindow.Show();
+        //    System.Windows.Threading.Dispatcher.Run();
+        //    this.Close();
+        //}
+
         void playersChanged(object sender, ProgressChangedEventArgs e)
         {
             WorkerParameter param = (WorkerParameter)e.UserState;

@@ -9,7 +9,7 @@ class RequestHandlerFactory;
 class GameRequestHandler : public IRequestHandler
 {
 public:
-	GameRequestHandler(LoggedUser* user, GameManager* gameManager, RequestHandlerFactory* handlerFactory);
+	GameRequestHandler(LoggedUser* user, RequestHandlerFactory* handlerFactory);
 
 	bool isRequestRelevant(RequestInfo info);
 	RequestResult handleRequest(RequestInfo info);

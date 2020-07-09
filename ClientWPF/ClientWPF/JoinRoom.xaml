@@ -48,7 +48,8 @@
                       >
             <ListBox x:Name="availableRooms" 
                      MinHeight="170" 
-                     ItemsSource="{Binding rooms, Mode=OneWayToSource}"
+                     DisplayMemberPath="name"
+                     ItemsSource="{Binding name, Mode=OneWayToSource }"
                      SelectionChanged="availableRooms_SelectionChanged">
             </ListBox>
         </ScrollViewer>

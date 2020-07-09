@@ -62,6 +62,7 @@ std::string JsonResponsePacketSerializer::serializeResponse(GetPlayersInRoomResp
 {
 	json players(getPlayersInRoom.players);
 	json j;
+	j[jsonFields[STATUS]] = getPlayersInRoom.status;
 	j[jsonFields[PLAYERS_IN_ROOM]] = players;
 	return JsonResponsePacketSerializer::serializeResponse(j, GET_PLAYERS_IN_ROOM_CODE);
 }

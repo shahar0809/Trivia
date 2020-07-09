@@ -12,13 +12,14 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using ClientWPF.Responses;
+using ClientWPF.Requests;
 
 namespace ClientWPF
 {
     /// <summary>
     /// Interaction logic for gameResults.xaml
     /// </summary>
-    /// 
 
     public struct PlayerResults
     {
@@ -26,12 +27,14 @@ namespace ClientWPF
         public int correctAnswersCount { get; set; }
         public int wrongAnswersCount { get; set; }
         public double averageAnswerTime { get; set; }
-    }
 
-    public struct GetGameResultsResponse
-    {
-        public int status { get; set; }
-        public List<string> Results { set; get; }
+        public PlayerResults(string result)
+        {
+            username = result.Split(',')[0];
+            correctAnswersCount = int.Parse(result.Split(',')[1]);
+            wrongAnswersCount = int.Parse(result.Split(',')[2]);
+            averageAnswerTime = double.Parse(result.Split(',')[3]);
+        }
     }
 
     public partial class GameResults : Window
@@ -46,7 +49,7 @@ namespace ClientWPF
             GetGameResultsResponse resp = 
                 Communicator.ManageSendAndGetData<GetGameResultsResponse>("", clientStream, Codes.GET_GAME_RESULTS_CODE);
 
-            if (resp.status == (int)Codes.ERROR_CODE)
+            if (resp.Status == (int)Codes.ERROR_CODE)
             {
                 MessageBox.Show("Couldn't load the scores!");
                 var mainWindow = new MainWindow(this.clientStream);
@@ -55,19 +58,14 @@ namespace ClientWPF
             }
             else
             {
-                 // Displaying the winner's username 
-                 winnerUsername.Text = (string)resp.Results[0].Split(',')[0] ;
+                // Displaying the winner's username 
+                winnerUsername.Text = (string)resp.Results[0].Split(',')[0] ;
+
+                // Getting a list of the player results
                 List<PlayerResults> results = new List<PlayerResults>();
                 foreach (string playerResult in resp.Results)
                 {
-                    PlayerResults player = new PlayerResults
-                    {
-                        username = playerResult.Split(',')[0],
-                        correctAnswersCount = int.Parse(playerResult.Split(',')[1]),
-                        wrongAnswersCount = int.Parse(playerResult.Split(',')[2]),
-                        averageAnswerTime = double.Parse(playerResult.Split(',')[3])
-                    };
-                    results.Add(player);
+                    results.Add(new PlayerResults(playerResult));
                 }
 
                 // Displaying all the results in the data grid

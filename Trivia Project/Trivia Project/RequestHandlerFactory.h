@@ -23,7 +23,7 @@ public:
 	MenuRequestHandler* createMenuRequestHandler(LoggedUser* user);
 	RoomMemberRequestHandler* createRoomMemberRequestHandler(Room* room, LoggedUser* user, RequestHandlerFactory* handlerFactory, RoomManager* roomManger);
 	RoomAdminRequestHandler* createRoomAdminRequestHandler(Room* room, LoggedUser* user, RequestHandlerFactory* handlerFactory, RoomManager* roomManger);
-	GameRequestHandler* createGameRequestHandler(LoggedUser* user, RequestHandlerFactory* handlerFactory, GameManager& gameManager);
+	GameRequestHandler* createGameRequestHandler(LoggedUser* user, RequestHandlerFactory* handlerFactory);
 
 	LoginManager& getLoginManger();
 	StatisticsManager& getStatisticsManager();
