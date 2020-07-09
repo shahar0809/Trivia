@@ -12,7 +12,6 @@ bool RoomManager::deleteRoom(int ID)
 {
 	std::map<int, Room>::iterator it;
 	it = this->m_rooms.find(ID);
-
 	if (it != this->m_rooms.end())
 	{
 		RoomData data = it->second.getMetadata();
@@ -37,12 +36,14 @@ unsigned int RoomManager::getRoomState(int ID)
 std::vector<RoomData> RoomManager::getRooms()
 {
 	std::vector<RoomData> rooms;
-	std::map<int,Room>::iterator it;
 
-	for (it = this->m_rooms.begin(); it != this->m_rooms.end(); it++)
+	for (auto room : m_rooms)
 	{
-		rooms.push_back(it->second.getMetadata());
+		RoomData data = room.second.getMetadata();
+		if (data.isActive)
+			rooms.push_back(data);
 	}
+
 	return rooms;
 }
 
