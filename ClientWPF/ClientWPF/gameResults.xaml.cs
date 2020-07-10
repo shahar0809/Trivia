@@ -14,6 +14,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using ClientWPF.Responses;
 using ClientWPF.Requests;
+using System.Threading;
 
 namespace ClientWPF
 {
@@ -56,6 +57,7 @@ namespace ClientWPF
             {
                 resp =
                 Communicator.ManageSendAndGetData<GetGameResultsResponse>("", clientStream, Codes.GET_GAME_RESULTS_CODE);
+                Thread.Sleep(3000);
             }
 
             // Displaying the winner's username 
@@ -77,6 +79,11 @@ namespace ClientWPF
             var mainWindow = new MainWindow(this.clientStream, m_username);
             mainWindow.Show();
             this.Close();
+        }
+
+        private void showComponents()
+        {
+
         }
     }
 }

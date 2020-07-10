@@ -68,6 +68,15 @@ RequestResult GameRequestHandler::getGameResults(RequestInfo info)
 		resp.results = m_handlerFactory->getGameManager()->getGameResults(*this->m_user);
 		m_handlerFactory->getGameManager()->deleteGame(*m_user);
 	}
+	catch (std::string)
+	{
+		resp.status = FAILED;
+		return RequestResult
+		{
+			JsonResponsePacketSerializer::serializeResponse(resp),
+			this->m_handlerFactory->createGameRequestHandler(m_user, m_handlerFactory)
+		};
+	}
 	catch (const std::exception & e)
 	{
 		resp.status = FAILED;

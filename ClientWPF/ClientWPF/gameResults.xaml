@@ -36,12 +36,24 @@
                    Margin="140, 0, 140, 5">
         </TextBlock>
 
+        <TextBlock x:Name="UserMessage"
+                   TextWrapping="Wrap"
+                   Grid.Row="2" Grid.Column="1"
+                   Margin="50, 10"
+                   Grid.RowSpan="3"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Center"
+                   Text="Please wait till all the players are finished."
+                   FontFamily="Forte" FontSize="42" 
+        />
+        
         <WrapPanel Name="displayWinner"
                    Grid.Row="2"
                    Grid.Column="1"
                    Grid.ColumnSpan="2"
                    Margin="0, 5, 0, 5"
                    HorizontalAlignment="Center"
+                   Visibility="Collapsed"
         >
             <TextBlock 
                     Text="The winner is:  "
@@ -66,7 +78,7 @@
             <Border.BitmapEffect>
                 <DropShadowBitmapEffect />
             </Border.BitmapEffect>
-            <Grid>
+            <Grid x:Name="TableGrid" Visibility="Collapsed">
                 <Border x:Name="BDRounded" BorderThickness="0" CornerRadius="15" Background="White"/>
                 <DataGrid x:Name="playersResult" 
                           BorderBrush="{x:Null}" 

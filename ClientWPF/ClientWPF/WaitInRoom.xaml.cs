@@ -166,7 +166,7 @@ namespace ClientWPF
                 WorkerParameter param = new WorkerParameter { list = resp.PlayersInRoom };
                 worker.ReportProgress(0, param);
 
-                Thread.Sleep(3000);
+                Thread.Sleep(1000);
             }
         }
 

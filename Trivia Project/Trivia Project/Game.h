@@ -34,7 +34,7 @@ public:
 	bool operator<(const Game& other) const;
 	int getId();
 	std::map<LoggedUser, GameData> getPlayers();
-	std::map<LoggedUser, GameData> getPlayersGameData();
+	std::map<LoggedUser, GameData>* getPlayersGameData();
 
 private:
 	std::vector<Question>* m_questions;

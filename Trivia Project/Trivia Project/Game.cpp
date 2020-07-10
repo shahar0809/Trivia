@@ -102,9 +102,9 @@ int Game::getId()
 	return this->m_Id;
 }
 
-std::map<LoggedUser, GameData> Game::getPlayersGameData()
+std::map<LoggedUser, GameData>* Game::getPlayersGameData()
 {
-	return this->m_players;
+	return &(this->m_players);
 }
 
 std::map<LoggedUser, GameData> Game::getPlayers()

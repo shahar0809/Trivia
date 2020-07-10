@@ -49,7 +49,7 @@ namespace ClientWPF
                 Username = usernameBox.Text,
                 Email = emailBox.Text
             };
-
+            
             // Edit and send signUp request.
             string json = JsonConvert.SerializeObject(signUp, Formatting.Indented);
             Response signUpResponse = Communicator.ManageSendAndGetData<Response>(json, clientStream, Codes.SIGN_UP_CODE);

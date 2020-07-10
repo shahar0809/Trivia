@@ -45,19 +45,23 @@ Game* GameManager::getGame(LoggedUser user)
 
 std::vector<PlayerResults> GameManager::getGameResults(LoggedUser user)
 {
-	std::map<LoggedUser, GameData> playersData = this->getGame(user)->getPlayersGameData();
+	std::map<LoggedUser, GameData>* playersData = this->getGame(user)->getPlayersGameData();
 	std::vector<PlayerResults> results;
 
 	// Updating that the current user has finished the game
-	auto player = playersData.find(user);
-	player->second.isFinished = true;
+	auto player = playersData->find(user);
+
+	if (player != playersData->end())
+	{
+		player->second.isFinished = true;
+	}
 
 	if (!isEveryoneFinished(user))
 	{
-		return results;
+		throw std::string("Not all the players are finished");
 	}
 
-	for (auto playerData : playersData)
+	for (auto playerData : *playersData)
 	{
 		LoggedUser user = playerData.first;
 		GameData gameData = playerData.second;
@@ -74,6 +78,7 @@ std::vector<PlayerResults> GameManager::getGameResults(LoggedUser user)
 	updateResultsInDatabase(user);
 	return results;
 }
+
 Question GameManager::getQuestion(LoggedUser user)
 {
 	return getGame(user)->getQuestionForUser(user);
@@ -81,8 +86,8 @@ Question GameManager::getQuestion(LoggedUser user)
 
 bool GameManager::isEveryoneFinished(LoggedUser user)
 {
-	std::map<LoggedUser, GameData> playersData = this->getGame(user)->getPlayersGameData();
-	for (auto user : playersData)
+	std::map<LoggedUser, GameData>* playersData = this->getGame(user)->getPlayersGameData();
+	for (auto user : *playersData)
 	{
 		if (!user.second.isFinished)
 			return false;
@@ -103,13 +108,14 @@ bool GameManager::removePlayer(LoggedUser user)
 void GameManager::updateResultsInDatabase(LoggedUser user)
 {
 	//Update statistics table.
-	std::map<LoggedUser, GameData> playersData = this->getGame(user)->getPlayersGameData();
+	std::map<LoggedUser, GameData>* playersData = this->getGame(user)->getPlayersGameData();
+	auto data = (*playersData)[user];
 	this->database->insertStatistics(this->getGame(user)->getId(), user.getUsername(),
-		playersData[user].correctAnswerCount, playersData[user].wrongAnswerCount,
-		playersData[user].averangeAnswerTime);
+		data.correctAnswerCount, data.wrongAnswerCount,
+		data.averangeAnswerTime);
 
 	//Update socre table.
 	this->database->insertScore(user.getUsername(),
-		playersData[user].wrongAnswerCount * WRONG_ANSWER_POINTS +
-		playersData[user].correctAnswerCount * CORRECT_ANSWER_POINTS);
+		data.wrongAnswerCount * WRONG_ANSWER_POINTS +
+		data.correctAnswerCount * CORRECT_ANSWER_POINTS);
 }
