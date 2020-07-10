@@ -35,7 +35,7 @@ namespace ClientWPF
 
         private void CancelButton_Click(object sender, RoutedEventArgs e)
         {
-            var mainWindow = new MainWindow(this.clientStream);
+            var mainWindow = new MainWindow(this.clientStream, "");
             mainWindow.Show();
             this.Close();
         }
@@ -53,11 +53,11 @@ namespace ClientWPF
 
             if (loginResponse.status == (int)Codes.ERROR_CODE)
             {
-                MessageBox.Show("Login Failed");
+                ErrorBox.Visibility = Visibility.Visible;
             }
 
             // Closing the Log in window and returing to the menu.
-            var mainWindow = new MainWindow(this.clientStream);
+            var mainWindow = new MainWindow(this.clientStream, login.Username);
             mainWindow.Show();
             this.Close();
         }

@@ -13,7 +13,6 @@ bool LoginRequestHandler::isRequestRelevant(RequestInfo info)
 
 RequestResult LoginRequestHandler::handleRequest(RequestInfo info)
 {
-	
 	if (info.requestId == LOGIN_CODE)
 	{
 		return login(info);
@@ -30,6 +29,8 @@ RequestResult LoginRequestHandler::login(RequestInfo info)
 	LoginResponse response;
 	RequestResult result;
 	LoggedUser* user = m_loginManager->login(loginReq.username, loginReq.password);
+	this->m_username = user->getUsername();
+
 	if (user != nullptr)
 	{
 		response.status = SUCCEEDED;

@@ -30,6 +30,15 @@
             <RowDefinition Height="20"/>
         </Grid.RowDefinitions>
 
+        <TextBlock x:Name="usernameBox"
+                   Grid.Row="1" Grid.Column="1"
+                   HorizontalAlignment="Left"
+                   Text="username"
+                   Margin="10, 0, 0, 75"
+                   FontFamily="Aharoni" FontSize="22"
+                   Background="White"
+        />
+        
         <TextBlock x:Name="displayRoomName"
                    Grid.Column="1"
                    Grid.Row="1"

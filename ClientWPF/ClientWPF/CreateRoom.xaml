@@ -6,7 +6,6 @@
         xmlns:local="clr-namespace:ClientWPF"
         mc:Ignorable="d" FontFamily="Forte" FontSize="36"
         Title="Create Room" Height="600" Width="800"
-        
         >
 
     <Grid>
@@ -33,6 +32,15 @@
             <RowDefinition Height="20"/>
         </Grid.RowDefinitions>
 
+        <TextBlock x:Name="usernameBox"
+                   Grid.Row="1" Grid.Column="1"
+                   HorizontalAlignment="Left"
+                   Text="username"
+                   Margin="0,0,0,60"
+                   FontFamily="Aharoni" FontSize="22"
+                   Background="White"
+        />
+        
         <TextBlock Text="Create Room"
                    Grid.Row="1"
                    Grid.Column="1"

@@ -8,6 +8,7 @@ RoomParticipantRequestHandler::RoomParticipantRequestHandler(Room* room, LoggedU
 	m_user = user;
 	m_handlerFactory = *handlerFactory;
 	m_roomManager = roomManager;
+	m_username = user->getUsername();
 }
 
 RequestResult RoomParticipantRequestHandler::getRoomState(RequestInfo info)

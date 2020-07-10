@@ -29,7 +29,7 @@ namespace ClientWPF
         public const int TIMER_WARNING = 10;
         public const int INDEX = 0;
         public const int ANSWER = 1;
-        
+
         private RoomData m_roomData;
         private TimeSpan m_time;
         private DispatcherTimer m_timer;
@@ -38,6 +38,7 @@ namespace ClientWPF
         private NetworkStream m_clientStream;
         private int m_correctAnswers = 0;
         private int m_questionsLeft;
+        private string m_username;
 
         private struct Answer
         {
@@ -45,12 +46,14 @@ namespace ClientWPF
             public string answer;
         }
 
-        public DisplayQuestion(NetworkStream clientStream,RoomData roomData)
+        public DisplayQuestion(NetworkStream clientStream,RoomData roomData, string username)
         {
+            InitializeComponent();
+            usernameBox.Text = username;
             m_clientStream = clientStream;
             m_questionsLeft = roomData.NumOfQuestions;
             m_roomData = roomData;
-            InitializeComponent();
+            m_username = username;
 
             m_answersButtons = new List<Tuple<Button, TextBlock>>();
             m_answersButtons.Add( Tuple.Create( new Button(), new TextBlock())); // Random element
@@ -75,14 +78,11 @@ namespace ClientWPF
                     if (m_time.TotalSeconds <= TIMER_WARNING)
                     {
                         Timer.Foreground = Brushes.Red;
-                        m_time = new TimeSpan(0, 0, (int)m_time.TotalSeconds - 1); // Updating countdown
-                        Timer.Text = string.Format("{0} : 0{1}", (int)m_time.TotalMinutes, (int)m_time.Seconds); // Updating Timer text box
                     }
-                    else
-                    {
-                        m_time = new TimeSpan(0, 0, (int)m_time.TotalSeconds - 1); // Updating countdown
-                        Timer.Text = string.Format("{0} : {1}", (int)m_time.TotalMinutes, (((int)m_time.Seconds).ToString()).PadLeft(2)); // Updating Timer text box
-                    }
+                   
+                    m_time = new TimeSpan(0, 0, (int)m_time.TotalSeconds - 1); // Updating countdown
+                    Timer.Text = string.Format("{0} : {1}", (int)m_time.TotalMinutes, 
+                        (((int)m_time.Seconds).ToString()).PadLeft(2, '0')); // Updating Timer text box
             }
             else
             {
@@ -97,7 +97,7 @@ namespace ClientWPF
             if (m_questionsLeft == 0)
             {
                 m_timer.Stop();
-                var results = new GameResults(m_clientStream);
+                var results = new GameResults(m_clientStream, m_username);
                 results.Show();
                 Close();
             }
@@ -142,7 +142,7 @@ namespace ClientWPF
             sendSubmitAnswer(1);
         }
 
-        private void sendSubmitAnswer(int answerId)
+        private async void sendSubmitAnswer(int answerId)
         {
             updateButtons(false);
             TimeSpan time = DateTime.Now.TimeOfDay;
@@ -166,20 +166,11 @@ namespace ClientWPF
                 m_answersButtons[answerId].Item1.Background = Brushes.Green;
             }
 
-            DispatcherTimer waitForButtons = new DispatcherTimer();
-            waitForButtons.Interval = TimeSpan.FromSeconds(2);
-            waitForButtons.Tick += Tick;
-            waitForButtons.Start();
-
+            await Task.Delay(2000);
             m_questionsLeft--;
             updateQuestion();
         }
-
-        private void Tick(object sender, EventArgs e)
-        {
-
-        }
-
+        
         /* Releases / Locks the buttons so that the user won't be able to submit another answer */
         private void updateButtons(bool isEnabled)
         {
@@ -196,7 +187,7 @@ namespace ClientWPF
                 m_clientStream, Codes.LEAVE_GAME_CODE);
             if (exitGameResponse.status == 1)
             {
-                MainWindow mainWindow = new MainWindow(m_clientStream);
+                MainWindow mainWindow = new MainWindow(m_clientStream, m_username);
                 mainWindow.Show();
                 Close();
             }

@@ -43,14 +43,17 @@ StatisticsManager& RequestHandlerFactory::getStatisticsManager()
 {
 	return this->m_StatisticsManager;
 }
+
 RoomManager* RequestHandlerFactory::getRoomManager()
 {
 	return this->m_roomManager;
 }
+
 RoomMemberRequestHandler* RequestHandlerFactory::createRoomMemberRequestHandler(Room* room, LoggedUser* user, RequestHandlerFactory* handlerFactory, RoomManager* roomManger)
 {
 	return new RoomMemberRequestHandler(room, user, handlerFactory, roomManger);
 }
+
 RoomAdminRequestHandler* RequestHandlerFactory::createRoomAdminRequestHandler(Room* room, LoggedUser* user, RequestHandlerFactory* handlerFactory, RoomManager* roomManger)
 {
 	return new RoomAdminRequestHandler(room, user, handlerFactory, roomManger);

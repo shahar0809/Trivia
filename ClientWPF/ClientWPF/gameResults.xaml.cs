@@ -40,10 +40,15 @@ namespace ClientWPF
     public partial class GameResults : Window
     {
         private NetworkStream clientStream;
-        public GameResults(NetworkStream clientStream)
+        private string m_username;
+
+        public GameResults(NetworkStream clientStream, string username)
         {
             this.clientStream = clientStream;
+            m_username = username;
+
             InitializeComponent();
+
             GetGameResultsResponse resp =
                 Communicator.ManageSendAndGetData<GetGameResultsResponse>("", clientStream, Codes.GET_GAME_RESULTS_CODE);
 
@@ -69,7 +74,7 @@ namespace ClientWPF
 
         private void backToMenu_Click(object sender, RoutedEventArgs e)
         {
-            var mainWindow = new MainWindow(this.clientStream);
+            var mainWindow = new MainWindow(this.clientStream, m_username);
             mainWindow.Show();
             this.Close();
         }

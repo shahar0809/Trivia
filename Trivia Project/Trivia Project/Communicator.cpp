@@ -50,6 +50,7 @@ void Communicator::bindAndListen()
 void Communicator::handleNewClient(std::pair<SOCKET, IRequestHandler*> client)
 {
 	//IRequestHandler* currHandler = client.second;
+	std::string username;
 
 	/* Getting requests from the client */
 	while (!this->m_isEnded)
@@ -64,6 +65,7 @@ void Communicator::handleNewClient(std::pair<SOCKET, IRequestHandler*> client)
 		{
 			closesocket(client.first);
 			this->m_clients.erase(client.first);
+			m_handlerFactory.getLoginManger()->logout(client.second->getUsername());
 			return; // End thread execution
 		}
 		
@@ -84,6 +86,8 @@ void Communicator::handleNewClient(std::pair<SOCKET, IRequestHandler*> client)
 		}
 	} 
 	closesocket(client.first);
+	this->m_clients.erase(client.first);
+	m_handlerFactory.getLoginManger()->logout(client.second->getUsername());
 }
 
 /**

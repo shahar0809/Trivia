@@ -21,6 +21,7 @@ LoggedUser* LoginManager::login(std::string userName, std::string password)
 	{
 		LoggedUser* user = new LoggedUser(userName);
 		this->m_loggedUsers.push_back(*user);
+
 		return user;
 	}
 	std::cerr << "User doesn't exist." << std::endl;

@@ -6,6 +6,7 @@ GameRequestHandler::GameRequestHandler(LoggedUser* user, RequestHandlerFactory* 
 	this->m_gameManager = handlerFactory->getGameManager();
 	this->m_user = user;
 	this->m_game = this->m_gameManager->getGame(*user);
+	m_username = user->getUsername();
 }
 
 bool GameRequestHandler::isRequestRelevant(RequestInfo info)

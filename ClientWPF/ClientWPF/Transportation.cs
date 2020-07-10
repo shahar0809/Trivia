@@ -49,12 +49,6 @@ namespace ClientWPF
         {
             public int RoomId;
         }
-
-        public struct StatisticRequest
-        {
-            public string UserStatistics;
-            public string HighScores;
-        }
     }
 
     namespace Responses
@@ -86,6 +80,12 @@ namespace ClientWPF
             public int NumOfQuestions;
             public double TimeForQuestion;
             public int IsActive;
+        }
+
+        public struct StatisticResponse
+        {
+            public string UserStatistics;
+            public List<string> HighScores;
         }
 
         public struct GeneralResponse

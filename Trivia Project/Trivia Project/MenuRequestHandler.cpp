@@ -7,6 +7,7 @@ MenuRequestHandler::MenuRequestHandler(LoggedUser* user, RequestHandlerFactory* 
 {
 	this->m_handlerFactory = *m_handlerFactory;
 	this->m_user = user;
+	m_username = user->getUsername();
 }
 
 MenuRequestHandler::~MenuRequestHandler()
@@ -124,7 +125,7 @@ RequestResult MenuRequestHandler::getStatistics(RequestInfo info)
 
 	try
 	{
-		stats= statsManager.getStatistics(this->m_user->getUsername());
+		stats = statsManager.getStatistics(this->m_user->getUsername());
 	}
 	catch (const std::exception& e)
 	{
@@ -134,6 +135,7 @@ RequestResult MenuRequestHandler::getStatistics(RequestInfo info)
 
 	std::vector<std::string> highScore;
 
+	// Converting high scores to strings
 	for (auto score : stats.second)
 		highScore.push_back(score.toString());
 

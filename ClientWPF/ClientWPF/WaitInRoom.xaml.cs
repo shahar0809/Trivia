@@ -36,15 +36,17 @@ namespace ClientWPF
         private bool isAdmin;
         private NetworkStream clientStream;
         private BackgroundWorker worker = new BackgroundWorker();
-        private bool stopUpdating;
+        private bool stopUpdating = false;
+        private string m_username;
 
-        public WaitInRoom(RoomData data, NetworkStream clientStream, bool isAdmin)
+        public WaitInRoom(RoomData data, NetworkStream clientStream, bool isAdmin, string username)
         {
             InitializeComponent();
             this.roomData = data;
             this.clientStream = clientStream;
             this.isAdmin = isAdmin;
-            stopUpdating = false;
+            m_username = username;
+            usernameBox.Text = username;
 
             initWindow();
         }
@@ -85,7 +87,7 @@ namespace ClientWPF
             if (resp.status != (int)Codes.ERROR_CODE)
             {
                 stopUpdating = true;
-                var mainWindow = new MainWindow(this.clientStream);
+                var mainWindow = new MainWindow(this.clientStream, m_username);
                 mainWindow.Show();
                 this.Close();
             }
@@ -107,7 +109,7 @@ namespace ClientWPF
                     MessageBox.Show("Error wwhile leaving the room!");
                 }
             }
-            var nextWindow = new MainWindow(this.clientStream);
+            var nextWindow = new MainWindow(this.clientStream, m_username);
             nextWindow.Show();
             this.Close();
         }  
@@ -122,12 +124,12 @@ namespace ClientWPF
                 if (resp.status == (int)Codes.ERROR_CODE)
                 {
                     MessageBox.Show("Couldn't start the game!");
-                    var nextWindow = new MainWindow(this.clientStream);
+                    var nextWindow = new MainWindow(this.clientStream, m_username);
                     nextWindow.Show();
                     this.Close();
                 }
             }
-            var question = new DisplayQuestion(this.clientStream, roomData);
+            var question = new DisplayQuestion(this.clientStream, roomData, m_username);
             question.Show();
             this.Close();
         }

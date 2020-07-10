@@ -25,11 +25,13 @@ namespace ClientWPF
     public partial class CreateRoom : Window
     {
         private NetworkStream clientStream;
-        public const int ERROR_CODE = 0;
+        private string username;
 
-        public CreateRoom(NetworkStream clientStream)
+        public CreateRoom(NetworkStream clientStream, string username)
         {
             InitializeComponent();
+            this.username = username;
+            usernameBox.Text = username;
             this.clientStream = clientStream;
         }
 
@@ -55,10 +57,10 @@ namespace ClientWPF
             CreateRoomResponse createRoomResponse = 
                 Communicator.ManageSendAndGetData<CreateRoomResponse>(json, clientStream, Codes.CREATE_ROOM_CODE);
 
-            if (createRoomResponse.Status == ERROR_CODE)
+            if (createRoomResponse.Status == (int)Codes.ERROR_CODE)
             {
                 MessageBox.Show("Error! , can't create room");
-                var mainWindow = new MainWindow(clientStream);
+                var mainWindow = new MainWindow(clientStream, username);
                 mainWindow.Show();
             }
             else
@@ -76,16 +78,16 @@ namespace ClientWPF
                 };
 
                 // Show the room details to the admin.
-                var waitInRoom = new WaitInRoom(roomData, clientStream, true);
+                var waitInRoom = new WaitInRoom(roomData, clientStream, true, username);
                 waitInRoom.Show();
             }
-            Close();
+            this.Close();
         }
 
         private void cancel_Click(object sender, RoutedEventArgs e)
         {
             // Closing the Log in window and returing to the menu.
-            var mainWindow = new MainWindow(this.clientStream);
+            var mainWindow = new MainWindow(this.clientStream, username);
             mainWindow.Show();
             this.Close();
         }

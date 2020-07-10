@@ -48,9 +48,13 @@ namespace ClientWPF
         private NetworkStream clientStream;
         private BackgroundWorker worker = new BackgroundWorker();
         private bool stopUpdating = false;
-        public JoinRoom(NetworkStream clientStream)
+        private string m_username;
+
+        public JoinRoom(NetworkStream clientStream, string username)
         {
             InitializeComponent();
+            m_username = username;
+            usernameBox.Text = username;
             availableRooms.ItemsSource = roomsList;
             this.clientStream = clientStream;
 
@@ -108,7 +112,7 @@ namespace ClientWPF
                     IsActive = resp.IsActive
                 };
 
-                WaitInRoom obj = new WaitInRoom(roomData, clientStream, false);
+                WaitInRoom obj = new WaitInRoom(roomData, clientStream, false, m_username);
                 obj.Show();
                 this.Close();
             }
@@ -139,7 +143,7 @@ namespace ClientWPF
         private void CancelButton_Click(object sender, RoutedEventArgs e)
         {
             stopUpdating = true;
-            var mainWindow = new MainWindow(this.clientStream);
+            var mainWindow = new MainWindow(this.clientStream, m_username);
             mainWindow.Show();
             this.Close();
         }

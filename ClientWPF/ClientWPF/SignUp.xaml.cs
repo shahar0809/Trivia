@@ -36,7 +36,7 @@ namespace ClientWPF
 
         private void CancelButton_Click(object sender, RoutedEventArgs e)
         {
-            var mainWindow = new MainWindow(this.clientStream);
+            var mainWindow = new MainWindow(this.clientStream, "");
             mainWindow.Show();
             this.Close();
         }
@@ -56,11 +56,11 @@ namespace ClientWPF
 
             if (signUpResponse.status == (int)Codes.ERROR_CODE)
             {
-                MessageBox.Show("Sign up failed!");
+                ErrorBox.Visibility = Visibility.Visible;
             }
 
             // Going back to the main menu
-            var mainWindow = new MainWindow(this.clientStream);
+            var mainWindow = new MainWindow(this.clientStream, "");
             mainWindow.Show();
             Close();
         }
