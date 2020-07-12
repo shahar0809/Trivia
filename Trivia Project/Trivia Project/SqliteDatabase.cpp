@@ -302,7 +302,7 @@ std::vector<Question>* SqliteDatabase::getQuestions(int maybeNumOfQuestions)
 
 float SqliteDatabase::getPlayerAverageAnswerTime(std::string username)
 {
-	std::string sqlQuery = "SELECT AVG(ANSWER_TIME) FROM STATISTICS "
+	std::string sqlQuery = "SELECT AVG(AVG_ANSWER_TIME) FROM STATISTICS "
 		"WHERE USERNAME = '" + username + "';";
 
 	float queryResult;
@@ -312,9 +312,8 @@ float SqliteDatabase::getPlayerAverageAnswerTime(std::string username)
 
 int SqliteDatabase::getNumOfCorrectAnswers(std::string username)
 {
-	std::string sqlQuery = "SELECT COUNT(*) FROM STATISTICS "
-		"WHERE USERNAME = '" + username + "' AND "
-		"IS_CORRECT = 1;";
+	std::string sqlQuery = "SELECT SUM(CORRECT_ANSWERS) FROM STATISTICS "
+		"WHERE USERNAME = '" + username + "';";
 
 	float queryResult;
 	executeMsg(sqlQuery, statisticsCallback, &queryResult);
@@ -324,12 +323,17 @@ int SqliteDatabase::getNumOfCorrectAnswers(std::string username)
 int SqliteDatabase::getNumOfTotalAnswers(std::string username)
 {
 	// Each record in the table represents an answer of a user.
-	std::string sqlQuery = "SELECT COUNT(*) FROM STATISTICS "
+	std::string sqlQuery = "SELECT SUM(CORRECT_ANSWERS) FROM STATISTICS "
 		"WHERE USERNAME = '" + username + "';";
 		
-	float queryResult;
-	executeMsg(sqlQuery, statisticsCallback, &queryResult);
-	return (int)(queryResult);
+	float correctAns, wrongAns;
+	executeMsg(sqlQuery, statisticsCallback, &correctAns);
+
+	sqlQuery = "SELECT SUM(WRONG_ANSWERS) FROM STATISTICS "
+		"WHERE USERNAME = '" + username + "';";
+
+	executeMsg(sqlQuery, statisticsCallback, &wrongAns);
+	return (int)(wrongAns + correctAns);
 }
 
 int SqliteDatabase::getNumOfPlayerGames(std::string username)

@@ -73,24 +73,34 @@
 
 
         <TextBlock x:Name ="firstName" Text="{Binding name}" 
+                   HorizontalAlignment="Center" VerticalAlignment="Center"
                    Grid.Row="4" Grid.Column="2"/>
         <TextBlock x:Name ="firstScore" Text="{Binding score}" 
+                   HorizontalAlignment="Center" VerticalAlignment="Center"
                    Grid.Row="4" Grid.Column="3" />
         <TextBlock x:Name ="secondName" Text="{Binding name}" 
+                   HorizontalAlignment="Center" VerticalAlignment="Center"
                    Grid.Row="5" Grid.Column="2" />
         <TextBlock x:Name ="secondScore" Text="{Binding score}" 
+                   HorizontalAlignment="Center" VerticalAlignment="Center"
                    Grid.Row="5" Grid.Column="3"/>
         <TextBlock x:Name ="thirdName" Text="{Binding name}" 
+                   HorizontalAlignment="Center" VerticalAlignment="Center"
                    Grid.Row="6" Grid.Column="2" />
         <TextBlock x:Name ="thirdScore" Text="{Binding score}" 
+                   HorizontalAlignment="Center" VerticalAlignment="Center"
                    Grid.Row="6" Grid.Column="3" />
         <TextBlock x:Name ="fourthName" Text="{Binding name}" 
+                   HorizontalAlignment="Center" VerticalAlignment="Center"
                    Grid.Row="7" Grid.Column="2" />
         <TextBlock x:Name ="fourthScore" Text="{Binding score}" 
+                   HorizontalAlignment="Center" VerticalAlignment="Center"
                    Grid.Row="7" Grid.Column="3" />
         <TextBlock x:Name ="fifthName" Text="{Binding name}" 
+                   HorizontalAlignment="Center" VerticalAlignment="Center"
                    Grid.Row="8" Grid.Column="2" />
         <TextBlock x:Name ="fifthScore" Text="{Binding score}" 
+                   HorizontalAlignment="Center" VerticalAlignment="Center"
                    Grid.Row="8" Grid.Column="3"/>
 
         <TextBlock Text="1." Grid.Row="4" Grid.Column="1" 
