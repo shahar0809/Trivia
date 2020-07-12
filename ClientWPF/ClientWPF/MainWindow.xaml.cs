@@ -99,6 +99,8 @@ namespace ClientWPF
             joinRoomButton.IsEnabled = val;
             MyStatisticsButton.IsEnabled = val;
             HighScoresButton.IsEnabled = val;
+            loginButton.IsEnabled = !val;
+            signupButton.IsEnabled = !val;
         }
 
         private void HighScoresButton_Click(object sender, RoutedEventArgs e)

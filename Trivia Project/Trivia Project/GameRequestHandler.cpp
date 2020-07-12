@@ -127,7 +127,7 @@ RequestResult GameRequestHandler::submitAnswer(RequestInfo info)
 	SubmitAnswerRequest req = JsonRequestPacketDeserializer::deserializerSubmitAnswerRequest(info.buffer);
 	SubmitAnswerResponse resp;
 
-	resp.correctAnswerId = m_game->submitAnswer(*m_user, req.answerId);
+	resp.correctAnswerId = m_game->submitAnswer(*m_user, req.answerId,req.time);
 	if (resp.correctAnswerId != ERROR)
 	{
 		resp.status = SUCCEEDED;
