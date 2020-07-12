@@ -14,7 +14,7 @@ RequestHandlerFactory::RequestHandlerFactory(IDatabase* db)
 {
 	this->m_database = db;
 	this->m_StatisticsManager = StatisticsManager(db);
-	this->m_roomManager = new RoomManager();
+	this->m_roomManager = new RoomManager(db->getLastId());
 	this->m_loginManager = new LoginManager(db);
 	this->m_gameManager = new GameManager(db);
 }

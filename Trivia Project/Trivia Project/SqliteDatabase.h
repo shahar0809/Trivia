@@ -29,6 +29,7 @@ public:
 	std::vector<Score> getHighScores();
 
 	// DATABASE RELATED
+	int getLastId();
 	void initDatabase();
 	bool openDb();
 	void close();

@@ -1,5 +1,9 @@
 #include "RoomManager.h"
 
+RoomManager::RoomManager(int lastId)
+{
+	roomId = lastId + 1;
+}
 
 Room* RoomManager::createRoom(LoggedUser user, RoomData data)
 {
