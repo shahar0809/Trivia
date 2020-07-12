@@ -1,6 +1,7 @@
 #pragma once
 #include <iostream>
 #include <iomanip>
+#include <string>
 #include "IRequestHandler.h"
 
 #include "include/nlohmann/json.hpp"
