@@ -71,7 +71,7 @@ struct CreateRoomRequest
 struct SubmitAnswerRequest
 {
 	unsigned int answerId;
-	unsigned int time;
+	double time;
 };
 
 class JsonRequestPacketDeserializer
@@ -84,4 +84,3 @@ public:
 	static CreateRoomRequest deserializeCreateRoomRequest(std::vector<uint8_t> buffer);
 	static SubmitAnswerRequest deserializerSubmitAnswerRequest(std::vector<uint8_t> buffer);
 };
-
