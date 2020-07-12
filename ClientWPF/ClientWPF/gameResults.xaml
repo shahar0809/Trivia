@@ -44,7 +44,7 @@
                    HorizontalAlignment="Center"
                    VerticalAlignment="Center"
                    Text="Please wait till all the players are finished."
-                   FontFamily="Forte" FontSize="42" 
+                   FontFamily="Forte" FontSize="36" 
         />
         
         <WrapPanel Name="displayWinner"
@@ -121,7 +121,7 @@
                 HorizontalAlignment="Center"
                 Padding="7"
                 Grid.Column="1" Grid.Row="5"
-                Margin="320, 20"
+                Margin="320, 20" MinWidth="110"
                 FontFamily="Forte" FontSize="36"
                 Click="backToMenu_Click">
         </Button>

@@ -68,7 +68,6 @@ RequestResult GameRequestHandler::getGameResults(RequestInfo info)
 	try
 	{
 		resp.results = gameManager->getGameResults(*this->m_user);
-		gameManager->deleteGame(*m_user);
 	}
 
 	// If everyone is not finished yet.
@@ -90,6 +89,8 @@ RequestResult GameRequestHandler::getGameResults(RequestInfo info)
 			this->m_handlerFactory->createMenuRequestHandler(m_user)
 		};
 	}
+
+	gameManager->deleteGame(*m_user);
 	resp.status = SUCCEEDED;
 	return RequestResult
 	{

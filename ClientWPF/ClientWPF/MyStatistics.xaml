@@ -44,7 +44,7 @@
         <Button Grid.Column="4" Grid.Row="6"
                 HorizontalAlignment="Center"
                 Margin="5, 35" Content="Back"
-                FontFamily="Forte" 
+                FontFamily="Forte"  MinWidth="80"
                 FontSize="24" Padding="3"
                 Click="backToMainWindow_Click">
         </Button>

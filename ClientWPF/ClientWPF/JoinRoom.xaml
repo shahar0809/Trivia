@@ -92,7 +92,7 @@
         <Button x:Name="joinRoomButton" 
                 Grid.Column="2" Grid.Row="5"
                 Content="Join"
-                FontSize="36"
+                FontSize="36" MinWidth="125"
                 HorizontalAlignment="Center"
                 Padding="10"
                 Click="joinRoomButton_Click"
@@ -104,7 +104,7 @@
             Grid.Column="1" Grid.Row="5"
             Content="Cancel"
             Padding="10"
-            FontSize="36"
+            FontSize="36" MinWidth="125"
             HorizontalAlignment="Center"
             Click="CancelButton_Click">
         </Button>

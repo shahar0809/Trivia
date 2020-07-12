@@ -87,8 +87,8 @@
                 VerticalAlignment="Top"
                 Click="SubmitButton_Click"
                 Background="AliceBlue"
-                Margin="0, 0, 80, 0"
-                Padding="10, 2"
+                Margin="60, 0, 80, 0"
+                Padding="10, 2" MinWidth="125"
                 Content="Log In">
         </Button>
 
@@ -97,10 +97,10 @@
                 HorizontalAlignment="Center"
                 VerticalAlignment="Top"
                 Grid.ColumnSpan="3"
-                Margin="80, 0, 0, 0"
+                Margin="150, 0, 0, 0"
                 Click="CancelButton_Click"
                 Content="Cancel"
-                Padding="10, 2"
+                Padding="10, 2" MinWidth="125"
                 Background="AliceBlue">
         </Button>
     </Grid>

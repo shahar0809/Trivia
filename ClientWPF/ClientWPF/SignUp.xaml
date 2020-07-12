@@ -105,7 +105,7 @@
                 Click="SubmitButton_Click"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Top" 
-                 Margin="0, 0, 80, 0"
+                 Margin="0, 0, 80, 0" MinWidth="130"
                 Content="Sign Up">
         </Button>
 
@@ -116,7 +116,7 @@
                 Click="CancelButton_Click"
                 VerticalAlignment="Top"
                 HorizontalAlignment="Center"
-                 Margin="80, 0, 0, 0"
+                Margin="80, 0, 0, 0" MinWidth="130"
                 Content="Cancel">
         </Button>
     </Grid>

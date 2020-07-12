@@ -1,11 +1,13 @@
 #pragma once
-
 #include <iostream>
 #include <sstream>
 #include <vector>
 #include "Game.h"
 #include "IDatabase.h"
 #include "Room.h"
+
+#define CORRECT_ANSWER_POINTS 2
+#define WRONG_ANSWER_POINTS -1
 
 struct PlayerResults
 {
@@ -23,18 +25,24 @@ struct PlayerResults
 	}
 };
 
-
 class Game;
+
 class GameManager
 {
 public:
 	GameManager(IDatabase* db);
+	
+	// General
 	Game* createGame(Room r);
 	bool deleteGame(LoggedUser user);
-	Game* getGame(LoggedUser);
-	std::vector<PlayerResults> getGameResults(LoggedUser);
+	
 	Question getQuestion(LoggedUser user);
 	bool isEveryoneFinished(LoggedUser user);
+	bool allGotResults(LoggedUser user);
+
+	// Setters & Getters
+	Game* getGame(LoggedUser);
+	std::vector<PlayerResults> getGameResults(LoggedUser);
 
 	bool removePlayer(LoggedUser user);
 	void updateResultsInDatabase(LoggedUser user);

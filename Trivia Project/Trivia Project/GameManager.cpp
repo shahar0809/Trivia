@@ -1,6 +1,4 @@
 #include "GameManager.h"
-#define CORRECT_ANSWER_POINTS 2
-#define WRONG_ANSWER_POINTS -1
 
 GameManager::GameManager(IDatabase* db)
 {
@@ -40,7 +38,7 @@ Game* GameManager::getGame(LoggedUser user)
 			return &(*it);
 		}
 	}
-	return nullptr;
+	throw std::exception();
 }
 
 std::vector<PlayerResults> GameManager::getGameResults(LoggedUser user)
@@ -75,7 +73,14 @@ std::vector<PlayerResults> GameManager::getGameResults(LoggedUser user)
 		};
 		results.push_back(playerDetails);
 	}
+
 	updateResultsInDatabase(user);
+	player->second.hasGotResults = true;
+
+	if (allGotResults(user))
+	{
+		deleteGame(user);
+	}
 	return results;
 }
 
@@ -95,6 +100,17 @@ bool GameManager::isEveryoneFinished(LoggedUser user)
 	return true;
 }
 
+bool GameManager::allGotResults(LoggedUser user)
+{
+	std::map<LoggedUser, GameData>* playersData = this->getGame(user)->getPlayersGameData();
+	for (auto user : *playersData)
+	{
+		if (!user.second.hasGotResults)
+			return false;
+	}
+	return true;
+}
+
 bool GameManager::removePlayer(LoggedUser user)
 {
 	if (this->getGame(user)->removePlayer(user))
@@ -107,14 +123,14 @@ bool GameManager::removePlayer(LoggedUser user)
 
 void GameManager::updateResultsInDatabase(LoggedUser user)
 {
-	//Update statistics table.
+	// Update statistics table.
 	std::map<LoggedUser, GameData>* playersData = this->getGame(user)->getPlayersGameData();
 	auto data = (*playersData)[user];
 	this->database->insertStatistics(this->getGame(user)->getId(), user.getUsername(),
 		data.correctAnswerCount, data.wrongAnswerCount,
 		data.averangeAnswerTime);
 
-	//Update socre table.
+	// Update scores table.
 	this->database->insertScore(user.getUsername(),
 		data.wrongAnswerCount * WRONG_ANSWER_POINTS +
 		data.correctAnswerCount * CORRECT_ANSWER_POINTS);
