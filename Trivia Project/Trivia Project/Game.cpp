@@ -16,13 +16,6 @@ Game::Game(IDatabase* db,Room r)
 	{
 		this->m_players.insert(std::pair <LoggedUser, GameData>(user, beginGameData));
 	}
-
-	/*
-	std::vector<LoggedUser>::iterator it;
-	for (it = users.begin(); it != users.end(); it++)
-	{
-		this->m_players.insert(std::pair <LoggedUser, GameData>(*it, beginGameData));
-	}*/
 }
 
 Question Game::getQuestionForUser(LoggedUser user)

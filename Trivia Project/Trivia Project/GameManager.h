@@ -35,6 +35,7 @@ public:
 	// General
 	Game* createGame(Room r);
 	bool deleteGame(LoggedUser user);
+	bool deleteGame(Game* g);
 	
 	Question getQuestion(LoggedUser user);
 	bool isEveryoneFinished(LoggedUser user);
