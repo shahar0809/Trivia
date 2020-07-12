@@ -27,7 +27,7 @@ public:
 	Game(IDatabase* db,Room r);
 
 	Question getQuestionForUser(LoggedUser user);
-	int submitAnswer(LoggedUser user, int answerId, int time);
+	int submitAnswer(LoggedUser user, int answerId, double time);
 	bool removePlayer(LoggedUser user);
 	bool checkUserIsInGame(LoggedUser user);
 

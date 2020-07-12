@@ -43,7 +43,7 @@ Question Game::getQuestionForUser(LoggedUser user)
 	return *it;
 }
 
-int Game::submitAnswer(LoggedUser user,int answerId, int time)
+int Game::submitAnswer(LoggedUser user, int answerId, double time)
 {
 	std::map<LoggedUser, GameData>::iterator it;
 	GameData* data = nullptr;

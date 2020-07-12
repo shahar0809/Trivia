@@ -131,7 +131,14 @@ void GameManager::updateResultsInDatabase(LoggedUser user)
 		data.averangeAnswerTime);
 
 	// Update scores table.
-	this->database->insertScore(user.getUsername(),
-		data.wrongAnswerCount * WRONG_ANSWER_POINTS +
-		data.correctAnswerCount * CORRECT_ANSWER_POINTS);
+	if (data.wrongAnswerCount * WRONG_ANSWER_POINTS + data.correctAnswerCount * CORRECT_ANSWER_POINTS < 0)
+	{
+		this->database->insertScore(user.getUsername(), 0);
+	}
+	else
+	{
+		this->database->insertScore(user.getUsername(),
+			data.wrongAnswerCount * WRONG_ANSWER_POINTS +
+			data.correctAnswerCount * CORRECT_ANSWER_POINTS);
+	}
 }
