@@ -32,16 +32,15 @@
         </Grid.RowDefinitions>
 
         <TextBlock x:Name="usernameBox"
-                   Grid.Row="1" Grid.Column="3" 
-                   Grid.ColumnSpan="3"
-                   HorizontalAlignment="Right"
+                   Grid.Row="1" Grid.Column="1" 
+                   HorizontalAlignment="Left"
                    Text="username"
-                   Margin="10, 0, 20, 75"
+                   Margin="0, 0, 0, 75"
                    FontFamily="Aharoni" FontSize="22"
                    Background="White"
         />
         
-        <Button Grid.Column="4" Grid.Row="6"
+        <Button Grid.Column="3" Grid.Row="6"
                 HorizontalAlignment="Center"
                 Margin="5, 35" Content="Back"
                 FontFamily="Forte"  MinWidth="80"
@@ -53,7 +52,7 @@
                    Grid.ColumnSpan="4" Grid.RowSpan="2"
                    HorizontalAlignment="Center"
                    Text="My Statistics"
-                   Margin="50, 5, 50, 30"
+                   Margin="50, 10, 50, 30"
                    FontSize="56"
                    FontFamily="Ravie"
         />

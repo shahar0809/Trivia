@@ -59,7 +59,7 @@ namespace ClientWPF
             StatisticResponse resp = Communicator.ManageSendAndGetData<StatisticResponse>(clientStream, Codes.GET_STATISTICS_CODE);
             var highScores = extractHighScores(resp.HighScores);
 
-            for(int i = 0; i < numOfHighScores; i++)
+            for(int i = 0; i < resp.HighScores.Count(); i++)
             {
                 table[i].Item1.Text = highScores[i].Name;
                 table[i].Item2.Text = highScores[i].Score.ToString();
