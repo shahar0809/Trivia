@@ -40,7 +40,8 @@ RequestResult GameRequestHandler::leaveGame(RequestInfo info)
 	{
 		if (m_game->getPlayers().size() == 0)
 		{
-			m_handlerFactory->getGameManager()->deleteGame(*m_user);
+			m_handlerFactory->getGameManager()->deleteGame(m_game);
+			m_handlerFactory->getRoomManager()->deleteRoom(m_game->getId());
 		}
 		resp.status = SUCCEEDED;
 	}
@@ -52,11 +53,7 @@ RequestResult GameRequestHandler::leaveGame(RequestInfo info)
 	return RequestResult
 	{
 		JsonResponsePacketSerializer::serializeResponse(resp),
-		this->m_handlerFactory->createGameRequestHandler(m_user, m_handlerFactory)
-
-		/*JsonResponsePacketSerializer::serializeLeaveGameResponse(resp),
-		this->m_handlerFactory->createMenuRequestHandler(m_user)*/
-
+		this->m_handlerFactory->createMenuRequestHandler(m_user)
 	};
 }
 

@@ -14,7 +14,7 @@ struct PlayerResults
 	std::string username;
 	unsigned int correctAnswersCount;
 	unsigned int wrongAnswersCount;
-	unsigned int averageAnswerTime;
+	float averageAnswerTime;
 
 	std::string toString()
 	{
@@ -35,6 +35,7 @@ public:
 	// General
 	Game* createGame(Room r);
 	bool deleteGame(LoggedUser user);
+	bool deleteGame(Game* g);
 	
 	Question getQuestion(LoggedUser user);
 	bool isEveryoneFinished(LoggedUser user);

@@ -28,6 +28,21 @@ bool GameManager::deleteGame(LoggedUser user)
 	return false;
 }
 
+bool GameManager::deleteGame(Game * g)
+{
+	std::vector<Game>::iterator it;
+
+	for (it = this->m_games.begin(); it != this->m_games.end(); it++)
+	{
+		if (it->getId() == g->getId())
+		{
+			this->m_games.erase(it);
+			return true;
+		}
+	}
+	return false;
+}
+
 Game* GameManager::getGame(LoggedUser user)
 {
 	std::vector<Game>::iterator it;
@@ -113,9 +128,10 @@ bool GameManager::allGotResults(LoggedUser user)
 
 bool GameManager::removePlayer(LoggedUser user)
 {
-	if (this->getGame(user)->removePlayer(user))
+	if (this->getGame(user))//Check user is in game.
 	{
 		updateResultsInDatabase(user);
+		this->getGame(user)->removePlayer(user);
 		return true;
 	}
 	return false;
