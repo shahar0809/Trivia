@@ -16,13 +16,6 @@ Game::Game(IDatabase* db,Room r)
 	{
 		this->m_players.insert(std::pair <LoggedUser, GameData>(user, beginGameData));
 	}
-
-	/*
-	std::vector<LoggedUser>::iterator it;
-	for (it = users.begin(); it != users.end(); it++)
-	{
-		this->m_players.insert(std::pair <LoggedUser, GameData>(*it, beginGameData));
-	}*/
 }
 
 Question Game::getQuestionForUser(LoggedUser user)
@@ -45,13 +38,23 @@ Question Game::getQuestionForUser(LoggedUser user)
 
 int Game::submitAnswer(LoggedUser user, int answerId, double time)
 {
-	std::map<LoggedUser, GameData>::iterator it;
 	GameData* data = nullptr;
 	unsigned int correctAnswerId = 0;
 
 	try
 	{
-		data = &(m_players.find(user)->second);
+		auto it = (m_players.find(user));
+		std::cout << "Is a? : " <<  it->first.operator==(LoggedUser("a")) << std::endl;
+
+		if (it == m_players.end())
+		{
+			std::cout << "got end of map" << std::endl;
+			return ERROR;
+		}
+		
+		std::cout << "trying to print something: " << std::endl;
+		data = &(it->second);
+		std::cout << data->currentQuestion << std::endl;
 		if (data->averangeAnswerTime == 0)
 		{
 			data->averangeAnswerTime = time;
@@ -60,6 +63,7 @@ int Game::submitAnswer(LoggedUser user, int answerId, double time)
 		{
 			data->averangeAnswerTime = (data->averangeAnswerTime + time) / 2;
 		}
+		std::cout << "Updated avg\n";
 		correctAnswerId = data->currentQuestion->getCorrectAnswerId();
 	}
 	catch (const std::exception & e)

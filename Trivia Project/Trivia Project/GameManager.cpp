@@ -126,6 +126,7 @@ void GameManager::updateResultsInDatabase(LoggedUser user)
 	// Update statistics table.
 	std::map<LoggedUser, GameData>* playersData = this->getGame(user)->getPlayersGameData();
 	auto data = (*playersData)[user];
+
 	this->database->insertStatistics(this->getGame(user)->getId(), user.getUsername(),
 		data.correctAnswerCount, data.wrongAnswerCount,
 		data.averangeAnswerTime);
