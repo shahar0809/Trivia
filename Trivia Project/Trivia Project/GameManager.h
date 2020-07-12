@@ -14,7 +14,7 @@ struct PlayerResults
 	std::string username;
 	unsigned int correctAnswersCount;
 	unsigned int wrongAnswersCount;
-	unsigned int averageAnswerTime;
+	float averageAnswerTime;
 
 	std::string toString()
 	{
