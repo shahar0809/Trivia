@@ -29,10 +29,11 @@ RequestResult LoginRequestHandler::login(RequestInfo info)
 	LoginResponse response;
 	RequestResult result;
 	LoggedUser* user = m_loginManager->login(loginReq.username, loginReq.password);
-	this->m_username = user->getUsername();
+	
 
 	if (user != nullptr)
 	{
+		this->m_username = user->getUsername();
 		response.status = SUCCEEDED;
 		result.newHandler = m_handlerFactory.createMenuRequestHandler(user); // Setting next state to the menu handler.
 	}

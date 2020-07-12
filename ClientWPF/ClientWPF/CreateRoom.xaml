@@ -28,6 +28,7 @@
             <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="20"/>
         </Grid.RowDefinitions>
@@ -114,9 +115,19 @@
                  VerticalAlignment="Center"
         ></TextBox>
 
+        <TextBlock x:Name="ErrorBox"
+                   Grid.Row="6" Grid.Column="1"
+                   Grid.ColumnSpan="4"
+                   Background="White"
+                   VerticalAlignment="Center"
+                   Text="Invalid params!"
+                   Visibility="Hidden"
+                   HorizontalAlignment="Center"
+        />
+        
         <Button x:Name="submitRoom"
                 IsDefault="True"
-                Grid.Column="2" Grid.Row="6" 
+                Grid.Column="2" Grid.Row="7" 
                 Grid.ColumnSpan="2"
                 Click="Submit_Button_Click"
                 Content="Submit"
@@ -126,7 +137,7 @@
         />
 
         <Button Name="cancel"
-                Grid.Column="1" Grid.Row="6" 
+                Grid.Column="1" Grid.Row="7" 
                 Click="cancel_Click"
                 Content="Cancel"
                 HorizontalAlignment="Center"

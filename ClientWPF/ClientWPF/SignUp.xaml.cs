@@ -27,7 +27,7 @@ namespace ClientWPF
         private NetworkStream clientStream;
         public const int DATA_START_INDEX = 5;
         public const int DATA_END_INDEX = 14;
-        
+
         public SignUp(NetworkStream clientStream)
         {
             InitializeComponent();
@@ -43,6 +43,12 @@ namespace ClientWPF
 
         private void SubmitButton_Click(object sender, RoutedEventArgs e)
         {
+            if (string.IsNullOrWhiteSpace(passwordBox.Password) || string.IsNullOrWhiteSpace(usernameBox.Text)
+                || string.IsNullOrWhiteSpace(emailBox.Text))
+            {
+                MessageBox.Show("Please fill all the fields!");
+                return;
+            }
             SignUpRequest signUp = new SignUpRequest
             {
                 Password = passwordBox.Password,

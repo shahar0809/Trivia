@@ -1,6 +1,8 @@
 #include "Game.h"
 #include "GameManager.h"
 
+#define SECOND 1/60
+
 Game::Game(IDatabase* db,Room r)
 {
 	this->m_Id = r.getMetadata().id;
@@ -41,7 +43,7 @@ Question Game::getQuestionForUser(LoggedUser user)
 	return *it;
 }
 
-int Game::submitAnswer(LoggedUser user,int answerId)
+int Game::submitAnswer(LoggedUser user,int answerId, int time)
 {
 	std::map<LoggedUser, GameData>::iterator it;
 	GameData* data = nullptr;
@@ -50,6 +52,14 @@ int Game::submitAnswer(LoggedUser user,int answerId)
 	try
 	{
 		data = &(m_players.find(user)->second);
+		if (data->averangeAnswerTime == 0)
+		{
+			data->averangeAnswerTime = time * SECOND;
+		}
+		else
+		{
+			data->averangeAnswerTime = (data->averangeAnswerTime + time * SECOND )/ 2;
+		}
 		correctAnswerId = data->currentQuestion->getCorrectAnswerId();
 	}
 	catch (const std::exception & e)
