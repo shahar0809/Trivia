@@ -62,12 +62,16 @@ RequestResult GameRequestHandler::leaveGame(RequestInfo info)
 
 RequestResult GameRequestHandler::getGameResults(RequestInfo info)
 {
+	GameManager* gameManager = m_handlerFactory->getGameManager();
 	GetGameResultsResponse resp;
+
 	try
 	{
-		resp.results = m_handlerFactory->getGameManager()->getGameResults(*this->m_user);
-		m_handlerFactory->getGameManager()->deleteGame(*m_user);
+		resp.results = gameManager->getGameResults(*this->m_user);
+		gameManager->deleteGame(*m_user);
 	}
+
+	// If everyone is not finished yet.
 	catch (std::string)
 	{
 		resp.status = FAILED;
