@@ -403,3 +403,12 @@ int SqliteDatabase::getScore(std::string username)
 		}
 	}
 }
+
+int SqliteDatabase::getLastId()
+{
+	std::string sqlQuery = "SELECT MAX(GAME_ID) FROM STATISTICS;";
+
+	float queryResult;
+	executeMsg(sqlQuery, statisticsCallback, &queryResult);
+	return (int)(queryResult);
+}

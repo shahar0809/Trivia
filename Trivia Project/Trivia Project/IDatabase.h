@@ -39,6 +39,7 @@ public:
 
 	virtual void insertScore(std::string username, int points)=0;
 	virtual void insertStatistics(int roomId, std::string username, int correctAnswers, int wrongAnswers, float avgTime)=0;
+	virtual int getLastId() = 0;
 
 private:
 	virtual void initDatabase() = 0;
