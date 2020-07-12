@@ -149,7 +149,7 @@ namespace ClientWPF
             m_currTime = time - m_currTime;
 
             SubmitAnswerRequest submitAns = new SubmitAnswerRequest { AnswerId = answerId, 
-                Time = Int32.Parse(((int)m_currTime.TotalSeconds).ToString()) };
+                Time = (m_currTime.TotalSeconds).ToString("#.000") };
 
             // Edit and send question request.
             string json = JsonConvert.SerializeObject(submitAns, Formatting.Indented);

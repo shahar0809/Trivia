@@ -32,7 +32,7 @@ namespace ClientWPF
         public struct SubmitAnswerRequest
         {
             public int AnswerId { set; get; }
-            public int Time { set; get; }
+            public string Time { set; get; }
         }
 
         public struct JoinRoomRequest

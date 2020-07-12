@@ -93,7 +93,7 @@ std::string JsonResponsePacketSerializer::serializeResponse(GetStatisticsRespons
 	json j;
 	j[jsonFields[STATUS]] = getStatistics.status;
 	j[jsonFields[USER_STATS]] = getStatistics.userStatistics;
-	j[jsonFields[HIGH_SCORES]] = parseVector(getStatistics.highScore, DELIMETER);
+	j[jsonFields[HIGH_SCORES]] = json(getStatistics.highScore);
 	return JsonResponsePacketSerializer::serializeResponse(j, GET_STATISTICS_CODE);
 }
 
