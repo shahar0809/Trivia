@@ -94,5 +94,6 @@ SubmitAnswerRequest JsonRequestPacketDeserializer::deserializerSubmitAnswerReque
 		"Time: " << j[jsonFields[TIME]] << std::endl <<
 		"Answer ID: " << j[jsonFields[ANS_ID]] << std::endl << std::endl;
 
-	return SubmitAnswerRequest{ j[jsonFields[ANS_ID]], j[jsonFields[TIME]] };
+	std::string time = j[jsonFields[TIME]];
+	return SubmitAnswerRequest{ j[jsonFields[ANS_ID]], std::stod(time) };
 }

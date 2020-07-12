@@ -54,11 +54,11 @@ int Game::submitAnswer(LoggedUser user, int answerId, double time)
 		data = &(m_players.find(user)->second);
 		if (data->averangeAnswerTime == 0)
 		{
-			data->averangeAnswerTime = time * SECOND;
+			data->averangeAnswerTime = time;
 		}
 		else
 		{
-			data->averangeAnswerTime = (data->averangeAnswerTime + time * SECOND )/ 2;
+			data->averangeAnswerTime = (data->averangeAnswerTime + time) / 2;
 		}
 		correctAnswerId = data->currentQuestion->getCorrectAnswerId();
 	}

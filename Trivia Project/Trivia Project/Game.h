@@ -14,7 +14,7 @@ struct GameData
 	unsigned int currentQuestionIndex = 0;
 	unsigned int correctAnswerCount;
 	unsigned int wrongAnswerCount;
-	unsigned int averangeAnswerTime;
+	float averangeAnswerTime;
 	bool isFinished = false;
 	bool hasGotResults = false;
 };

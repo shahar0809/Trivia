@@ -1,6 +1,7 @@
 #pragma once
 #include <iostream>
 #include <iomanip>
+#include <string>
 #include "IRequestHandler.h"
 
 #include "include/nlohmann/json.hpp"
@@ -71,7 +72,7 @@ struct CreateRoomRequest
 struct SubmitAnswerRequest
 {
 	unsigned int answerId;
-	unsigned int time;
+	double time;
 };
 
 class JsonRequestPacketDeserializer
