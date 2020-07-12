@@ -33,6 +33,7 @@ namespace ClientWPF
             this.clientStream = clientStream;
             m_usrename = username;
             usernameBox.Text = username;
+            getUserStats();
         }
 
         void getUserStats()

@@ -90,7 +90,6 @@ RequestResult GameRequestHandler::getGameResults(RequestInfo info)
 		};
 	}
 
-	gameManager->deleteGame(*m_user);
 	resp.status = SUCCEEDED;
 	return RequestResult
 	{
