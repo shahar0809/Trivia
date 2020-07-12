@@ -89,7 +89,14 @@ RequestResult GameRequestHandler::getGameResults(RequestInfo info)
 			this->m_handlerFactory->createMenuRequestHandler(m_user)
 		};
 	}
-
+	try
+	{
+		this->m_gameManager->getGame(*m_user);
+	}
+	catch (const std::exception & e)//Case game was deleted, erase room too.
+	{
+		m_handlerFactory->getRoomManager()->deleteRoom(m_game->getId());
+	}
 	resp.status = SUCCEEDED;
 	return RequestResult
 	{
@@ -132,6 +139,7 @@ RequestResult GameRequestHandler::submitAnswer(RequestInfo info)
 	SubmitAnswerResponse resp;
 
 	resp.correctAnswerId = m_game->submitAnswer(*m_user, req.answerId,req.time);
+	
 	if (resp.correctAnswerId != ERROR)
 	{
 		resp.status = SUCCEEDED;

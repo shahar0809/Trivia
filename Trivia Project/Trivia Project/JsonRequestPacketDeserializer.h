@@ -85,4 +85,3 @@ public:
 	static CreateRoomRequest deserializeCreateRoomRequest(std::vector<uint8_t> buffer);
 	static SubmitAnswerRequest deserializerSubmitAnswerRequest(std::vector<uint8_t> buffer);
 };
-

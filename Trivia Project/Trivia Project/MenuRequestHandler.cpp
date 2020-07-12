@@ -75,7 +75,8 @@ RequestResult MenuRequestHandler::getRooms(RequestInfo info)
 
 	for (auto room : roomManager->getRooms())
 	{
-		roomsNames.push_back(room.name + "," + std::to_string(room.id));
+		if(room.isActive)
+			roomsNames.push_back(room.name + "," + std::to_string(room.id));
 	}
 	GetRoomResponse resp{ SUCCEEDED, roomsNames };
 	return RequestResult

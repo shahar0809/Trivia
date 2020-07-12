@@ -41,7 +41,7 @@ namespace ClientWPF
             this.Close();
         }
 
-        private void SubmitButton_Click(object sender, RoutedEventArgs e)
+        private async void SubmitButton_Click(object sender, RoutedEventArgs e)
         {
             if (string.IsNullOrWhiteSpace(passwordBox.Password) || string.IsNullOrWhiteSpace(usernameBox.Text)
                 || string.IsNullOrWhiteSpace(emailBox.Text))
@@ -63,6 +63,7 @@ namespace ClientWPF
             if (signUpResponse.status == (int)Codes.ERROR_CODE)
             {
                 ErrorBox.Visibility = Visibility.Visible;
+                await Task.Delay(1000);
             }
 
             // Going back to the main menu
