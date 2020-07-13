@@ -20,6 +20,8 @@ void Server::run()
 
 void main()
 {
+	std::cout.flush();
+	std::cout << " *** Starting Trivia : Server Side ... ***" << std::endl;
 	try
 	{
 		WSAInitializer wsaInit;

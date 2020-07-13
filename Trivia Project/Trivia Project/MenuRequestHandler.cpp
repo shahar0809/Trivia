@@ -7,6 +7,7 @@ MenuRequestHandler::MenuRequestHandler(LoggedUser* user, RequestHandlerFactory* 
 {
 	this->m_handlerFactory = *m_handlerFactory;
 	this->m_user = user;
+	m_username = user->getUsername();
 }
 
 MenuRequestHandler::~MenuRequestHandler()
@@ -18,7 +19,7 @@ bool MenuRequestHandler::isRequestRelevant(RequestInfo info)
 	return info.requestId >= CREATE_ROOM_CODE && info.requestId <= LOGOUT_CODE;
 }
 
-RequestResult MenuRequestHandler::handleRequest(RequestInfo info, SOCKET socket)
+RequestResult MenuRequestHandler::handleRequest(RequestInfo info)
 {
 	switch (info.requestId)
 	{
@@ -52,7 +53,7 @@ RequestResult MenuRequestHandler::handleRequest(RequestInfo info, SOCKET socket)
 RequestResult MenuRequestHandler::logout(RequestInfo info)
 {
 	LogoutResponse resp;
-	if (this->m_handlerFactory.getLoginManger().logout(this->m_user->getUsername()))
+	if (this->m_handlerFactory.getLoginManger()->logout(this->m_user->getUsername()))
 	{
 		resp.status = SUCCEEDED;
 	}
@@ -70,13 +71,14 @@ RequestResult MenuRequestHandler::logout(RequestInfo info)
 RequestResult MenuRequestHandler::getRooms(RequestInfo info)
 {
 	RoomManager* roomManager = m_handlerFactory.getRoomManager();
-	std::vector<std::string> roomNames;
+	std::vector<std::string> roomsNames;
 
 	for (auto room : roomManager->getRooms())
 	{
-		roomNames.push_back(room.name + "," + std::to_string(room.id));
+		if(room.isActive)
+			roomsNames.push_back(room.name + "," + std::to_string(room.id));
 	}
-	GetRoomResponse resp{ SUCCEEDED, roomNames };
+	GetRoomResponse resp{ SUCCEEDED, roomsNames };
 	return RequestResult
 	{
 		JsonResponsePacketSerializer::serializeResponse(resp),
@@ -88,17 +90,30 @@ RequestResult MenuRequestHandler::getPlayersInRoom(RequestInfo info)
 {
 	GetPlayersInRoomRequest req = JsonRequestPacketDeserializer::deserializeGetPlayersRequest(info.buffer);
 	RoomManager* roomManager = m_handlerFactory.getRoomManager();
-	std::vector<LoggedUser> loggedUsers = roomManager->getRoom(req.roomId)->getAllUsers();
 	std::vector<std::string> roomPlayers;
+	std::vector<LoggedUser> loggedUsers;
 
+	try
+	{
+		loggedUsers = roomManager->getRoom(req.roomId)->getAllUsers();
+	}
+	catch (std::exception & e)
+	{
+		return RequestResult
+		{
+			JsonResponsePacketSerializer::serializeResponse(GetPlayersInRoomResponse { FAILED, roomPlayers }),
+			m_handlerFactory.createMenuRequestHandler(this->m_user)
+		};
+	}
+	
+	// Creating a vector of all the players in the room
 	for (auto user : loggedUsers)
 	{
 		roomPlayers.push_back(user.getUsername());
 	}
-
 	return RequestResult
 	{
-		JsonResponsePacketSerializer::serializeResponse(GetPlayersInRoomResponse { roomPlayers }),
+		JsonResponsePacketSerializer::serializeResponse(GetPlayersInRoomResponse { SUCCEEDED, roomPlayers }),
 		m_handlerFactory.createMenuRequestHandler(this->m_user)
 	};
 }
@@ -111,16 +126,17 @@ RequestResult MenuRequestHandler::getStatistics(RequestInfo info)
 
 	try
 	{
-		stats= statsManager.getStatistics(this->m_user->getUsername());
+		stats = statsManager.getStatistics(this->m_user->getUsername());
 	}
 	catch (const std::exception& e)
 	{
 		resp.status = FAILED;
-		return RequestResult{ JsonResponsePacketSerializer::serializeResponse(resp), nullptr };
+		return RequestResult{ JsonResponsePacketSerializer::serializeResponse(resp), m_handlerFactory.createMenuRequestHandler(this->m_user)};
 	}
 
 	std::vector<std::string> highScore;
 
+	// Converting high scores to strings
 	for (auto score : stats.second)
 		highScore.push_back(score.toString());
 
@@ -179,7 +195,7 @@ RequestResult MenuRequestHandler::createRoom(RequestInfo info)
 		return RequestResult
 		{ 
 			JsonResponsePacketSerializer::serializeResponse(resp),
-			m_handlerFactory.createRoomAdminRequestHandler(room, m_user, &m_handlerFactory, m_handlerFactory.getRoomManager())
+			m_handlerFactory.createMenuRequestHandler(m_user)
 		};
 	}
 	

@@ -14,6 +14,11 @@ using System.Windows.Shapes;
 using System.Net.Sockets;
 using System.Net;
 using Newtonsoft.Json;
+using System.ComponentModel;
+using System.Threading;
+using ClientWPF.Requests;
+using ClientWPF.Responses;
+using System.Windows.Threading;
 
 namespace ClientWPF
 {
@@ -21,59 +26,43 @@ namespace ClientWPF
     /// Interaction logic for JoinRoom.xaml
     /// </summary>
     /// 
-
     public struct RoomData
     {
         public int RoomId { set; get; }
         public string RoomName { set; get; }
         public int NumOfplayers { set; get; }
         public int NumOfQuestions { set; get; }
-        public int TimeForQuestion { set; get; }
+        public double TimeForQuestion { set; get; }
         public int IsActive { set; get; }
     };
-    public struct GetRoomsResponse
+
+    public struct Room
     {
-        public int Status;
-        public List<string> Rooms;
-    }
-    public struct GetPlayersInRoomResponse
-    {
-        public List<string> PlayersInRoom;
-    }
-    public struct JoinRoomRequest
-    {
-        public int RoomId;
-    }
-    public struct JoinRoomResponse
-    {
-        public int Status;
-        public int RoomId;
-        public string RoomName;
-        public int NumOfplayers;
-        public int NumOfQuestions;
-        public int TimeForQuestion;
-        public int IsActive;
-    }
-    public struct GetPlayersInRoomRequest
-    {
-        public int RoomId;
-    }
-    public struct GetRoomRequest
-    {
-        public int RoomId;
+        public int RoomId { set; get; }
+        public string Name { set; get; }
     }
 
     public partial class JoinRoom : Window
     {
-
+        private List<Room> roomsList = new List<Room>();
         private NetworkStream clientStream;
-        public JoinRoom(NetworkStream clientStream)
+        private BackgroundWorker worker = new BackgroundWorker();
+        private bool stopUpdating = false;
+        private string m_username;
+
+        public JoinRoom(NetworkStream clientStream, string username)
         {
             InitializeComponent();
+            m_username = username;
+            usernameBox.Text = username;
+            availableRooms.ItemsSource = roomsList;
             this.clientStream = clientStream;
 
-            // Getting the available rooms.
-            availableRooms.ItemsSource = updateAvailableRooms();
+            // Creating a background worker that constantly updates the available rooms.
+            worker.WorkerReportsProgress = true;
+            worker.DoWork += updateAvailableRooms;
+            worker.ProgressChanged += roomsChanged;
+            worker.RunWorkerAsync();
         }
 
         private void availableRooms_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -81,13 +70,13 @@ namespace ClientWPF
             if (availableRooms.SelectedItem == null)
                 return;
 
-            var rooms = (ListBox)sender;
-            int idIndex = rooms.SelectedItem.ToString().LastIndexOf(':');
-            GetPlayersInRoomRequest req = new GetPlayersInRoomRequest { RoomId = int.Parse(rooms.SelectedItem.ToString().Substring(idIndex + 2)) };
+            /* Getting the data about the room selected */
+            int idIndex = ((Room)availableRooms.SelectedItem).RoomId;
+            GetPlayersInRoomRequest req = new GetPlayersInRoomRequest { RoomId = ((Room)availableRooms.SelectedItem).RoomId };
             string json = JsonConvert.SerializeObject(req);
 
             // Getting the players in the room changed
-            GetPlayersInRoomResponse resp = Communicator.ManageSendAndGetData<GetPlayersInRoomResponse>(json, clientStream, (int)Codes.GET_PLAYERS_IN_ROOM_CODE);
+            GetPlayersInRoomResponse resp = Communicator.ManageSendAndGetData<GetPlayersInRoomResponse>(json, clientStream, Codes.GET_PLAYERS_IN_ROOM_CODE);
 
             // Displaying the room players in a listBox
             playersInRoom.ItemsSource = resp.PlayersInRoom;
@@ -98,13 +87,12 @@ namespace ClientWPF
             if (availableRooms.SelectedItem == null)
                 return;
 
-            //var rooms = (ListBox)sender;
-            int idIndex = availableRooms.SelectedItem.ToString().LastIndexOf(':');
-            JoinRoomRequest req = new JoinRoomRequest { RoomId = int.Parse(availableRooms.SelectedItem.ToString().Substring(idIndex + 2)) };
+            int idIndex = ((Room)availableRooms.SelectedItem).RoomId;
+            JoinRoomRequest req = new JoinRoomRequest { RoomId = ((Room)availableRooms.SelectedItem).RoomId };
             string json = JsonConvert.SerializeObject(req);
 
             // Requesting to join the selected items
-            JoinRoomResponse resp = Communicator.ManageSendAndGetData<JoinRoomResponse>(json, clientStream, (int)Codes.JOIN_ROOM_CODE);
+            JoinRoomResponse resp = Communicator.ManageSendAndGetData<JoinRoomResponse>(json, clientStream, Codes.JOIN_ROOM_CODE);
 
             if (resp.Status == 0)
             {
@@ -113,6 +101,7 @@ namespace ClientWPF
             }
             else
             {
+                stopUpdating = true;
                 RoomData roomData = new RoomData
                 {
                     RoomId = resp.RoomId,
@@ -123,47 +112,56 @@ namespace ClientWPF
                     IsActive = resp.IsActive
                 };
 
-                var roomAdmin = new RoomAdmin(roomData, clientStream, false);
-                roomAdmin.Show();
+                WaitInRoom obj = new WaitInRoom(roomData, clientStream, false, m_username);
+                obj.Show();
                 this.Close();
             }
         }
-        private void refreshGames_Click(object sender, RoutedEventArgs e)
+
+        public void updateAvailableRooms(object sender, DoWorkEventArgs e) 
         {
-            availableRooms.ItemsSource = updateAvailableRooms();
+            while (!stopUpdating)
+            {
+                // Requesting available rooms from the server
+                GetRoomsResponse resp = Communicator.ManageSendAndGetData<GetRoomsResponse>(clientStream, Codes.GET_ROOMS_CODE);
+                WorkerParameter param = new WorkerParameter { list = resp.Rooms };
+                worker.ReportProgress(0, param);
+
+                Thread.Sleep(3000);
+            }
         }
 
-        public List<string> updateAvailableRooms()
+        // Updating list on screen
+        void roomsChanged(object sender, ProgressChangedEventArgs e)
         {
-            GetRoomsResponse resp = Communicator.ManageSendAndGetData<GetRoomsResponse>("",
-                    clientStream,
-                    (int)Codes.GET_ROOMS_CODE);
-            List<string> rooms = new List<string>();
-            try
-            {
-                foreach (string room in resp.Rooms)
-                {
-                    var splitted = room.Split(',');
-                    string name = splitted[0];
-                    if (name != "") //Is not a room that was erased.
-                    {
-                        int id = Int32.Parse(splitted[1]);
-                        rooms.Add("Name: " + name + ", Id: " + id.ToString());
-                    }
-                }
-            }
-            catch (NullReferenceException e)
-            {
-                MessageBox.Show("Sorry there are no available rooms");
-            }
-            return rooms;
+            WorkerParameter param = (WorkerParameter)e.UserState;
+            roomsList = getRoomsNames(param.list);
+            availableRooms.ItemsSource = roomsList;
         }
+
+        // Going back to the main menu
         private void CancelButton_Click(object sender, RoutedEventArgs e)
         {
-            var mainWindow = new MainWindow(this.clientStream);
+            stopUpdating = true;
+            var mainWindow = new MainWindow(this.clientStream, m_username);
             mainWindow.Show();
             this.Close();
         }
-        
+
+        private List<Room> getRoomsNames(List<string> rooms)
+        {
+            //List<string> roomsNames = new List<string>();
+            List<Room> availRooms = new List<Room>();
+
+            if (rooms != null)
+            {
+                foreach (string room in rooms)
+                {
+                    var splitted = room.Split(',');
+                    availRooms.Add(new Room { Name = splitted[0], RoomId = Int32.Parse(splitted[1]) });
+                }
+            }
+            return availRooms;
+        }
     }
 }

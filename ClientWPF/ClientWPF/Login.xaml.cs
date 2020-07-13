@@ -14,21 +14,19 @@ using System.Windows.Shapes;
 using System.Net.Sockets;
 using System.Net;
 using Newtonsoft.Json;
+using ClientWPF.Responses;
+using ClientWPF.Requests;
 
 namespace ClientWPF
 {
     /// <summary>
     /// Interaction logic for Login.xaml
     /// </summary>
+    
     public partial class Login : Window
     {
         private NetworkStream clientStream;
-        public const int ERROR_CODE = 0;
-        private struct LoginRequest
-        {
-            public string Username { set; get; }
-            public string Password { set; get; }  
-        }
+
         public Login(NetworkStream clientStream)
         {
             InitializeComponent();
@@ -37,29 +35,41 @@ namespace ClientWPF
 
         private void CancelButton_Click(object sender, RoutedEventArgs e)
         {
-            var mainWindow = new MainWindow(this.clientStream);
+            var mainWindow = new MainWindow(this.clientStream, "");
             mainWindow.Show();
             this.Close();
         }
-        private void SubmitButton_Click(object sender, RoutedEventArgs e)
+        private async void SubmitButton_Click(object sender, RoutedEventArgs e)
         {
-            LoginRequest login = new LoginRequest 
-            { 
-                Password = passwordBox.Text,
+            if (string.IsNullOrWhiteSpace(passwordBox.Password) || string.IsNullOrWhiteSpace(usernameBox.Text))
+            {
+                MessageBox.Show("Please fill all the fields!");
+                return;
+            }
+            LoginRequest login = new LoginRequest
+            {
+                Password = passwordBox.Password,
                 Username = usernameBox.Text
             };
 
             // Edit and send login request.
             string json = JsonConvert.SerializeObject(login, Formatting.Indented);
-            Response loginResponse = Communicator.ManageSendAndGetData<Response>(json, clientStream, (int)Codes.LOGIN_CODE);
+            Response loginResponse = Communicator.ManageSendAndGetData<Response>(json, clientStream, Codes.LOGIN_CODE);
 
-            if (loginResponse.status == ERROR_CODE)
+            string userName;
+            if (loginResponse.status == (int)Codes.ERROR_CODE)
             {
-                MessageBox.Show("Login Failed. Please make sure you're signed up!");
+                ErrorBox.Visibility = Visibility.Visible;
+                await Task.Delay(1000);
+                userName = "";
+            }
+            else
+            {
+                userName = login.Username;
             }
 
             // Closing the Log in window and returing to the menu.
-            var mainWindow = new MainWindow(this.clientStream);
+            var mainWindow = new MainWindow(this.clientStream, userName);
             mainWindow.Show();
             this.Close();
         }

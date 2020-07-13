@@ -1,8 +1,17 @@
 #include "RoomManager.h"
 
+RoomManager::RoomManager(int lastId)
+{
+	roomId = lastId + 1;
+}
 
 Room* RoomManager::createRoom(LoggedUser user, RoomData data)
 {
+	if (data.maxPlayers < 1 || data.numOfQuestions < 1 || data.timeForQuestion <= 0 || data.name == "")
+	{
+		throw std::exception();
+	}
+
 	m_rooms[roomId] = *new Room(this->roomId, data, user);
 	this->roomId++;
 	return &(m_rooms[roomId - 1]);
@@ -12,10 +21,11 @@ bool RoomManager::deleteRoom(int ID)
 {
 	std::map<int, Room>::iterator it;
 	it = this->m_rooms.find(ID);
-
 	if (it != this->m_rooms.end())
 	{
-		this->m_rooms.erase(ID);
+		RoomData data = it->second.getMetadata();
+		data.isActive = false;
+		it->second.setMetadata(data);
 		return true;
 	}
 	return false;
@@ -35,12 +45,14 @@ unsigned int RoomManager::getRoomState(int ID)
 std::vector<RoomData> RoomManager::getRooms()
 {
 	std::vector<RoomData> rooms;
-	std::map<int,Room>::iterator it;
 
-	for (it = this->m_rooms.begin(); it != this->m_rooms.end(); it++)
+	for (auto room : m_rooms)
 	{
-		rooms.push_back(it->second.getMetadata());
+		RoomData data = room.second.getMetadata();
+		if (data.isActive)
+			rooms.push_back(data);
 	}
+
 	return rooms;
 }
 
