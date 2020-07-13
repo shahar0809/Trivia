@@ -72,7 +72,15 @@ int SqliteDatabase::statisticsCallback(void* data, int argc, char** argv, char**
 int SqliteDatabase::floatCallback(void* data, int argc, char** argv, char** azColName)
 {
 	float* queryResult = static_cast<float*>(data);
-	*queryResult = atof(argv[0]);
+
+	if (argv[0] == nullptr)
+	{
+		*queryResult = 0;
+	}
+	else
+	{
+		*queryResult = std::stod(argv[0]);
+	}
 	return 0;
 }
 
@@ -156,15 +164,13 @@ bool SqliteDatabase::openDb()
 
 	int doesFileExist = _access(dbFileName.c_str(), 0);
 	int result = sqlite3_open(dbFileName.c_str(), &db);
+	initDatabase();
+
 	if (result != SQLITE_OK)
 	{
 		db = nullptr;
 		std::cout << "Failed to open DB" << std::endl;
 		return false;
-	}
-	if (doesFileExist == NOT_FOUND)
-	{
-		initDatabase();
 	}
 	return true;
 }
@@ -279,7 +285,6 @@ void SqliteDatabase::createScoreTable()
 	createTable("SCORE", createScoreTableQuery);
 }
 
-
 void SqliteDatabase::createTable(std::string tableName, std::string createTableQuery)
 {
 	std::string errorMsg;
@@ -296,15 +301,18 @@ void SqliteDatabase::createTable(std::string tableName, std::string createTableQ
 
 void SqliteDatabase::insertOneQuestion(std::string question,std::string correctAnswer,std::string ans2,std::string ans3,std::string ans4)
 {
-	std::string sqlMsg("INSERT INTO	QUESTIONS"
-		"(QUESTION, CORRECT_ANSWER, ANSWER2, ANSWER3, ANSWER4) VALUES('" +
-		question + "','" + 
-		correctAnswer + "','" + 
-		ans2 + "','" + 
-		ans3+"','" + 
-		ans4+"');");
+	if (!checkIfQuestionExists(question))
+	{
+		std::string sqlMsg("INSERT INTO QUESTIONS "
+			"(QUESTION, CORRECT_ANSWER, ANSWER2, ANSWER3, ANSWER4) VALUES('" +
+			question + "','" +
+			correctAnswer + "','" +
+			ans2 + "','" +
+			ans3 + "','" +
+			ans4 + "');");
 
-	executeMsg(sqlMsg, nullptr, nullptr);
+		executeMsg(sqlMsg, nullptr, nullptr);
+	}
 }
 
 void SqliteDatabase::initQuestionTable()
@@ -319,6 +327,13 @@ void SqliteDatabase::initQuestionTable()
 	insertOneQuestion("On which instruments Adler Trio play?", "Harmonicas", "Clarinet, Trombon, Trumpet", "Guitar, Keyboard, Bass", "Violin, Viola, Chelo");
 	insertOneQuestion("What is the name of the Manager of Magshimim?", "Hadas", "Michal", "Uri", "Itay");
 	insertOneQuestion("Neo is a character in which movie?", "Matrix", "Lord of the Ring", "Fight Club", "Intouchables");
+}
+
+bool SqliteDatabase::checkIfQuestionExists(std::string question)
+{
+	std::vector<Question>* questionsList = new std::vector<Question>();
+	executeMsg("SELECT * FROM QUESTIONS WHERE QUESTION='" + question + "';", questionsCallback, questionsList);
+	return questionsList->size() == 1;
 }
 
 std::vector<Question>* SqliteDatabase::getQuestions(int maybeNumOfQuestions)

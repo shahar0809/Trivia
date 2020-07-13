@@ -50,6 +50,8 @@ private:
 	static int scoresCallback(void* data, int argc, char** argv, char** azColName);
 	void createUserTable();
 
+	bool checkIfQuestionExists(std::string question);
+
 	void createQuestionsTable();
 
 	void createStatisticsTable();
