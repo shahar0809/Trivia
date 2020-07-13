@@ -10,7 +10,7 @@ bool RoomAdminRequestHandler::isRequestRelevant(RequestInfo info)
 	return (info.requestId >= CLOSE_ROOM_CODE && info.requestId <= GET_ROOM_STATE_CODE) || info.requestId == GET_PLAYERS_IN_ROOM_CODE;
 }
 
-RequestResult RoomAdminRequestHandler::handleRequest(RequestInfo info, SOCKET socket)
+RequestResult RoomAdminRequestHandler::handleRequest(RequestInfo info)
 {
 	switch (info.requestId)
 	{
@@ -28,6 +28,15 @@ RequestResult RoomAdminRequestHandler::handleRequest(RequestInfo info, SOCKET so
 	}
 }
 
+RequestResult RoomAdminRequestHandler::getRoomState(RequestInfo info)
+{
+	RequestResult res = RoomParticipantRequestHandler::getRoomState(info);
+	if (res.newHandler == nullptr)
+		res.newHandler = m_handlerFactory.createRoomAdminRequestHandler(m_room, m_user, &m_handlerFactory, m_roomManager);
+	return res;
+
+}
+
 RequestResult RoomAdminRequestHandler::closeRoom(RequestInfo info)
 {
 	CloseRoomResponse resp;
@@ -43,23 +52,35 @@ RequestResult RoomAdminRequestHandler::closeRoom(RequestInfo info)
 	
 	return RequestResult
 	{
-		JsonResponsePacketSerializer::serializeCloseRoomResponse(resp),
+		JsonResponsePacketSerializer::serializeResponse(resp),
 		this->m_handlerFactory.createMenuRequestHandler(this->m_user)
 	};
 }
 
 RequestResult RoomAdminRequestHandler::startGame(RequestInfo info)
 {
-	// Once GameManger is implemented -> we call it to actually start the game.
-	StartGameResponse resp{ SUCCEEDED };
+	StartGameResponse resp;
 
+	try
+	{
+		this->m_handlerFactory.getGameManager()->createGame(*m_room);
+		m_room->setHasGameBegun(true);
+	}
+	catch (const std::exception & e)
+	{
+		resp.status = FAILED;
+		return RequestResult
+		{
+			JsonResponsePacketSerializer::serializeResponse(resp),
+			this->m_handlerFactory.createMenuRequestHandler(this->m_user)
+		};
+	}
+
+	resp.status = SUCCEEDED;
 	return RequestResult
 	{
-		JsonResponsePacketSerializer::serializeStartGameResponse(resp),
-		this->m_handlerFactory.createRoomAdminRequestHandler(
-			this->m_room,
-			this->m_user,
-			&this->m_handlerFactory,this->m_roomManager)
+		JsonResponsePacketSerializer::serializeResponse(resp),
+		this->m_handlerFactory.createGameRequestHandler(this->m_user, &this->m_handlerFactory)
 	};
 }
 

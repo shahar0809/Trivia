@@ -18,7 +18,7 @@
 class Communicator
 {
 public:
-	Communicator() {};
+	Communicator() { m_isEnded = false; };
 	Communicator(IDatabase* db);
 	void startHandleRequests();
 	void setIsEnded(bool isEnded);

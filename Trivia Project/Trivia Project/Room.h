@@ -35,6 +35,7 @@ public:
 	bool removeUser(LoggedUser user);
 	std::vector<LoggedUser> getAllUsers();
 	RoomData getMetadata();
+	void setMetadata(RoomData data) { this->m_metadata = data; };
 
 	std::vector<std::string> getAllUsernames();
 	bool getHasGameBegun() { return hasGameBegun; };

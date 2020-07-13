@@ -8,26 +8,49 @@ RoomParticipantRequestHandler::RoomParticipantRequestHandler(Room* room, LoggedU
 	m_user = user;
 	m_handlerFactory = *handlerFactory;
 	m_roomManager = roomManager;
+	m_username = user->getUsername();
 }
 
 RequestResult RoomParticipantRequestHandler::getRoomState(RequestInfo info)
 {
-	RoomData roomData = m_room->getMetadata();
+	RoomData roomData;
 
-	// I'm not sure when the status is FAILED
+	try
+	{
+		roomData = m_room->getMetadata();
+	}
+	catch (std::exception & e)
+	{
+		GetRoomStateResponse resp
+		{
+			FAILED, false, std::vector<std::string>(), 0, 0
+		};
+
+		return RequestResult
+		{
+			JsonResponsePacketSerializer::serializeResponse(resp),nullptr
+		};
+	}
 
 	GetRoomStateResponse resp
 	{
-		SUCCEEDED,
-		m_room->getHasGameBegun(),
-		m_room->getAllUsernames(),
-		roomData.numOfQuestions,
-		roomData.timeForQuestion
+		SUCCEEDED, m_room->getHasGameBegun(), m_room->getAllUsernames(), roomData.numOfQuestions, roomData.timeForQuestion
 	};
 
-	return RequestResult
+	RequestResult res
 	{
-		JsonResponsePacketSerializer::serializeGetRoomStateResponse(resp), nullptr
+		JsonResponsePacketSerializer::serializeResponse(resp), nullptr
 	};
+
+
+	if (m_room->getHasGameBegun())
+	{
+		res.newHandler = m_handlerFactory.createGameRequestHandler(m_user, &m_handlerFactory);
+	}
+	if (!roomData.isActive)
+	{
+		res.newHandler = m_handlerFactory.createMenuRequestHandler(m_user);
+	}
+	return res;
 }
 

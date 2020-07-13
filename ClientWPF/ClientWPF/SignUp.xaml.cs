@@ -14,6 +14,8 @@ using System.Windows.Shapes;
 using System.Net.Sockets;
 using System.Net;
 using Newtonsoft.Json;
+using ClientWPF.Responses;
+using ClientWPF.Requests;
 
 namespace ClientWPF
 {
@@ -25,43 +27,47 @@ namespace ClientWPF
         private NetworkStream clientStream;
         public const int DATA_START_INDEX = 5;
         public const int DATA_END_INDEX = 14;
-        public const int ERROR_CODE = 0;
-        private struct SignUpRequest
-        {
-            public string Username { set; get; }
-            public string Password { set; get; }
-            public string Email { set; get; }
-        }
+
         public SignUp(NetworkStream clientStream)
         {
             InitializeComponent();
             this.clientStream = clientStream;
         }
+
         private void CancelButton_Click(object sender, RoutedEventArgs e)
         {
-            var mainWindow = new MainWindow(this.clientStream);
+            var mainWindow = new MainWindow(this.clientStream, "");
             mainWindow.Show();
             this.Close();
         }
-        private void SubmitButton_Click(object sender, RoutedEventArgs e)
-        {
-            SignUpRequest signUp = new SignUpRequest 
-            {
-                Password = passwordBox.Text,
-                Username = usernameBox.Text,
-                Email= emailBox.Text
-            };
 
+        private async void SubmitButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(passwordBox.Password) || string.IsNullOrWhiteSpace(usernameBox.Text)
+                || string.IsNullOrWhiteSpace(emailBox.Text))
+            {
+                MessageBox.Show("Please fill all the fields!");
+                return;
+            }
+            SignUpRequest signUp = new SignUpRequest
+            {
+                Password = passwordBox.Password,
+                Username = usernameBox.Text,
+                Email = emailBox.Text
+            };
+            
             // Edit and send signUp request.
             string json = JsonConvert.SerializeObject(signUp, Formatting.Indented);
-            Response signUpResponse = Communicator.ManageSendAndGetData<Response>(
-                json, clientStream, (int)Codes.SIGN_UP_CODE);
+            Response signUpResponse = Communicator.ManageSendAndGetData<Response>(json, clientStream, Codes.SIGN_UP_CODE);
 
-            if (signUpResponse.status == ERROR_CODE)
+            if (signUpResponse.status == (int)Codes.ERROR_CODE)
             {
-                MessageBox.Show("Sorry! Username was taken \n please change your username ");
+                ErrorBox.Visibility = Visibility.Visible;
+                await Task.Delay(1000);
             }
-            var mainWindow = new MainWindow(this.clientStream);
+
+            // Going back to the main menu
+            var mainWindow = new MainWindow(this.clientStream, "");
             mainWindow.Show();
             Close();
         }

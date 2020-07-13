@@ -1,0 +1,171 @@
+﻿<Window x:Class="ClientWPF.DisplayQuestion"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ClientWPF"
+        mc:Ignorable="d" FontSize="30" FontFamily="Aharoni"
+        Title="q" Height="600" Width="800">
+    <Grid>
+        <Grid.Background>
+            <ImageBrush ImageSource="Resources/genBackground.png" Stretch="UniformToFill"/>
+        </Grid.Background>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="20"/>
+            <ColumnDefinition Width="80"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="80"/>
+            <ColumnDefinition Width="20"/>
+        </Grid.ColumnDefinitions>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="20"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="20"/>
+
+        </Grid.RowDefinitions>
+
+        <Button Content="Exit"
+                Click="Exit_Button_Click"
+                FontFamily="Forte" FontSize="32"
+                Grid.Column="1"
+                Grid.Row="1"
+        />
+
+        <TextBlock x:Name="usernameBox"
+            Grid.Row="1" Grid.Column="1"
+                   Grid.ColumnSpan="2"
+                   HorizontalAlignment="Center"
+                   FontSize="20" />
+
+        <Grid x:Name="QuestionGrid"
+              Grid.Column="2" Grid.Row="2"
+              Grid.ColumnSpan="2" 
+              MinWidth="550" MinHeight="75"
+              VerticalAlignment="Center"
+              HorizontalAlignment="Center"
+              Margin="0, 2, 0, 30"
+              Background="White">
+
+            <TextBlock x:Name="questionBox"
+                       TextWrapping="Wrap"
+                       FontFamily="Aharoni"
+                       VerticalAlignment="Center"
+                       HorizontalAlignment="Center"/>
+        </Grid>
+
+        <Grid x:Name="GridAnswer1"
+              Grid.Column="2" Grid.Row="3"
+              Grid.ColumnSpan="2" 
+              MinWidth="500" MinHeight="50"
+              VerticalAlignment="Center"
+              HorizontalAlignment="Center"
+              Margin="0, 10"
+              Background="White">
+            <Button x:Name="Answer1_button"
+                    Click="Answer1_Box_Click">
+                <TextBlock x:Name="Answer1_Box" TextWrapping="Wrap"/>
+            </Button>
+        </Grid>
+
+        <Grid x:Name="GridAnswer2"
+              Grid.Column="2" Grid.Row="4"
+              Grid.ColumnSpan="2" 
+              MinWidth="500" MinHeight="50"
+              VerticalAlignment="Center"
+              HorizontalAlignment="Center"
+              Margin="0, 10"
+              Background="White">
+            <Button Background="White"
+                    x:Name="Answer2_button"
+                    Click="Answer2_Box_Click">
+                <TextBlock x:Name="Answer2_Box" TextWrapping="Wrap"/>
+            </Button>
+        </Grid>
+
+        <Grid x:Name="GridAnswer3"
+              Grid.Column="2" Grid.Row="5"
+              Grid.ColumnSpan="2" 
+              MinWidth="500" MinHeight="50"
+              VerticalAlignment="Center"
+              HorizontalAlignment="Center"
+              Margin="0, 10"
+              Background="White">
+            <Button x:Name="Answer3_button"
+                    Click="Answer3_Box_Click">
+                <TextBlock x:Name="Answer3_Box" TextWrapping="Wrap"/>
+            </Button>
+        </Grid>
+
+        <Grid x:Name="GridAnswer4"
+              Grid.Column="2" Grid.Row="6"
+              Grid.ColumnSpan="2" 
+              MinWidth="500" MinHeight="50"
+              VerticalAlignment="Center"
+              HorizontalAlignment="Center"
+              Margin="0, 10"
+              Background="White">
+            <Button x:Name="Answer4_button"
+                    Click="Answer4_Box_Click">
+                <TextBlock x:Name="Answer4_Box" TextWrapping="Wrap"/>
+            </Button>
+        </Grid>
+
+        <Grid x:Name="TimerGrid"
+              Grid.Column="4" Grid.Row="1"
+              HorizontalAlignment="Center"
+              Background="White">
+            <TextBlock x:Name="Timer"
+                       Text="timer"
+                       VerticalAlignment="Center"
+                       HorizontalAlignment="Center"
+            />
+        </Grid>
+
+        <TextBlock Text="Questions Left:"
+                   HorizontalAlignment="Center"
+                   Margin="0, 25, 0, 0"
+                   FontSize="24"
+                   Grid.Column="2" Grid.Row="7"
+        />
+
+        <TextBlock Text="Correct Answers:"
+                   HorizontalAlignment="Center"
+                   Margin="0, 25, 0, 0"
+                   FontSize="24"
+                   Grid.Column="3" Grid.Row="7"
+        />
+
+        <Grid Grid.Column="2" Grid.Row="8"
+              HorizontalAlignment="Center"
+              Margin="0, 10, 0, 30"
+              Background="White">
+            <TextBlock x:Name="questionsLeft"
+                       Text="left"
+                       VerticalAlignment="Center"
+                       HorizontalAlignment="Center"
+            />
+        </Grid>
+
+        <Grid Grid.Column="3" Grid.Row="8"
+              HorizontalAlignment="Center"
+              Margin="0, 10, 0, 30"
+              Background="White">
+            <TextBlock x:Name="correctAnswers"
+                       Text="correct"
+                       VerticalAlignment="Center"
+                       HorizontalAlignment="Center"
+            />
+        </Grid>
+    </Grid>
+</Window>

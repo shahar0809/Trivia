@@ -5,10 +5,10 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ClientWPF"
         mc:Ignorable="d" FontSize="30" FontFamily="Forte"
-        Title="HighScores" Height="600" Width="800">
+        Title="High Scores" Height="600" Width="800">
     <Grid>
         <Grid.Background>
-            <ImageBrush ImageSource="Images/genBackground.png" Stretch="UniformToFill"/>
+            <ImageBrush ImageSource="Resources/genBackground.png" Stretch="UniformToFill"/>
         </Grid.Background>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="130"/>
@@ -35,6 +35,15 @@
             <RowDefinition Height="20"/>
         </Grid.RowDefinitions>
 
+        <TextBlock x:Name="usernameBox"
+                   Grid.Row="2" Grid.Column="0"
+                   HorizontalAlignment="Left"
+                   Text="username"
+                   Margin="10, 0, 0, 75"
+                   FontFamily="Aharoni" FontSize="22"
+                   Background="White"
+        />
+        
         <Rectangle Grid.Row="3" Grid.Column="1"
                    Fill="White" 
                    RadiusX="10" RadiusY="10"
@@ -64,24 +73,34 @@
 
 
         <TextBlock x:Name ="firstName" Text="{Binding name}" 
+                   HorizontalAlignment="Center" VerticalAlignment="Center"
                    Grid.Row="4" Grid.Column="2"/>
         <TextBlock x:Name ="firstScore" Text="{Binding score}" 
+                   HorizontalAlignment="Center" VerticalAlignment="Center"
                    Grid.Row="4" Grid.Column="3" />
         <TextBlock x:Name ="secondName" Text="{Binding name}" 
+                   HorizontalAlignment="Center" VerticalAlignment="Center"
                    Grid.Row="5" Grid.Column="2" />
         <TextBlock x:Name ="secondScore" Text="{Binding score}" 
+                   HorizontalAlignment="Center" VerticalAlignment="Center"
                    Grid.Row="5" Grid.Column="3"/>
         <TextBlock x:Name ="thirdName" Text="{Binding name}" 
+                   HorizontalAlignment="Center" VerticalAlignment="Center"
                    Grid.Row="6" Grid.Column="2" />
         <TextBlock x:Name ="thirdScore" Text="{Binding score}" 
+                   HorizontalAlignment="Center" VerticalAlignment="Center"
                    Grid.Row="6" Grid.Column="3" />
         <TextBlock x:Name ="fourthName" Text="{Binding name}" 
+                   HorizontalAlignment="Center" VerticalAlignment="Center"
                    Grid.Row="7" Grid.Column="2" />
         <TextBlock x:Name ="fourthScore" Text="{Binding score}" 
+                   HorizontalAlignment="Center" VerticalAlignment="Center"
                    Grid.Row="7" Grid.Column="3" />
         <TextBlock x:Name ="fifthName" Text="{Binding name}" 
+                   HorizontalAlignment="Center" VerticalAlignment="Center"
                    Grid.Row="8" Grid.Column="2" />
         <TextBlock x:Name ="fifthScore" Text="{Binding score}" 
+                   HorizontalAlignment="Center" VerticalAlignment="Center"
                    Grid.Row="8" Grid.Column="3"/>
 
         <TextBlock Text="1." Grid.Row="4" Grid.Column="1" 
@@ -100,21 +119,15 @@
                    FontSize="36"
                    HorizontalAlignment="Right" Margin="40, 5, 15, 5"/>
 
-        <Button x:Name="backToHomePage"
-                Content="Back"
+        <Button Content="Menu"
                 Grid.Column="4"
                 Grid.Row="9"
                 Grid.ColumnSpan="2"
-                Margin="10, 15"
+                Margin="2, 15"
                 Padding="6, 2"
                 FontSize="36"
-                Click="goBackButton_Click"
+                Click="goBackButton_Click" Background="AliceBlue"
                 >
-            <Button.Resources>
-                <Style TargetType="Border">
-                    <Setter Property="CornerRadius" Value="5"/>
-                </Style>
-            </Button.Resources>
         </Button>
 
         <Path Grid.Row="3" Grid.Column="2" Stroke="#FF4981E4" 

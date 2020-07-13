@@ -15,12 +15,12 @@ public:
 	~MenuRequestHandler();
 
 	bool isRequestRelevant(RequestInfo info);
-	RequestResult handleRequest(RequestInfo info, SOCKET socket);
+	RequestResult handleRequest(RequestInfo info);
 	RequestResult getPlayersInRoom(RequestInfo info);
 
 private:
 	LoggedUser* m_user;
-	RequestHandlerFactory  m_handlerFactory;
+	RequestHandlerFactory m_handlerFactory;
 
 	RequestResult logout(RequestInfo info);
 	RequestResult getRooms(RequestInfo info);

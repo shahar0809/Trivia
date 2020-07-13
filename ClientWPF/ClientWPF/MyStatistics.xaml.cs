@@ -13,6 +13,8 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.Net.Sockets;
 using System.Net;
+using ClientWPF.Requests;
+using ClientWPF.Responses;
 
 namespace ClientWPF
 {
@@ -22,21 +24,37 @@ namespace ClientWPF
     public partial class MyStatistics : Window
     {
         private NetworkStream clientStream;
-        public MyStatistics(NetworkStream clientStream, UserStats userStats)
+        private string m_usrename;
+        private const char delimeter = ',';
+
+        public MyStatistics(NetworkStream clientStream, string username)
         {
             InitializeComponent();
             this.clientStream = clientStream;
+            m_usrename = username;
+            usernameBox.Text = username;
+            getUserStats();
+        }
 
-            // Displaying each statistic in its own text box.
-            displayNumOfGames.Text = "Games Played: " + userStats.NumOfGames;
-            displayNumOfCorrectAns.Text = "Correct Answers: " + userStats.CorrectAnswers.ToString();
-            displayNumOfAns.Text = "Total Answers: " + userStats.TotalAnswers.ToString();
-            displayAvgTime.Text = "Average Answer Time: " + userStats.AvgAnswerTime.ToString();
+        void getUserStats()
+        {
+            StatisticResponse resp = Communicator.ManageSendAndGetData<StatisticResponse>(clientStream, Codes.GET_STATISTICS_CODE);
+            
+            extractStats(resp.UserStatistics);
+        }
+
+        void extractStats(string buffer)
+        {
+            var stats = buffer.Split(delimeter);
+            displayAvgTime.Text = stats[0];
+            displayNumOfCorrectAns.Text = stats[1];
+            displayNumOfAns.Text = stats[2];
+            displayNumOfGames.Text = stats[3];
         }
 
         private void backToMainWindow_Click(object sender, RoutedEventArgs e)
         {
-            var mainWindow = new MainWindow(this.clientStream);
+            var mainWindow = new MainWindow(this.clientStream, m_usrename);
             mainWindow.Show();
             this.Close();
         }
