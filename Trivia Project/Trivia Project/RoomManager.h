@@ -9,7 +9,7 @@
 class RoomManager
 {
 public:
-	RoomManager() { roomId = 0; };
+	RoomManager(int lastId);
 
 	// Managing rooms
 	Room* createRoom(LoggedUser user, RoomData data);
