@@ -134,7 +134,6 @@ RequestResult GameRequestHandler::submitAnswer(RequestInfo info)
 {
 	SubmitAnswerRequest req = JsonRequestPacketDeserializer::deserializerSubmitAnswerRequest(info.buffer);
 	SubmitAnswerResponse resp;
-	std::cout << "SUBMITTING ANSWER FROM: " << this->getUsername() << std::endl;
 
 	resp.correctAnswerId = m_game->submitAnswer(*m_user, req.answerId,req.time);
 	

@@ -24,7 +24,7 @@ Question Game::getQuestionForUser(LoggedUser user)
 
 	for (int i = 0; i < currentQuestion; i++)
 	{
-		if (it == this->m_questions->end())//Case there aren't enough questions, should start again?
+		if (it == this->m_questions->end())
 		{
 			it = this->m_questions->begin();
 		}
@@ -42,15 +42,12 @@ int Game::submitAnswer(LoggedUser user, int answerId, double time)
 	try
 	{
 		auto it = (m_players.find(user));
-		std::cout << "Is a? : " <<  it->first.operator==(LoggedUser("a")) << std::endl;
 
 		if (it == m_players.end())
 		{
-			std::cout << "got end of map" << std::endl;
 			return ERROR;
 		}
 		
-		std::cout << "trying to print something: " << std::endl;
 		data = &(it->second);
 		std::cout << data->currentQuestion << std::endl;
 		if (data->averangeAnswerTime == 0)
@@ -61,7 +58,6 @@ int Game::submitAnswer(LoggedUser user, int answerId, double time)
 		{
 			data->averangeAnswerTime = (data->averangeAnswerTime + time) / 2;
 		}
-		std::cout << "Updated avg\n";
 		correctAnswerId = data->currentQuestion->getCorrectAnswerId();
 	}
 	catch (const std::exception & e)

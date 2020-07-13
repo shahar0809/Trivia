@@ -78,7 +78,7 @@
             <Border.BitmapEffect>
                 <DropShadowBitmapEffect />
             </Border.BitmapEffect>
-            <Grid x:Name="TableGrid" Visibility="Collapsed">
+            <Grid x:Name="TableGrid" Visibility="Collapsed" MinHeight="100" MinWidth="750">
                 <Border x:Name="BDRounded" BorderThickness="0" CornerRadius="15" Background="White"/>
                 <DataGrid x:Name="playersResult" 
                           BorderBrush="{x:Null}" 
@@ -87,25 +87,25 @@
                     <DataGrid.Columns>
                         <DataGridTextColumn Binding="{Binding username}">
                             <DataGridTextColumn.Header>
-                                <TextBlock Text="Username" FontWeight="Bold" FontSize="25"/>
+                                <TextBlock Text="Username" FontWeight="Bold" FontSize="24"/>
                             </DataGridTextColumn.Header>
                         </DataGridTextColumn>
 
                         <DataGridTextColumn Binding="{Binding correctAnswersCount}">
                             <DataGridTextColumn.Header>
-                                <TextBlock Text="Correct Answers" FontWeight="Bold" FontSize="25"/>
+                                <TextBlock Text="Correct Answers" FontWeight="Bold" FontSize="24"/>
                             </DataGridTextColumn.Header>
                         </DataGridTextColumn>
 
                         <DataGridTextColumn Binding="{Binding wrongAnswersCount}">
                             <DataGridTextColumn.Header>
-                                <TextBlock Text="Wrong Answers" FontWeight="Bold" FontSize="25"/>
+                                <TextBlock Text="Wrong Answers" FontWeight="Bold" FontSize="24"/>
                             </DataGridTextColumn.Header>
                         </DataGridTextColumn>
 
                         <DataGridTextColumn Binding="{Binding averageAnswerTime}">
                             <DataGridTextColumn.Header>
-                                <TextBlock Text="Average Time" FontWeight="Bold" FontSize="25"/>
+                                <TextBlock Text="Average Time" FontWeight="Bold" FontSize="24"/>
                             </DataGridTextColumn.Header>
                         </DataGridTextColumn>
                     </DataGrid.Columns>

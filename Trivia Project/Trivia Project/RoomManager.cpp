@@ -7,6 +7,11 @@ RoomManager::RoomManager(int lastId)
 
 Room* RoomManager::createRoom(LoggedUser user, RoomData data)
 {
+	if (data.maxPlayers < 1 || data.numOfQuestions < 1 || data.timeForQuestion <= 0 || data.name == "")
+	{
+		throw std::exception();
+	}
+
 	m_rooms[roomId] = *new Room(this->roomId, data, user);
 	this->roomId++;
 	return &(m_rooms[roomId - 1]);

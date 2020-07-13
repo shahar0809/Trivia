@@ -28,14 +28,14 @@ namespace ClientWPF
         public string username { get; set; }
         public int correctAnswersCount { get; set; }
         public int wrongAnswersCount { get; set; }
-        public double averageAnswerTime { get; set; }
+        public string averageAnswerTime { get; set; }
 
         public PlayerResults(string result)
         {
             username = result.Split(',')[0];
             correctAnswersCount = int.Parse(result.Split(',')[1]);
             wrongAnswersCount = int.Parse(result.Split(',')[2]);
-            averageAnswerTime = double.Parse(result.Split(',')[3]);
+            averageAnswerTime = (double.Parse(result.Split(',')[3])).ToString("#.000");
         }
     }
 
@@ -81,6 +81,7 @@ namespace ClientWPF
         {
             TableGrid.Visibility = Visibility.Visible;
             UserMessage.Visibility = Visibility.Collapsed;
+            winnerUsername.Visibility = Visibility.Visible;
 
             // Displaying the winner's username 
             winnerUsername.Text = (string)resp.Results[0].Split(',')[0];

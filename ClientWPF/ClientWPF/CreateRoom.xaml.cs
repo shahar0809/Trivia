@@ -44,6 +44,23 @@ namespace ClientWPF
                 MessageBox.Show("Please fill all the fields!");
                 return;
             }
+            
+            if (Int32.Parse(numOfPlayers.Text) < 1)
+            {
+                MessageBox.Show("The Number of players in the room must be at least 1!");
+                return;
+            }
+            if (Int32.Parse(numOfQuestions.Text) < 1)
+            {
+                MessageBox.Show("The Number of questions in the game must be at least 1!");
+                return;
+            }
+            if (Int32.Parse(timeout.Text) <= 0)
+            {
+                MessageBox.Show("The Number of players in the room must be bigger than 0!");
+                return;
+            }
+
             CreateRoomRequest createRoom = new CreateRoomRequest();
             try
             {

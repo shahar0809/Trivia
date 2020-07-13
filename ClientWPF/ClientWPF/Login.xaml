@@ -86,7 +86,6 @@
                 HorizontalAlignment="Center"
                 VerticalAlignment="Top"
                 Click="SubmitButton_Click"
-                Background="AliceBlue"
                 Margin="60, 0, 80, 0"
                 Padding="10, 2" MinWidth="125"
                 Content="Log In">
