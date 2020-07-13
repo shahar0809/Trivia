@@ -1,6 +1,5 @@
 #pragma once
 #include <map>
-//#include "GameManager.h"
 #include "IDatabase.h"
 #include "LoggedUser.h"
 #include <iostream>
@@ -19,6 +18,7 @@ struct GameData
 	bool hasGotResults = false;
 };
 
+class IDatabase;
 class GameManager;
 
 class Game

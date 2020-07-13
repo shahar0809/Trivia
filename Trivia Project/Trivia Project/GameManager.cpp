@@ -8,18 +8,18 @@ GameManager::GameManager(IDatabase* db)
 Game* GameManager::createGame(Room room)
 {
 	Game * game = new Game(this->database,room);
-	this->m_games.push_back(*game);
+	this->m_games.push_back(game);
 	return game;
 }
 
 // This function removes the game that the given logged user attends.
 bool GameManager::deleteGame(LoggedUser user)
 {
-	std::vector<Game>::iterator it;
+	std::vector<Game*>::iterator it;
 
 	for (it = this->m_games.begin(); it != this->m_games.end(); it++)
 	{
-		if (it->checkUserIsInGame(user))
+		if ((*it)->checkUserIsInGame(user))
 		{
 			this->m_games.erase(it);
 			return true;
@@ -30,11 +30,11 @@ bool GameManager::deleteGame(LoggedUser user)
 
 bool GameManager::deleteGame(Game * g)
 {
-	std::vector<Game>::iterator it;
+	std::vector<Game*>::iterator it;
 
 	for (it = this->m_games.begin(); it != this->m_games.end(); it++)
 	{
-		if (it->getId() == g->getId())
+		if ((*it)->getId() == g->getId())
 		{
 			this->m_games.erase(it);
 			return true;
@@ -45,12 +45,12 @@ bool GameManager::deleteGame(Game * g)
 
 Game* GameManager::getGame(LoggedUser user)
 {
-	std::vector<Game>::iterator it;
+	std::vector<Game*>::iterator it;
 	for (it = this->m_games.begin(); it != this->m_games.end(); it++)
 	{
-		if (it->checkUserIsInGame(user))
+		if ((*it)->checkUserIsInGame(user))
 		{
-			return &(*it);
+			return *it;
 		}
 	}
 	throw std::exception();
@@ -59,7 +59,6 @@ Game* GameManager::getGame(LoggedUser user)
 std::vector<PlayerResults> GameManager::getGameResults(LoggedUser user)
 {
 	std::map<LoggedUser, GameData>* playersData = this->getGame(user)->getPlayersGameData();
-	std::vector<PlayerResults> results;
 
 	// Updating that the current user has finished the game
 	auto player = playersData->find(user);
@@ -74,23 +73,10 @@ std::vector<PlayerResults> GameManager::getGameResults(LoggedUser user)
 		throw std::string("Not all the players are finished");
 	}
 
-	for (auto playerData : *playersData)
-	{
-		LoggedUser user = playerData.first;
-		GameData gameData = playerData.second;
-
-		PlayerResults playerDetails
-		{ 
-			user.getUsername(),
-			gameData.correctAnswerCount,
-			gameData.wrongAnswerCount,
-			gameData.averangeAnswerTime 
-		};
-		results.push_back(playerDetails);
-	}
-
 	updateResultsInDatabase(user);
 	player->second.hasGotResults = true;
+	
+	std::vector<PlayerResults> results = this->database->getPlayersResults(this->getGame(user)->getId());
 
 	if (allGotResults(user))
 	{

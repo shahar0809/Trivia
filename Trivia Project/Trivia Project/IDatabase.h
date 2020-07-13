@@ -5,9 +5,11 @@
 #include <vector>
 #include <map>
 #include "Question.h"
+#include "GameManager.h"
 
 #define HIGHSCORE_LIMIT 5
 
+class GameManager;
 struct Score
 {
 	std::string username;
@@ -21,7 +23,7 @@ struct Score
 			std::to_string(score);
 	}
 };
-
+struct PlayerResults;
 class IDatabase
 {
 public:
@@ -36,6 +38,7 @@ public:
 	virtual int getNumOfTotalAnswers(std::string username) = 0;
 	virtual int getNumOfPlayerGames(std::string username) = 0;
 	virtual std::vector<Score> getHighScores() = 0;
+	virtual std::vector<PlayerResults> getPlayersResults(int gameId) = 0;
 
 	virtual void insertScore(std::string username, int points)=0;
 	virtual void insertStatistics(int roomId, std::string username, int correctAnswers, int wrongAnswers, float avgTime)=0;

@@ -43,6 +43,34 @@ int SqliteDatabase::callbackExists(void* data, int argc, char** argv, char** azC
 
 int SqliteDatabase::statisticsCallback(void* data, int argc, char** argv, char** azColName)
 {
+	std::vector<PlayerResults>* resultsList = (std::vector<PlayerResults>*)data;
+	PlayerResults* playerResult = new PlayerResults();
+
+	for (int i = 0; i < argc; i++)
+	{
+		if (std::string(azColName[i]) == "USERNAME")
+		{
+			playerResult->username = std::string(argv[i]);
+		}
+		if (std::string(azColName[i]) == "CORRECT_ANSWERS")
+		{
+			playerResult->correctAnswersCount = atoi(argv[i]);
+		}
+		if (std::string(azColName[i]) == "WRONG_ANSWERS")
+		{
+			playerResult->wrongAnswersCount = atoi(argv[i]);
+		}
+		if (std::string(azColName[i]) == "AVG_ANSWER_TIME")
+		{
+			playerResult->averageAnswerTime = std::stof(argv[i]);
+		}
+	}
+	resultsList->push_back(*playerResult);
+	return 0;
+}
+
+int SqliteDatabase::floatCallback(void* data, int argc, char** argv, char** azColName)
+{
 	float* queryResult = static_cast<float*>(data);
 	*queryResult = atof(argv[0]);
 	return 0;
@@ -306,7 +334,7 @@ float SqliteDatabase::getPlayerAverageAnswerTime(std::string username)
 		"WHERE USERNAME = '" + username + "';";
 
 	float queryResult;
-	executeMsg(sqlQuery, statisticsCallback, &queryResult);
+	executeMsg(sqlQuery, floatCallback, &queryResult);
 	return queryResult;
 }
 
@@ -316,7 +344,7 @@ int SqliteDatabase::getNumOfCorrectAnswers(std::string username)
 		"WHERE USERNAME = '" + username + "';";
 
 	float queryResult;
-	executeMsg(sqlQuery, statisticsCallback, &queryResult);
+	executeMsg(sqlQuery, floatCallback, &queryResult);
 	return (int)(queryResult);
 }
 
@@ -327,12 +355,12 @@ int SqliteDatabase::getNumOfTotalAnswers(std::string username)
 		"WHERE USERNAME = '" + username + "';";
 		
 	float correctAns, wrongAns;
-	executeMsg(sqlQuery, statisticsCallback, &correctAns);
+	executeMsg(sqlQuery, floatCallback, &correctAns);
 
 	sqlQuery = "SELECT SUM(WRONG_ANSWERS) FROM STATISTICS "
 		"WHERE USERNAME = '" + username + "';";
 
-	executeMsg(sqlQuery, statisticsCallback, &wrongAns);
+	executeMsg(sqlQuery, floatCallback, &wrongAns);
 	return (int)(wrongAns + correctAns);
 }
 
@@ -343,7 +371,7 @@ int SqliteDatabase::getNumOfPlayerGames(std::string username)
 		"WHERE USERNAME = '" + username + "');";
 
 	float queryResult;
-	executeMsg(sqlQuery, statisticsCallback, &queryResult);
+	executeMsg(sqlQuery, floatCallback, &queryResult);
 	return (int)(queryResult);
 }
 
@@ -409,6 +437,15 @@ int SqliteDatabase::getLastId()
 	std::string sqlQuery = "SELECT MAX(GAME_ID) FROM STATISTICS;";
 
 	float queryResult;
-	executeMsg(sqlQuery, statisticsCallback, &queryResult);
+	executeMsg(sqlQuery, floatCallback, &queryResult);
 	return (int)(queryResult);
+}
+
+std::vector<PlayerResults> SqliteDatabase::getPlayersResults(int gameId)
+{
+	std::string sqlQuery = "SELECT * FROM STATISTICS WHERE GAME_ID ="+std::to_string(gameId)+";";
+
+	std::vector<PlayerResults> results;
+	executeMsg(sqlQuery, statisticsCallback, &results);
+	return results;
 }
