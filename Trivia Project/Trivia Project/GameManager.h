@@ -3,12 +3,13 @@
 #include <sstream>
 #include <vector>
 #include "Game.h"
-#include "IDatabase.h"
+//#include "IDatabase.h"
 #include "Room.h"
 
 #define CORRECT_ANSWER_POINTS 2
 #define WRONG_ANSWER_POINTS -1
 
+class IDatabase;
 struct PlayerResults
 {
 	std::string username;

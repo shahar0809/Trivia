@@ -1,8 +1,6 @@
 #include "Game.h"
 #include "GameManager.h"
 
-#define SECOND 1/60
-
 Game::Game(IDatabase* db,Room r)
 {
 	this->m_Id = r.getMetadata().id;

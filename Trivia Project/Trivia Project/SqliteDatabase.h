@@ -6,6 +6,7 @@
 #include "sqlite3.h"
 #include "io.h"
 
+
 class SqliteDatabase : public IDatabase
 {
 public:
@@ -19,7 +20,8 @@ public:
 	void insertScore(std::string username, int points);
 	void insertStatistics(int roomId,std::string username, int correctAnswers,int wrongAnswers,float avgTime);
 	bool doesUserHaveScore(std::string userName);
-	int getScore(std::string username);
+	int getScore(std::string username); 
+	std::vector<PlayerResults> getPlayersResults(int gameId);
 
 	std::vector<Question>* getQuestions(int maybeNumOfQuestions);
 	float getPlayerAverageAnswerTime(std::string username);
@@ -42,6 +44,7 @@ private:
 
 	bool executeMsg(std::string sqlStatement, int(*callback)(void*, int, char**, char**), void* param);
 	static int callbackExists(void* data, int argc, char** argv, char** azColName);
+	static int floatCallback(void* data, int argc, char** argv, char** azColName);
 	static int statisticsCallback(void* data, int argc, char** argv, char** azColName);
 	static int questionsCallback(void* data, int argc, char** argv, char** azColName);
 	static int scoresCallback(void* data, int argc, char** argv, char** azColName);

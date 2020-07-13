@@ -59,7 +59,6 @@ Game* GameManager::getGame(LoggedUser user)
 std::vector<PlayerResults> GameManager::getGameResults(LoggedUser user)
 {
 	std::map<LoggedUser, GameData>* playersData = this->getGame(user)->getPlayersGameData();
-	std::vector<PlayerResults> results;
 
 	// Updating that the current user has finished the game
 	auto player = playersData->find(user);
@@ -74,23 +73,10 @@ std::vector<PlayerResults> GameManager::getGameResults(LoggedUser user)
 		throw std::string("Not all the players are finished");
 	}
 
-	for (auto playerData : *playersData)
-	{
-		LoggedUser user = playerData.first;
-		GameData gameData = playerData.second;
-
-		PlayerResults playerDetails
-		{ 
-			user.getUsername(),
-			gameData.correctAnswerCount,
-			gameData.wrongAnswerCount,
-			gameData.averangeAnswerTime 
-		};
-		results.push_back(playerDetails);
-	}
-
 	updateResultsInDatabase(user);
 	player->second.hasGotResults = true;
+
+	std::vector<PlayerResults> results = database->getPlayersResults(this->getGame(user)->getId());
 
 	if (allGotResults(user))
 	{
