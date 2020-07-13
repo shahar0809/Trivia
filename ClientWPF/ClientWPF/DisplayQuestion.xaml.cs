@@ -86,6 +86,7 @@ namespace ClientWPF
             }
             else
             {
+                Timer.Foreground = Brushes.Black;
                 updateQuestion();
             }
         }
@@ -166,7 +167,7 @@ namespace ClientWPF
                 m_answersButtons[answerId].Item1.Background = Brushes.Green;
             }
 
-            await Task.Delay(2000);
+            await Task.Delay(1200);
             m_questionsLeft--;
             updateQuestion();
         }
