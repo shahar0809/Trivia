@@ -1,5 +1,7 @@
 #pragma once 
 #include "IDataBase.h"
+#include <sstream>
+#include <iomanip>
 #include <tuple>
 
 struct UserStatistics
@@ -9,10 +11,15 @@ struct UserStatistics
 	int totalAnswers;
 	int numOfGames;
 
+	
+
 	std::string toString()
 	{
+		std::stringstream stream;
+		stream << std::fixed << std::setprecision(3) << avgAnswerTime;
+
 		return 
-			std::to_string(avgAnswerTime) + ","+
+			stream.str() + ","+
 			std::to_string(correctAnswers) + "," +
 			std::to_string(totalAnswers) + "," +
 			std::to_string(numOfGames);

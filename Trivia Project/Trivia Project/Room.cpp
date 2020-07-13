@@ -12,7 +12,6 @@ Room::Room(int id, RoomData data, LoggedUser user)
 	this->m_metadata.isActive = true;
 	this->m_users.push_back(user);
 	this->hasGameBegun = false;
-
 }
 
 Room::~Room()
