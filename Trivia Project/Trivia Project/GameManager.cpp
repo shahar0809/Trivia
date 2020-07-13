@@ -8,18 +8,18 @@ GameManager::GameManager(IDatabase* db)
 Game* GameManager::createGame(Room room)
 {
 	Game * game = new Game(this->database,room);
-	this->m_games.push_back(*game);
+	this->m_games.push_back(game);
 	return game;
 }
 
 // This function removes the game that the given logged user attends.
 bool GameManager::deleteGame(LoggedUser user)
 {
-	std::vector<Game>::iterator it;
+	std::vector<Game*>::iterator it;
 
 	for (it = this->m_games.begin(); it != this->m_games.end(); it++)
 	{
-		if (it->checkUserIsInGame(user))
+		if ((*it)->checkUserIsInGame(user))
 		{
 			this->m_games.erase(it);
 			return true;
@@ -30,11 +30,11 @@ bool GameManager::deleteGame(LoggedUser user)
 
 bool GameManager::deleteGame(Game * g)
 {
-	std::vector<Game>::iterator it;
+	std::vector<Game*>::iterator it;
 
 	for (it = this->m_games.begin(); it != this->m_games.end(); it++)
 	{
-		if (it->getId() == g->getId())
+		if ((*it)->getId() == g->getId())
 		{
 			this->m_games.erase(it);
 			return true;
@@ -45,12 +45,12 @@ bool GameManager::deleteGame(Game * g)
 
 Game* GameManager::getGame(LoggedUser user)
 {
-	std::vector<Game>::iterator it;
+	std::vector<Game*>::iterator it;
 	for (it = this->m_games.begin(); it != this->m_games.end(); it++)
 	{
-		if (it->checkUserIsInGame(user))
+		if ((*it)->checkUserIsInGame(user))
 		{
-			return &(*it);
+			return *it;
 		}
 	}
 	throw std::exception();
@@ -75,8 +75,8 @@ std::vector<PlayerResults> GameManager::getGameResults(LoggedUser user)
 
 	updateResultsInDatabase(user);
 	player->second.hasGotResults = true;
-
-	std::vector<PlayerResults> results = database->getPlayersResults(this->getGame(user)->getId());
+	
+	std::vector<PlayerResults> results = this->database->getPlayersResults(this->getGame(user)->getId());
 
 	if (allGotResults(user))
 	{

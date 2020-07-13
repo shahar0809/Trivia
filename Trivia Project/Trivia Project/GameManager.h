@@ -51,6 +51,6 @@ public:
 
 private:
 	IDatabase* database;		
-	std::vector<Game> m_games;
+	std::vector<Game*> m_games;
 };
 
