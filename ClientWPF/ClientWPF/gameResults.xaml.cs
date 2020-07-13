@@ -73,7 +73,7 @@ namespace ClientWPF
             while (resp.Status == (int)Codes.ERROR_CODE)
             {
                 resp = Communicator.ManageSendAndGetData<GetGameResultsResponse>("", clientStream, Codes.GET_GAME_RESULTS_CODE);
-                Thread.Sleep(3000);
+                Thread.Sleep(1000);
             }            
         }
 

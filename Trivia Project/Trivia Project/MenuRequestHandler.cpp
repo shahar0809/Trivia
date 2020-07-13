@@ -163,6 +163,12 @@ RequestResult MenuRequestHandler::joinRoom(RequestInfo info)
 	if (!(roomManager->getRoom(joinReq.roomId)->addUser(*(this->m_user))))
 	{
 		resp.status = FAILED;
+		return RequestResult
+		{
+			JsonResponsePacketSerializer::serializeResponse(resp),
+			m_handlerFactory.createMenuRequestHandler(m_user)
+		};
+
 	}
 	else
 	{
