@@ -95,7 +95,7 @@ def edit_request(sock, json_request, code):
     json_request = json.dumps(json_request)  # Getting the json as a string
     json_length = str(len(json_request))
     json_length = json_length.zfill(DATA_LEN_IN_BYTES)
-
+    print(json_length)
     # Building the packet according to the protocol
     str_packet = convert_to_binary(code) + convert_to_binary(json_length) + convert_to_binary(json_request)
 

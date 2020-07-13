@@ -1,12 +1,12 @@
 #include "MenuRequestHandler.h"
+#include "RoomMemberRequestHandler.h"
+#include "RoomAdminRequestHandler.h"
 
-MenuRequestHandler::MenuRequestHandler()
-{
-}
 
-MenuRequestHandler::MenuRequestHandler(std::string username)
+MenuRequestHandler::MenuRequestHandler(LoggedUser* user, RequestHandlerFactory* m_handlerFactory)
 {
-	this->m_user = LoggedUser(username);
+	this->m_handlerFactory = *m_handlerFactory;
+	this->m_user = user;
 }
 
 MenuRequestHandler::~MenuRequestHandler()
@@ -18,7 +18,7 @@ bool MenuRequestHandler::isRequestRelevant(RequestInfo info)
 	return info.requestId >= CREATE_ROOM_CODE && info.requestId <= LOGOUT_CODE;
 }
 
-RequestResult MenuRequestHandler::handleRequest(RequestInfo info)
+RequestResult MenuRequestHandler::handleRequest(RequestInfo info, SOCKET socket)
 {
 	switch (info.requestId)
 	{
@@ -26,7 +26,7 @@ RequestResult MenuRequestHandler::handleRequest(RequestInfo info)
 		{
 			return this->createRoom(info);
 		}
-		case GET_ROOM_CODE:
+		case GET_ROOMS_CODE:
 		{
 			return this->getRooms(info);
 		}
@@ -51,60 +51,144 @@ RequestResult MenuRequestHandler::handleRequest(RequestInfo info)
 
 RequestResult MenuRequestHandler::logout(RequestInfo info)
 {
-	RequestResult res;
-	return res;
+	LogoutResponse resp;
+	if (this->m_handlerFactory.getLoginManger().logout(this->m_user->getUsername()))
+	{
+		resp.status = SUCCEEDED;
+	}
+	else
+	{
+		resp.status = FAILED;
+	}
+
+	return RequestResult
+	{
+		JsonResponsePacketSerializer::serializeResponse(resp),nullptr
+	};
 }
 
 RequestResult MenuRequestHandler::getRooms(RequestInfo info)
 {
-	JoinRoomRequest joinReq = JsonRequestPacketDeserializer::deserializeJoinRoomRequest(info.buffer);
-	RoomManager roomManager = m_handlerFactory.getRoomManager();
+	RoomManager* roomManager = m_handlerFactory.getRoomManager();
+	std::vector<std::string> roomNames;
 
-	GetRoomResponse resp{ 1, roomManager.getRooms() };
-	return RequestResult{ JsonResponsePacketSerializer::serializeResponse(resp), nullptr };
+	for (auto room : roomManager->getRooms())
+	{
+		roomNames.push_back(room.name + "," + std::to_string(room.id));
+	}
+	GetRoomResponse resp{ SUCCEEDED, roomNames };
+	return RequestResult
+	{
+		JsonResponsePacketSerializer::serializeResponse(resp),
+		m_handlerFactory.createMenuRequestHandler(this->m_user)
+	};
 }
 
 RequestResult MenuRequestHandler::getPlayersInRoom(RequestInfo info)
 {
-	JoinRoomRequest joinReq = JsonRequestPacketDeserializer::deserializeJoinRoomRequest(info.buffer);
-	RoomManager roomManager = m_handlerFactory.getRoomManager();
-	
-	return RequestResult{ "", nullptr };
+	GetPlayersInRoomRequest req = JsonRequestPacketDeserializer::deserializeGetPlayersRequest(info.buffer);
+	RoomManager* roomManager = m_handlerFactory.getRoomManager();
+	std::vector<LoggedUser> loggedUsers = roomManager->getRoom(req.roomId)->getAllUsers();
+	std::vector<std::string> roomPlayers;
+
+	for (auto user : loggedUsers)
+	{
+		roomPlayers.push_back(user.getUsername());
+	}
+
+	return RequestResult
+	{
+		JsonResponsePacketSerializer::serializeResponse(GetPlayersInRoomResponse { roomPlayers }),
+		m_handlerFactory.createMenuRequestHandler(this->m_user)
+	};
 }
 
 RequestResult MenuRequestHandler::getStatistics(RequestInfo info)
 {
-	StatisticsManager statsManager = this->m_handlerFactory.getStatisticsManager();
+	StatisticsManager& statsManager = this->m_handlerFactory.getStatisticsManager();
 	GetStatisticsResponse resp;
+	std::pair<UserStatistics, std::vector<Score>> stats;
 
 	try
 	{
-		std::pair<UserStatistics, std::vector<Score>> stats = statsManager.getStatistics(this->m_user.getUsername());
+		stats= statsManager.getStatistics(this->m_user->getUsername());
 	}
 	catch (const std::exception& e)
 	{
 		resp.status = FAILED;
 		return RequestResult{ JsonResponsePacketSerializer::serializeResponse(resp), nullptr };
 	}
-	
+
+	std::vector<std::string> highScore;
+
+	for (auto score : stats.second)
+		highScore.push_back(score.toString());
+
+	resp.highScore = highScore;
+	resp.userStatistics = stats.first.toString();
 	resp.status = SUCCEEDED;
-	return RequestResult{ JsonResponsePacketSerializer::serializeResponse(resp), nullptr };
+
+	return RequestResult
+	{
+		JsonResponsePacketSerializer::serializeResponse(resp),
+		m_handlerFactory.createMenuRequestHandler(this->m_user)
+	};
+
 }
 
 RequestResult MenuRequestHandler::joinRoom(RequestInfo info)
 {
 	JoinRoomRequest joinReq = JsonRequestPacketDeserializer::deserializeJoinRoomRequest(info.buffer);
-	RoomManager roomManager = m_handlerFactory.getRoomManager();
+	RoomManager* roomManager = m_handlerFactory.getRoomManager();
 
-	RequestResult res;
-	return res;
+	JoinRoomResponse resp;
+	resp.roomData = roomManager->getRoom(joinReq.roomId)->getMetadata();
+
+	if (!(roomManager->getRoom(joinReq.roomId)->addUser(*(this->m_user))))
+	{
+		resp.status = FAILED;
+	}
+	else
+	{
+		resp.status = SUCCEEDED;
+	}
+
+	return RequestResult
+	{ 
+		JsonResponsePacketSerializer::serializeResponse(resp),
+		m_handlerFactory.createRoomMemberRequestHandler(this->m_handlerFactory.getRoomManager()->getRoom(joinReq.roomId),
+			this->m_user,&this->m_handlerFactory,this->m_handlerFactory.getRoomManager())
+	};
 }
+
 RequestResult MenuRequestHandler::createRoom(RequestInfo info)
 {
 	CreateRoomRequest createReq = JsonRequestPacketDeserializer::deserializeCreateRoomRequest(info.buffer);
-	RoomManager roomManager = m_handlerFactory.getRoomManager();
+	RoomManager* roomManager = m_handlerFactory.getRoomManager();
+	CreateRoomResponse resp;
+	Room* room = nullptr;
+
+	try
+	{
+		room = roomManager->createRoom(*m_user, createReq.getRoomData());
+
+	}
+	catch (const std::exception & e)
+	{
+		resp.status = FAILED;
+		return RequestResult
+		{ 
+			JsonResponsePacketSerializer::serializeResponse(resp),
+			m_handlerFactory.createRoomAdminRequestHandler(room, m_user, &m_handlerFactory, m_handlerFactory.getRoomManager())
+		};
+	}
 	
-	roomManager.createRoom(m_user, createReq.getRoomData());
-	RequestResult res;
-	return res;
+	resp.status = SUCCEEDED;
+	resp.roomId = roomManager->getLastId();
+	return RequestResult
+	{
+		JsonResponsePacketSerializer::serializeResponse(resp),
+		m_handlerFactory.createRoomAdminRequestHandler(room, m_user, &m_handlerFactory, m_handlerFactory.getRoomManager())
+	};
 }
+

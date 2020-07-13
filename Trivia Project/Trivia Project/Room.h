@@ -1,22 +1,34 @@
 #pragma once
 #include <iostream>
 #include <vector>
+#include <string>
 #include "LoggedUser.h"
+#include <sstream>
 
 struct RoomData
 {
 	unsigned int id;
 	std::string name;
-	unsigned int maxPlayers = 5;
-	unsigned int timePerQuestion = 1;
+	unsigned int maxPlayers;
+	unsigned int timeForQuestion ;
+	unsigned int numOfQuestions;
 	unsigned int isActive;
+
+	std::string toString()
+	{
+		return std::to_string(id) + "," + name + "," +
+			std::to_string(maxPlayers) + "," +
+			std::to_string(timeForQuestion) + "," +
+			std::to_string(numOfQuestions) + "," +
+			std::to_string(isActive);
+	}
 };
 
 class Room
 {
 public:
 	Room();
-	Room(int id, std::string name,LoggedUser user);
+	Room(int id, RoomData data,LoggedUser user);
 	~Room();
 
 	bool addUser(LoggedUser user);
@@ -24,7 +36,12 @@ public:
 	std::vector<LoggedUser> getAllUsers();
 	RoomData getMetadata();
 
+	std::vector<std::string> getAllUsernames();
+	bool getHasGameBegun() { return hasGameBegun; };
+	void setHasGameBegun(bool hasGameBegun) { this->hasGameBegun = hasGameBegun; };
+
 private:
 	RoomData m_metadata;
-	std::vector<LoggedUser> m_users;
+	std::vector<LoggedUser>  m_users;
+	bool hasGameBegun;
 };

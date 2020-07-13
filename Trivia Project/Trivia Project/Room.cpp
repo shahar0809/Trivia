@@ -5,17 +5,19 @@ Room::Room()
 {
 }
 
-Room::Room(int id, std::string name, LoggedUser user)
+Room::Room(int id, RoomData data, LoggedUser user)
 {
+	this->m_metadata = data;
 	this->m_metadata.id = id;
-	this->m_metadata.name = name;
 	this->m_metadata.isActive = true;
-	//this->m_users.push_back(user);
+	this->m_users.push_back(user);
+	this->hasGameBegun = false;
+
 }
 
 Room::~Room()
 {
-	//this->m_users.clear();
+	this->m_users.clear();
 }
 
 bool Room::addUser(LoggedUser user)
@@ -47,4 +49,15 @@ std::vector<LoggedUser> Room::getAllUsers()
 RoomData Room::getMetadata()
 {
 	return this->m_metadata;
+}
+
+std::vector<std::string> Room::getAllUsernames()
+{
+	std::vector<std::string> vec;
+
+	for (auto user : m_users)
+	{
+		vec.push_back(user.getUsername());
+	}
+	return vec;
 }
