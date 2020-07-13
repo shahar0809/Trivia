@@ -27,7 +27,12 @@ class IRequestHandler
 {
 public:
 	virtual bool isRequestRelevant(RequestInfo info) = 0;
-	virtual RequestResult handleRequest(RequestInfo, SOCKET socket) = 0;
+	virtual RequestResult handleRequest(RequestInfo info) = 0;
+	std::string getUsername() { return m_username; };
+
+
+protected:
+	std::string m_username;
 };
 
 class IRequestHandler;

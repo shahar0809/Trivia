@@ -2,6 +2,7 @@
 using System.Net.Sockets;
 using Newtonsoft.Json;
 using System.Windows;
+using System.Collections.Generic;
 
 namespace ClientWPF
 {
@@ -24,11 +25,11 @@ namespace ClientWPF
             this.clientStream = clientStream;
         }
 
-        public static string EditRequest(int code, string request)
+        public static string EditRequest(Codes code, string request)
         {
             //Create the request acording to the protocol.
             return
-                Helper.ToBinary(code.ToString().PadLeft(SIZE_OF_CODE, '0')) +
+                Helper.ToBinary(((int)code).ToString().PadLeft(SIZE_OF_CODE, '0')) +
                 Helper.ToBinary((request.Length).ToString().PadLeft(SIZE_OF_DATA_LEN, '0')) +
                 Helper.ToBinary(request);
         }
@@ -40,10 +41,13 @@ namespace ClientWPF
             clientStream.Flush();
         }
 
-        public static T ManageSendAndGetData<T>(string json, NetworkStream clientStream, int code)
+        public static T ManageSendAndGetData<T>(NetworkStream clientStream, Codes code)
         {
-            
+            return ManageSendAndGetData<T>("", clientStream, code);
+        }
 
+        public static T ManageSendAndGetData<T>(string json, NetworkStream clientStream, Codes code)
+        {
             // Edit and send request.
             json = EditRequest(code, json);
             SendRequest(json, clientStream);
@@ -51,7 +55,7 @@ namespace ClientWPF
             // Get response.
             string s = Helper.GetData(clientStream);
             string textStrData = s.Substring(DATA_START_INDEX);
-
+         
             T response = JsonConvert.DeserializeObject<T>(textStrData);
             return response;
         }
