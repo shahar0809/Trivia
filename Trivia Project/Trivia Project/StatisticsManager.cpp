@@ -9,6 +9,7 @@ std::pair<UserStatistics, std::vector<Score>> StatisticsManager::getStatistics(s
 {
 	int numOfGames = this->m_database->getNumOfPlayerGames(username);
 	UserStatistics userStats;
+
 	if(numOfGames == 0)
 	{ 
 		userStats = UserStatistics

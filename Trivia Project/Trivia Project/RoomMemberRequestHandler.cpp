@@ -11,7 +11,7 @@ bool RoomMemberRequestHandler::isRequestRelevant(RequestInfo info)
 	return (info.requestId >= LEAVE_ROOM_CODE && info.requestId <= GET_ROOM_STATE_CODE) || info.requestId == GET_PLAYERS_IN_ROOM_CODE;
 }
 
-RequestResult RoomMemberRequestHandler::handleRequest(RequestInfo info, SOCKET socket)
+RequestResult RoomMemberRequestHandler::handleRequest(RequestInfo info)
 {
 	switch (info.requestId)
 	{
@@ -40,7 +40,7 @@ RequestResult RoomMemberRequestHandler::leaveRoom(RequestInfo info)
 	}
 	return RequestResult
 	{
-		JsonResponsePacketSerializer::serializeLeaveRoomResponse(resp),
+		JsonResponsePacketSerializer::serializeResponse(resp),
 		m_handlerFactory.createMenuRequestHandler(m_user)
 	};
 }
@@ -49,5 +49,13 @@ RequestResult RoomMemberRequestHandler::getPlayersInRoom(RequestInfo info)
 {
 	RequestResult res = this->m_handlerFactory.createMenuRequestHandler(m_user)->getPlayersInRoom(info);
 	res.newHandler = this->m_handlerFactory.createRoomMemberRequestHandler(m_room, m_user, &m_handlerFactory, m_roomManager);
+	return res;
+}
+
+RequestResult RoomMemberRequestHandler::getRoomState(RequestInfo info)
+{
+	RequestResult res = RoomParticipantRequestHandler::getRoomState(info);
+	if(res.newHandler == nullptr)
+		res.newHandler = m_handlerFactory.createRoomMemberRequestHandler(m_room, m_user, &m_handlerFactory, m_roomManager);
 	return res;
 }

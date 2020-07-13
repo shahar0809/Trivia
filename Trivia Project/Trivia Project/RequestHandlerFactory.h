@@ -3,11 +3,14 @@
 #include "IDatabase.h"
 #include "RoomManager.h"
 #include "StatisticsManager.h"
+#include "GameManager.h"
+
 
 class MenuRequestHandler;
 class RoomMemberRequestHandler;
 class RoomAdminRequestHandler;
 class LoginRequestHandler;
+class GameRequestHandler;
 
 class RequestHandlerFactory
 {
@@ -20,14 +23,18 @@ public:
 	MenuRequestHandler* createMenuRequestHandler(LoggedUser* user);
 	RoomMemberRequestHandler* createRoomMemberRequestHandler(Room* room, LoggedUser* user, RequestHandlerFactory* handlerFactory, RoomManager* roomManger);
 	RoomAdminRequestHandler* createRoomAdminRequestHandler(Room* room, LoggedUser* user, RequestHandlerFactory* handlerFactory, RoomManager* roomManger);
-	LoginManager& getLoginManger();
+	GameRequestHandler* createGameRequestHandler(LoggedUser* user, RequestHandlerFactory* handlerFactory);
+
+	LoginManager* getLoginManger();
 	StatisticsManager& getStatisticsManager();
 	RoomManager* getRoomManager();
+	GameManager* getGameManager();
 
 private:
-	LoginManager m_loginManager;
+	LoginManager* m_loginManager;
 	IDatabase* m_database;
 	RoomManager* m_roomManager;
+	GameManager* m_gameManager;
 	StatisticsManager m_StatisticsManager;
 };
 
