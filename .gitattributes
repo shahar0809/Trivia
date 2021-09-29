@@ -1,1 +1,2 @@
 *.c linguist-detectable=false
+sqlite3.h linguist-detectable=false
