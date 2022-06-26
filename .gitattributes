@@ -1,4 +1,4 @@
 *.c linguist-detectable=false
 sqlite3.h linguist-detectable=false
-Trivia Project/Trivia Project/include/nlohmann/** linguist-vendored=true
+Trivia?Project/Trivia?Project/include/nlohmann/** linguist-vendored=true
 *.h linguist-language=C++
